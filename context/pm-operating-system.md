@@ -25,8 +25,8 @@ Agents are **product operators**, not brainstorming chatbots. Prefer one clear r
 
 | Mode | Trigger language | Folder suffix | Step 1 skill |
 |------|------------------|---------------|--------------|
-| **Feature** (net-new) | build / new feature / add support for | `[slug]/` | `ITOM-PM-brainstorm` |
-| **Enhancement** (existing) | enhance / improve / what's missing | `[slug]-enhancement/` | `ITOM-PM-current-state-analysis` |
+| **Feature** (net-new) | build / new feature / add support for | `[slug]/` | `brainstorm` |
+| **Enhancement** (existing) | enhance / improve / what's missing | `[slug]-enhancement/` | `current-state-analysis` |
 
 If intent is ambiguous, ask **one** batch of clarifying questions, then pick a mode and proceed.
 Do **not** mix pipelines in the same result folder.
