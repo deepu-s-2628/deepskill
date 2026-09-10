@@ -4,13 +4,20 @@
 
 ## Installation
 
+Run this from anywhere — your home directory, any project, it doesn't matter which:
+
 ```bash
-npx skills@latest add deepu-s-2628/deepskill
+npx skills@latest add deepu-s-2628/deepskill -g -a claude-code -y
 ```
 
-This uses the [skills.sh](https://www.skills.sh) package manager (same tool mattpocock/skills and other agent-skill repos install through). It reads git credentials you already have configured, so it works against this private repo the same way it would against a public one — no separate auth step. Pick which agent(s) to install for (Claude Code, Codex, Copilot — this repo ships compatibility shims for all three) when prompted, then restart your agent.
+This uses the [skills.sh](https://www.skills.sh) package manager (same tool mattpocock/skills and other agent-skill repos install through). It fetches directly from GitHub over the network — **no cloning, no local copy of this repo needed**. It reads the git credentials you already have configured (git credential helper / `gh auth` / SSH), so it works against this private repo the same way it would against a public one — no separate auth step, as long as your GitHub account has access.
 
-Re-run the same command after a repo update to pick up new/changed skills.
+Flag reference:
+- `-g` — install globally (`~/.claude/skills/`), so every project on your machine gets these skills. Drop it to install into just the current project instead (`./.claude/skills/`).
+- `-a claude-code` — target Claude Code specifically. Add `-a codex` and/or `-a copilot` too if you use those (this repo ships compatibility shims for all three).
+- `-y` — skip the confirmation prompts.
+
+Restart your agent afterward. Re-run the same command after a repo update to pick up new/changed skills.
 
 ## Why this exists
 
