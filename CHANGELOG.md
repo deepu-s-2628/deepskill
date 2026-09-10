@@ -1,4 +1,4 @@
-# itom-pm-skills
+# deepskill
 
 ## 0.1.0
 

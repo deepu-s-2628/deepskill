@@ -1,14 +1,16 @@
-# Ask Deepu — ITOM PM Skills
+# deepskill
 
-An end-to-end product-management pipeline for OpManager Plus, as an installable Claude Code plugin. Describe a feature or an improvement, and it takes you through research, competitive analysis, technical scoping, and a full deliverable set — decks, a PRD, a flowchart, a wireframe prompt — one reviewable step at a time.
+**Ask Deepu** — an end-to-end product-management pipeline for OpManager Plus, as an installable agent-skills package. Describe a feature or an improvement, and it takes you through research, competitive analysis, technical scoping, and a full deliverable set — decks, a PRD, a flowchart, a wireframe prompt — one reviewable step at a time.
 
 ## Installation
 
-1. Clone this repo somewhere on your machine.
-2. Run `./scripts/link-skills.sh` from the repo root.
-3. Restart Claude Code.
+```bash
+npx skills@latest add deepu-s-2628/deepskill
+```
 
-Re-run step 2 after every `git pull` to pick up new skills.
+This uses the [skills.sh](https://www.skills.sh) package manager (same tool mattpocock/skills and other agent-skill repos install through). It reads git credentials you already have configured, so it works against this private repo the same way it would against a public one — no separate auth step. Pick which agent(s) to install for (Claude Code, Codex, Copilot — this repo ships compatibility shims for all three) when prompted, then restart your agent.
+
+Re-run the same command after a repo update to pick up new/changed skills.
 
 ## Why this exists
 
@@ -79,4 +81,4 @@ uv sync
 
 ## Status
 
-Internal tool, `v0.1.0`, private. No published package — install via the symlink script above.
+Internal tool, `v0.1.0`, private. Not published to any registry — install directly from this repo via `npx skills add` above.

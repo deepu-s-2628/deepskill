@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "deepu-s-2628/itom-pm-skills" }],
+  "changelog": ["@changesets/changelog-github", { "repo": "deepu-s-2628/deepskill" }],
   "commit": false,
   "fixed": [],
   "linked": [],
