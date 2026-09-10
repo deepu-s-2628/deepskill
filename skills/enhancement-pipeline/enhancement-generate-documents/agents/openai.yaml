@@ -1,0 +1,3 @@
+interface:
+  display_name: "Enhancement Generate Documents"
+  short_description: "Render enhancement deliverables to PPTX/PDF/DOCX"

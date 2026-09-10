@@ -1,0 +1,34 @@
+{
+  "name": "itom-pm-skills",
+  "version": "0.1.0",
+  "description": "Ask Deepu: an end-to-end PM pipeline for OpManager Plus — feature and enhancement research, analysis, and deliverable generation.",
+  "author": {
+    "name": "Deepu S"
+  },
+  "license": "UNLICENSED",
+  "keywords": [
+    "product-management",
+    "opmanager-plus",
+    "itom",
+    "pipeline",
+    "prd"
+  ],
+  "skills": [
+    "./skills/ask-deepu",
+    "./skills/wait-what",
+    "./skills/feature-pipeline/brainstorm",
+    "./skills/feature-pipeline/competitive-analysis",
+    "./skills/feature-pipeline/technical-analysis",
+    "./skills/feature-pipeline/feature-definition",
+    "./skills/feature-pipeline/deliverables",
+    "./skills/feature-pipeline/generate-documents",
+    "./skills/feature-pipeline/lovable-wireframe",
+    "./skills/enhancement-pipeline/current-state-analysis",
+    "./skills/enhancement-pipeline/cross-module-analysis",
+    "./skills/enhancement-pipeline/enhancement-competitive",
+    "./skills/enhancement-pipeline/enhancement-findings",
+    "./skills/enhancement-pipeline/enhancement-deliverables",
+    "./skills/enhancement-pipeline/enhancement-generate-documents",
+    "./skills/enhancement-pipeline/enhancement-wireframe"
+  ]
+}

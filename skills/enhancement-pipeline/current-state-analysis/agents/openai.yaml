@@ -1,0 +1,3 @@
+interface:
+  display_name: "Current State Analysis"
+  short_description: "Step 1 of the enhancement pipeline: how it works today"

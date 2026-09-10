@@ -1,0 +1,3 @@
+interface:
+  display_name: "Ask Deepu"
+  short_description: "Start the PM pipeline for OpManager Plus"

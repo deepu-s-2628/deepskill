@@ -1,0 +1,3 @@
+interface:
+  display_name: "Cross-Module Analysis"
+  short_description: "Step 2 of the enhancement pipeline: cross-module ties"
