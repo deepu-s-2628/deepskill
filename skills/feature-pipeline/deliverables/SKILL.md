@@ -152,29 +152,18 @@ Read ALL prior step files:
 ---
 **Design notes:**
 - Use ManageEngine brand colors
-- Slide 2 is the emotional anchor — design it with a persona quote callout and a vivid scenario illustration
+- Slide 2 is the emotional anchor — a persona quote/callout, not bullets or a diagram
 - Slide 11 mirrors Slide 2 — same layout, but showing the "after" story
 - Include diagrams on slides 5, 6, 7
 - These are reading-first deliverables (async review, handoff), not a speaker-led talk — per frontend-slides' own density framework, aim for its "high density / reading-first" mode (4-8 bullets or structured cards per slide), not its sparse speaker-led one
 - Speaker notes included for presenter context
 
-**SLIDE LAYOUT VARIETY — MANDATORY:**
-Every presentation MUST use a mix of slide types. Never use more than 2 consecutive `add_content_slide()` (bullet) slides. Alternate between:
-- `add_content_slide()` — for text-heavy context (MAX 2 in a row)
-- `add_two_column_slide()` — for comparisons, before/after, problem/solution (use on Slides 3, 6, 8)
-- `add_kpi_slide()` — for metrics and key numbers (use on Slide 9)
-- `add_icon_grid_slide()` — for capability showcases (use on Slide 7 instead of bullets)
-- `add_process_flow_slide()` — for approaches and methodology (use on Slide 6)
-- `add_comparison_slide()` — for competitive landscape tables (use on Slide 5)
-- `add_timeline_slide()` — for phasing and roadmaps (use on Slide 10)
-- `add_stat_slide()` — for a single powerful statistic (insert between dense slides)
-- `add_quote_slide()` — for persona voice on Slides 2 and 11
+**Layout variety — mandatory.** Never more than 2 consecutive bullet-only slides. Vary layouts by content, using the same vocabulary `generate-documents` renders from (there is no fixed API to call — these are content shapes a frontend-slides deck is authored to, not function names): two-column (problem vs. solution — Slide 3, or comparisons on 6, 8), comparison matrix (competitive — Slide 5), process-flow (approach — Slide 6), icon grid, not a bullet list (capabilities — Slide 7), a single large stat breaking up dense slides (Slide 9), KPI cards (metrics), horizontal timeline (phasing — Slide 10), before/after panels (the transformation slide — Slide 11), quote/callout (persona voice — Slides 2, 11). Use whichever shape actually fits each slide's content — this is the palette, not a rigid per-slide assignment.
 
-**COLOR AND VISUAL RICHNESS:**
-- Use accent color backgrounds on at least 2 non-title slides (section breaks or quote slides)
-- Use KPI cards with color-coded values (green=positive, red=risk, blue=neutral)
-- Two-column slides should have a thin colored divider and colored column headers
-- Tables must have colored headers and alternating row shading
+- Use accent color/backgrounds on at least 2 non-title slides (section breaks or quote slides)
+- KPI cards color-coded by meaning (green=positive, red=risk, blue=neutral)
+- Two-column slides get a visual divider and distinct column headers
+- Tables get colored headers and alternating row shading
 - At least 30% of slides should be non-bullet layouts (diagrams, grids, KPIs, timelines)
 ```
 
@@ -269,24 +258,10 @@ Every presentation MUST use a mix of slide types. Never use more than 2 consecut
 - Architecture diagrams required on slides 5, 9 (data flow and polling detail)
 - Metrics tables should be legible (split across slides if needed)
 - Include code-level detail in speaker notes where helpful
-- Use consistent color coding: green=existing, blue=new, orange=modified
 
-**SLIDE LAYOUT VARIETY — MANDATORY:**
-Same rule as executive PPT — never more than 2 consecutive bullet slides. Use:
-- `add_two_column_slide()` — for metrics comparisons and before/after (Slides 6-7)
-- `add_table_slide()` — for metrics deep dives (Slides 6-7, split if >8 rows)
-- `add_process_flow_slide()` — for data collection pipeline (Slide 4 or 9)
-- `add_image_slide()` — for architecture diagrams (Slides 5, 10)
-- `add_timeline_slide()` — for phasing plan (Slide 15)
-- `add_kpi_slide()` — for scalability targets and performance numbers
-- `add_icon_grid_slide()` — for UI component overview (Slide 12)
+**Layout variety — mandatory.** Same rule as the executive deck — never more than 2 consecutive bullet-only slides. Same palette: two-column (metrics comparisons — Slides 6-7), a metrics table (deep dives, split if >8 rows), process-flow (data collection pipeline — Slide 4 or 9), an embedded architecture image (linked from the Archify flowchart, not redrawn — Slides 5, 10), horizontal timeline (phasing — Slide 15), KPI cards (scalability/performance targets), icon grid (UI component overview — Slide 12).
 
-**COLOR CODING CONSISTENCY:**
-- Green (#28A745) = existing/keep
-- Blue (#0078D4) = new components
-- Orange (#FD7E14) = modified
-- Red (#DC3545) = removed/deprecated
-- Use these colors consistently in architecture diagrams, tables, and flow slides
+This is a **feature**, not an enhancement — there is no existing/new/modified distinction here (that's an enhancement-pipeline concept, since a net-new feature has nothing prior to compare against). Color by meaning instead: severity/status on metrics and alerting slides, a single consistent accent color for architecture diagrams.
 ```
 
 ### 5c — Feature Flowchart
@@ -479,22 +454,7 @@ flowchart TD
 
 ## Report rebuild (mandatory)
 
-Every step artifact this skill writes must:
-
-1. **Markdown (source of truth, hidden):** `[slug]/.steps/<name>.md`
-   - Enhancement mode: `[slug]-enhancement/.steps/<name>.md`
-2. **Rebuild the consolidated report** immediately after:
-   ```bash
-   python "<scripts-dir>/build_report.py" "[slug]/"
-   ```
-   Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `architecture.html`) and reference it first with a `<!-- diagram: architecture.html -->` marker in the markdown, then rebuild.
-4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`analysis.html`** path.
-6. **Never delete** `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
-
-See `context/pm-operating-system.md` sections 3, 6, and 11–13.
-
+Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
 
 ## Quality Gate (before marking complete)
 

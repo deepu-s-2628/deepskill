@@ -433,3 +433,25 @@ If the PM doesn't know the slug and asks what runs exist, it's fine to look for 
 - PPTX or PDF output of any kind (superseded by HTML slide decks and Archify diagrams)
 - Deleting md/deliverables after generation
 - Thin placeholder slide decks or flowcharts
+
+---
+
+## 17. Token & File Discipline (skill-authoring convention)
+
+Applies whenever a skill in this repo is written or edited — new skills and edits to the existing 14 alike.
+
+### Don't duplicate content that's already mandatory context
+
+Every pipeline step already loads this file and `product-context.md` in full (Sections 1-16, ~1,000 lines) before it runs. **Never re-state a procedure this file already documents** — point to the section instead (`See context/pm-operating-system.md §6` beats copy-pasting the same three paragraphs into 14 files). The "Report rebuild" procedure in Sections 3, 6, and 11a is the canonical example: every step skill's own "Report rebuild" section is a one-paragraph pointer here, not a restatement — that used to be ~19 duplicated lines × 14 files (~266 lines of pure redundancy) before this section existed.
+
+### Progressive disclosure only pays off for conditional content
+
+A separate `references/*.md` file that's loaded *every single time* the skill runs provides no token savings over inlining it — the agent ends up reading the same total content either way, just across more tool calls. It only pays off when the reference is read on a **branch that doesn't always fire** — see Archify's own `SKILL.md` ("Read only those files... do not read the optional Viewer Runtime reference unless the user asks," "read `references/brand-marks.md` only for an unknown brand") for the pattern done right: bound the default path tightly, defer anything conditional. Before splitting a large `SKILL.md`, check whether the content in question is actually conditional — if every run needs all of it (e.g. Step 5 drafting all four deliverable documents in one continuous pass), splitting adds file-hop overhead for no real savings; the fix there is trimming genuinely dead or redundant content, not fragmenting live content.
+
+### Scope reads narrowly, the way Archify's own SKILL.md does
+
+When a step needs to consult a large directory (schemas, examples, a vendored tool's docs), name the exact file(s) to read, not the whole directory — e.g. "read one matching schema in `schemas/`... read only those files," not "see `schemas/`." Vague scoping invites reading everything in the directory out of caution.
+
+### Verify stale content directly, don't assume it's still correct
+
+A skill file can go quietly wrong when something it depends on changes elsewhere in the repo (a deleted script, a renamed method, a retired format) without the skill's own prose being updated — the file still parses, still reads plausibly, and nothing errors until the model tries to act on a reference that no longer exists. This has happened twice in this repo already: `python-pptx`/`PresentationBuilder` method names (`add_kpi_slide()`, etc.) survived in `deliverables/SKILL.md` and `enhancement-deliverables/SKILL.md` well after `generate_pptx.py` was deleted, and existing/new/modified color-coding (an enhancement-only concept) leaked into the *feature* pipeline's engineering-deck instructions via copy-paste. Both were found by tracing what the instruction actually pointed to, not by re-reading the prose for plausibility. When editing a skill that references another file, tool, or API, confirm that reference still exists and still means what the prose says — don't take a plausible-sounding instruction on faith just because it isn't obviously wrong.

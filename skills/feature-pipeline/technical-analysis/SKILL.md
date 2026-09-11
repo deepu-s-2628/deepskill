@@ -89,13 +89,7 @@ Discovery, polling path, storage, processing, alerting, UI patterns, EE/probe no
 
 ## Report rebuild (mandatory)
 
-1. Write: `[feature-name]/.steps/3_technical_analysis.md`
-2. Rebuild the consolidated report:
-   ```bash
-   python "<scripts-dir>/build_report.py" "[feature-name]/"
-   ```
-3. If this step's collection-method comparison or architecture is worth diagramming, render it with Archify — bundled at `skills/archify/`, always available (operating system §11a) — to `architecture.html`, referenced with `<!-- diagram: architecture.html -->` in the markdown, then rebuild.
-4. Never delete the markdown or `analysis.html` after later document generation.
+Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
 
 ## Output Format
 

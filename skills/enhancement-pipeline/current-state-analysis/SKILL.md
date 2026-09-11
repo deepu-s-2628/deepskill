@@ -165,22 +165,7 @@ These are narrative-driven stories showing the real human impact of the current 
 
 ## Report rebuild (mandatory)
 
-Every step artifact this skill writes must:
-
-1. **Markdown (source of truth, hidden):** `[slug]/.steps/<name>.md`
-   - Enhancement mode: `[slug]-enhancement/.steps/<name>.md`
-2. **Rebuild the consolidated report** immediately after:
-   ```bash
-   python "<scripts-dir>/build_report.py" "[slug]/"
-   ```
-   Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `architecture.html`) and reference it first with a `<!-- diagram: architecture.html -->` marker in the markdown, then rebuild.
-4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`analysis.html`** path.
-6. **Never delete** `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
-
-See `context/pm-operating-system.md` sections 3, 6, and 11–13.
-
+Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
 
 ## Quality Gate (before marking complete)
 
