@@ -18,6 +18,10 @@ import sys
 from pathlib import Path
 
 
+# Styling follows skills/design-taste/SKILL.md, matching build_report.py's
+# treatment: one accent color (ManageEngine brand blue, #0078d4) held
+# identically everywhere, row-separator tables instead of a full boxed grid,
+# a documented two-tier corner-radius scale, and real :focus-visible states.
 CSS = """
 :root { color-scheme: light; }
 * { box-sizing: border-box; }
@@ -33,9 +37,9 @@ body {
 main {
   background: #fff;
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 32px 36px;
-  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, .06);
 }
 .banner {
   font-size: 13px;
@@ -48,12 +52,14 @@ h2 { font-size: 1.35rem; margin-top: 1.6em; border-bottom: 1px solid #eef2f7; pa
 h3 { font-size: 1.1rem; margin-top: 1.3em; }
 h4 { font-size: 1rem; margin-top: 1.1em; }
 p, li { font-size: 15px; }
-a { color: #2563eb; }
+p { max-width: 75ch; }
+a { color: #0078d4; }
+a:focus-visible { outline: 2px solid #0078d4; outline-offset: 2px; }
 code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   background: #f1f5f9;
   padding: .1em .35em;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: .92em;
 }
 pre {
@@ -62,29 +68,31 @@ pre {
   padding: 14px 16px;
   border-radius: 8px;
   overflow-x: auto;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, .08);
 }
 pre code { background: transparent; color: inherit; padding: 0; }
 blockquote {
   margin: 1em 0;
   padding: .6em 1em;
-  border-left: 4px solid #3b82f6;
-  background: #eff6ff;
-  color: #1e3a8a;
+  border-left: 4px solid #0078d4;
+  background: #eaf4fc;
+  color: #004578;
 }
 table {
   border-collapse: collapse;
   width: 100%;
-  margin: 1em 0;
+  margin: 1.4em 0;
   font-size: 14px;
 }
 th, td {
-  border: 1px solid #e5e7eb;
-  padding: 8px 10px;
+  padding: 10px 12px;
   text-align: left;
   vertical-align: top;
+  border-bottom: 1px solid #e5e7eb;
 }
-th { background: #f1f5f9; font-weight: 600; }
-tr:nth-child(even) td { background: #fafafa; }
+th { background: transparent; font-weight: 600; color: #0f172a; border-bottom: 2px solid #0078d4; }
+tr:last-child td { border-bottom: none; }
+tr:nth-child(even) td { background: #fafbfc; }
 hr { border: 0; border-top: 1px solid #e5e7eb; margin: 2em 0; }
 ul, ol { padding-left: 1.4em; }
 .footer {
