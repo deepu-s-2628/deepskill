@@ -1,17 +1,17 @@
 # ITOM PM Toolkit — Operating System
 
-> Shared rules for **wayfind**, **PM Feature Agent**, and **PM Enhancement Agent**.
+> Shared rules for **ask-deepu**, **PM Feature Agent**, and **PM Enhancement Agent**.
 > Load this file at the start of every PM pipeline run (new or resume).
 > **Last updated:** 2026-09-11.
 >
-> **What is this file?** Single shared rulebook so wayfind and both pipelines stay consistent (paths, language bar, wayfinding-then-autonomous execution, the consolidated report, retention, quality gates, dense deliverables, resume).
+> **What is this file?** Single shared rulebook so ask-deepu's wayfinding phase and both pipelines stay consistent (paths, language bar, wayfinding-then-autonomous execution, the consolidated report, retention, quality gates, dense deliverables, resume).
 
 ---
 
 ## 1. Mission
 
 Produce opinionated, **immediately usable** product work for **OpManager Plus / OpManager Nexus**:
-wayfind → research → analysis → definition → **dense PPTX/PDF/DOCX** → Lovable wireframe prompt → **one consolidated HTML report**.
+wayfinding → research → analysis → definition → **dense PPTX/PDF/DOCX** → Lovable wireframe prompt → **one consolidated HTML report**.
 
 Agents are **product operators**, not brainstorming chatbots. Prefer one clear recommendation over option menus.
 
@@ -23,9 +23,9 @@ Agents are **product operators**, not brainstorming chatbots. Prefer one clear r
 
 ## 2. Wayfinding Comes First — Always
 
-Before any research step runs, the `wayfind` skill interrogates the request: does this actually belong in OpManager Plus/Nexus, is it a feature or an enhancement, and what does the rest of the pipeline need locked down before it can run unattended. See `skills/wayfind/SKILL.md` for the full interview process.
+Before any research step runs, `ask-deepu` interrogates the request itself: does this actually belong in OpManager Plus/Nexus, is it a feature or an enhancement, and what does the rest of the pipeline need locked down before it can run unattended. See `skills/ask-deepu/SKILL.md` for the full interview process — there is no separate wayfinding skill; it's `ask-deepu`'s own first phase.
 
-Wayfind is the **only** interactive step in the whole pipeline (Section 8). It concludes one of three ways, and nothing downstream may skip or second-guess this conclusion:
+Wayfinding is the **only** interactive phase in the whole pipeline (Section 8). It concludes one of three ways, and nothing downstream may skip or second-guess this conclusion:
 
 | Conclusion | What happens next |
 |---|---|
@@ -33,7 +33,7 @@ Wayfind is the **only** interactive step in the whole pipeline (Section 8). It c
 | **Proceed — Enhancement** | `.steps/0_wayfinding.md` written; hand off to the enhancement pipeline, Step 1 = `current-state-analysis` |
 | **Stop — Not a fit** | No result folder created. Explain why plainly and stop. |
 
-Trigger language (`build` / `new feature` vs `enhance` / `improve`) is a starting signal for wayfind's mode question — never a substitute for actually asking it. Do **not** mix pipelines in the same result folder.
+Trigger language (`build` / `new feature` vs `enhance` / `improve`) is a starting signal for the mode question — never a substitute for actually asking it. Do **not** mix pipelines in the same result folder.
 
 ---
 
@@ -288,9 +288,17 @@ Step 5 drafts and the document-generation outputs built from them must **transfe
 
 `report.html` can embed real, interactive diagrams — use judgment on when one earns its place:
 
-- **Use Archify** (the `archify` skill) for anything with real structure worth exploring: architecture/data-flow (Section 9's collection pipeline), the feature flowchart, a before/after comparison for an enhancement. Save the rendered HTML to `Generated/diagrams/<name>.html`, then reference it from the relevant step's markdown with `<!-- diagram: Generated/diagrams/<name>.html -->` (Section 6).
+- **Try Archify** (the `archify` skill) for anything with real structure worth exploring: architecture/data-flow (Section 9's collection pipeline), the feature flowchart, a before/after comparison for an enhancement. Save the rendered HTML to `Generated/diagrams/<name>.html`, then reference it from the relevant step's markdown with `<!-- diagram: Generated/diagrams/<name>.html -->` (Section 6).
+- **Archify is optional, not a dependency of this pipeline.** It's a separate plugin this repo does not bundle, and a teammate running this pipeline may not have it installed. If the Skill tool reports it's unavailable (an "unknown skill" error, or anything similar), **do not fail the step and do not stop the run** — just skip the diagram and write the same information as a table or short prose instead. A missing diagram is a minor quality gap; a stopped pipeline is not. Never block on, retry, or route around a missing optional skill by guessing at a differently-named one — treat "not installed" as a normal, expected case, same as "no diagram needed" from the point below.
 - **Skip the diagram** and just write it out when a short table or a few sentences say the same thing without asking the reader to parse a shape — e.g. a two-option comparison, a short ordered list of steps. A diagram that doesn't earn more clarity than prose is padding.
 - The flowchart PDF (`generate_flowchart.py`, Section 13) still gets generated separately for the binary deliverables — Archify is for `report.html`, not a replacement for the PDF.
+
+### Standing rule: no hard dependency on an unbundled skill
+
+This applies beyond Archify, to anything added later that leans on a skill from a different, separately-installed plugin (as opposed to a skill inside this repo's own `skills/`). Teammates will have different sets of plugins installed — never assume one is present. Every such reference must:
+1. Attempt the call, expecting it may not resolve.
+2. On failure, degrade to a plain-text/markdown equivalent rather than stopping the step or the run.
+3. Never let a failed lookup fall through to invoking a similarly-named but unrelated skill (this is exactly how `wayfind` briefly got confused with an installed-but-unrelated `wayfinder` skill from another plugin, before `wayfind` was folded directly into `ask-deepu` to remove the cross-skill call entirely). When in doubt, prefer inlining the logic into one of this repo's own skills over depending on another plugin's skill by name.
 
 ---
 

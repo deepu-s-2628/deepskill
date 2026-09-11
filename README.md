@@ -26,11 +26,11 @@ Describe what you want, prefixed with `ask-deepu`:
 
 > `/ask-deepu: I want to add Cisco SD-WAN monitoring support`
 
-`ask-deepu` hands your request to `wayfind` — the only interactive step. Wayfind interrogates it before anything else happens: does this actually belong in OpManager Plus/Nexus, is it a net-new feature or an improvement to something existing, and what does the rest of the pipeline need to know. It can conclude the request doesn't fit at all and stop there — that's a first-class outcome, not a failure.
+`ask-deepu` interrogates it first — that's its own job, not a separate step you have to invoke. Before anything else happens: does this actually belong in OpManager Plus/Nexus, is it a net-new feature or an improvement to something existing, and what does the rest of the pipeline need to know. It can conclude the request doesn't fit at all and stop there — that's a first-class outcome, not a failure.
 
-Once wayfind concludes "proceed," the matching pipeline runs every remaining step back-to-back with **no further pauses** — no `proceed`/`approve` replies needed. The one exception: the enhancement pipeline's wireframe step will still stop and ask for screenshots if none exist, since that's a real dependency, not a review gate.
+Once that interrogation ("wayfinding") concludes "proceed," the matching pipeline runs every remaining step back-to-back with **no further pauses** — no `proceed`/`approve` replies needed. The one exception: the enhancement pipeline's wireframe step will still stop and ask for screenshots if none exist, since that's a real dependency, not a review gate.
 
-Everything lands in one place: `ITOM-PM-Result/[slug]/report.html` — a single navigable page with every step's findings, plus any diagrams rendered as real interactive Archify views where a diagram earns its place over plain text.
+Everything lands in one place: `ITOM-PM-Result/[slug]/report.html` — a single navigable page with every step's findings, plus a diagram wherever one earns its place over plain text. Diagrams use the `archify` skill if it's installed (it's a separate, optional plugin this repo doesn't bundle — everything still works without it, just as plain tables/prose instead of interactive diagrams).
 
 ## Reference
 
@@ -62,9 +62,10 @@ Everything lands in one place: `ITOM-PM-Result/[slug]/report.html` — a single 
 
 | Skill | Purpose |
 |---|---|
-| `ask-deepu` | Entry point — hands the request to `wayfind` |
-| `wayfind` | The only interactive step: interrogates fit, mode, and scope before anything runs unattended |
+| `ask-deepu` | Entry point and the only interactive step — interrogates fit, mode, and scope, then hands off to the right pipeline |
 | `wait-what` | "That didn't land — re-pitch it simpler" |
+
+No skill in this repo depends on another plugin being installed to *work* — `ask-deepu`'s interrogation and every pipeline step are fully self-contained. The one optional enhancement is diagrams via the separate `archify` plugin, which degrades gracefully to plain tables/prose if it's not present (operating system §11a) — this repo does not assume any specific set of other plugins are on a teammate's machine.
 
 ## Generating the actual files (PPTX/DOCX/flowchart)
 
@@ -77,7 +78,7 @@ uv sync
 
 ## Roadmap
 
-`v0.1.0` covers: extraction, the glossary, plain-language output, dual-format skills, this release tooling — plus, pulled forward after real testing surfaced they weren't optional, the `wayfind` interrogation step, Archify diagrams embedded in the report, and the single consolidated `report.html`.
+`v0.1.0` covers: extraction, the glossary, plain-language output, dual-format skills, this release tooling — plus, pulled forward after real testing surfaced they weren't optional, `ask-deepu`'s wayfinding interrogation, optional Archify diagrams embedded in the report, and the single consolidated `report.html`.
 
 Still planned for `v0.2.0`+:
 

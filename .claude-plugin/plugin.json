@@ -17,7 +17,6 @@
   ],
   "skills": [
     "./skills/ask-deepu",
-    "./skills/wayfind",
     "./skills/wait-what",
     "./skills/feature-pipeline/brainstorm",
     "./skills/feature-pipeline/competitive-analysis",

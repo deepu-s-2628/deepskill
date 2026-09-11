@@ -1,3 +1,0 @@
-interface:
-  display_name: "Wayfind"
-  short_description: "Interrogate fit and scope before the pipeline runs unattended"

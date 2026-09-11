@@ -94,9 +94,8 @@ Discovery, polling path, storage, processing, alerting, UI patterns, EE/probe no
    ```bash
    python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[feature-name]/"
    ```
-3. If this step's collection-method comparison or architecture is worth diagramming, reference an Archify diagram first with `<!-- diagram: Generated/diagrams/<name>.html -->` in the markdown, then rebuild.
+3. If this step's collection-method comparison or architecture is worth diagramming, try an Archify diagram first, referenced with `<!-- diagram: Generated/diagrams/<name>.html -->` in the markdown, then rebuild. Archify is optional (operating system §11a) — if it's not installed, skip the diagram and keep the table/prose version; don't fail this step over it.
 4. Never delete the markdown or `report.html` after later binary generation.
-4. Chat summary cites **HTML first**.
 
 ## Output Format
 
