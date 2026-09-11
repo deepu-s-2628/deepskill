@@ -122,9 +122,9 @@ Visual bar: before/after architecture (green=existing, blue=new, orange=modified
 
 **Screenshots required** before writing the Lovable prompt — this is the one legitimate blocker in the whole pipeline (operating system §8): if none exist, mark `Progress.md` as `blocked_on_pm`, ask specifically for the pages needed, and stop there until the PM supplies them. Match existing OpManager Plus design language; show only the recommended enhancements.
 
-**Output:** `.steps/6_enhancement_wireframe.md` → rebuild report → mark `Progress.md` as `done`.
+**Output:** `.steps/6_enhancement_wireframe.md` + `prototype.html` (topic-folder root, static HTML rendering the enhanced main page with existing/new/modified coding — see the skill for the exact spec) → rebuild report → mark `Progress.md` as `done`.
 
-Report the finished `analysis.html` path to the PM. Outside of the screenshot dependency, there was nothing to approve in between.
+Report the finished `analysis.html` path to the PM, and mention `prototype.html` as the fastest way to actually see the change. Outside of the screenshot dependency, there was nothing to approve in between.
 
 ---
 
@@ -138,6 +138,7 @@ Report the finished `analysis.html` path to the PM. Outside of the screenshot de
 ├── executive-brief.html        ← executive slide deck
 ├── engineering-brief.html      ← engineering slide deck
 ├── product-requirements.docx   ← enhancement PRD
+├── prototype.html              ← static-HTML mockup of the enhanced main page
 └── .steps/                     ← HIDDEN markdown sources + build script (starts with 0_wayfinding.md)
     ├── diagrams/flowchart.json
     └── build_docx.py

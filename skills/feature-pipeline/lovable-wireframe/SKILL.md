@@ -184,6 +184,17 @@ For each persona story from Step 1, describe how the wireframe solves their chal
 > **If any persona's challenge is NOT clearly solvable from the wireframe screens, add the missing UI element before finalizing.**
 ```
 
+## Static Prototype (`prototype.html`)
+
+In addition to the Lovable prompt above, render **Screen 1** (the primary/dashboard screen already specified above) as a real, self-contained static HTML mockup. This is the "see it now" deliverable; the Lovable prompt above is still the "keep iterating" one — both ship, neither replaces the other.
+
+- **Reuse the spec, don't re-derive it.** Screen 1's layout, components table, and data already exist above — render exactly that screen, with the same widgets, the same table columns, the same realistic mock data (never lorem ipsum, matching "Additional Notes for Lovable" above).
+- **Follow `skills/design-taste/SKILL.md` in full** — read it before writing this file. In particular: one accent color held everywhere (ManageEngine brand blue, `#0078d4` — the same color already specified in this prompt's own "Color scheme" above, so the prototype and whatever Lovable later builds actually match), row-separator tables (not a full boxed grid + zebra), a documented shape scale, real `:focus-visible` states, no AI-slop defaults.
+- **Plain HTML + inline CSS, zero build step, zero framework** — same constraint as every other deliverable in this repo (Archify, frontend-slides, `analysis.html`). A little vanilla JS is fine only for something genuinely interactive the screen needs (e.g. a time-range dropdown that swaps a static mock chart) — this is a mockup demonstrating the idea, not a working app; don't over-build it.
+- **Persona-check it**: confirm the same persona validation already done for the Lovable prompt above actually holds for this one rendered screen — if the primary screen alone can't show a persona's challenge being solved, note that plainly rather than silently expanding scope to a second screen.
+
+Write to `[feature-name]/prototype.html` (topic-folder root — a visible deliverable like `architecture.html`/`executive-brief.html`, not `.steps/`; it isn't built from markdown so it sits outside the Report rebuild mechanism below).
+
 
 
 
@@ -196,6 +207,7 @@ Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and,
 - [ ] Prompt written under correct `.steps/` path, `analysis.html` rebuilt
 - [ ] Scope matches Step 4/5 findings (no silent expansion)
 - [ ] Paste-ready for Lovable (single coherent prompt)
+- [ ] `prototype.html` written at the topic-folder root, renders the same Screen 1 spec, follows `skills/design-taste/SKILL.md`
 - [ ] `Progress.md` → `done`
 
 
@@ -203,6 +215,6 @@ Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and,
 
 After producing the document, say:
 
-> **Step 6 complete.** Review `6_lovable_wireframe.md`. When ready, copy the entire content of this file and paste it into Lovable's prompt to generate your prototype.
+> **Step 6 complete.** Review `6_lovable_wireframe.md`. When ready, copy the entire content of this file and paste it into Lovable's prompt to generate your prototype. Or open `prototype.html` directly to see the primary screen now.
 >
 > **🎉 Feature pipeline complete!** All artifacts are in `[feature-name]/`.

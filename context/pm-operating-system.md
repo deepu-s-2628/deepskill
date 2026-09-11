@@ -11,7 +11,7 @@
 ## 1. Mission
 
 Produce opinionated, **immediately usable** product work for **OpManager Plus / OpManager Nexus**:
-wayfinding → research → analysis → definition → **dense HTML slide deck + Archify diagram + DOCX PRD** → Lovable wireframe prompt → **one consolidated HTML report**.
+wayfinding → research → analysis → definition → **dense HTML slide deck + Archify diagram + DOCX PRD** → Lovable wireframe prompt + static prototype → **one consolidated HTML report**.
 
 Agents are **product operators**, not brainstorming chatbots. Prefer one clear recommendation over option menus.
 
@@ -53,6 +53,7 @@ All paths are relative to the **opened workspace root**. There is no wrapper fol
 ├── executive-brief.html        ← executive slide deck (frontend-slides, HTML)
 ├── engineering-brief.html      ← engineering slide deck (frontend-slides, HTML)
 ├── product-requirements.docx   ← PRD, python-docx
+├── prototype.html              ← static-HTML mockup of the primary screen (Step 6, design-taste §11b)
 └── .steps/                     ← HIDDEN: markdown source of truth + build scripts (agent edit/resume)
     ├── 0_wayfinding.md
     ├── 1_brainstorm.md
@@ -74,7 +75,7 @@ All paths are relative to the **opened workspace root**. There is no wrapper fol
 Same flat pattern, folder named `[slug]-enhancement/`:
 - `.steps/*.md` — hidden sources, starting with `0_wayfinding.md`
 - `analysis.html` — the one consolidated deliverable
-- `architecture.html`, `executive-brief.html`, `engineering-brief.html`, `product-requirements.docx` — same deliverable set as feature mode
+- `architecture.html`, `executive-brief.html`, `engineering-brief.html`, `product-requirements.docx`, `prototype.html` — same deliverable set as feature mode
 
 ### Hard rules
 
@@ -84,7 +85,7 @@ Same flat pattern, folder named `[slug]-enhancement/`:
 4. **Diagrams are Archify HTML**, visible at the topic-folder root (e.g. `architecture.html`) *and* referenced from the relevant step's markdown with a `<!-- diagram: architecture.html -->` marker line — `build_report.py` turns that into an embedded, interactive `<iframe>` in the right section. There is no PDF flowchart.
 5. **Slide decks are HTML** (`frontend-slides`), not PPTX. Two decks — `executive-brief.html` (executive audience) and `engineering-brief.html` (engineering audience) — each self-contained, animation-capable, and openable directly in a browser.
 6. **The PRD stays DOCX** (`python-docx`), unchanged from before.
-7. **Retention — never delete** `.steps/*.md`, `analysis.html`, `Progress.md`, the deliverable files at the topic-folder root, or `.steps/build_docx.py`.
+7. **Retention — never delete** `.steps/*.md`, `analysis.html`, `Progress.md`, the deliverable files at the topic-folder root (including `prototype.html`), or `.steps/build_docx.py`.
 8. Do not invent alternate layout names (`output/`, `docs/`, `Generated/`, `steps/` without the dot).
 9. Chat summaries should **highlight the `analysis.html` path** for reviewers; mention MD only as internal source.
 
@@ -313,7 +314,7 @@ This still applies to anything **not** vendored into this repo's own `skills/` �
 
 `build_report.py`'s CSS follows `skills/design-taste/SKILL.md` — a curated, rewritten-for-this-repo adaptation of the stack-agnostic taste judgment from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill), not a copy of it (that skill's own React/Motion/npm machinery, and its landing-page structure rules, don't apply to a self-contained static-HTML report). Read that file for the full rationale and rule set; the short version: one accent color held identically everywhere (ManageEngine brand blue, `#0078d4`), a documented two-tier corner-radius scale, row-separator tables instead of a full boxed grid, a readable measure for prose while tables/diagrams keep the full width, and real `:focus-visible` states.
 
-This applies **only** to `analysis.html`'s own styling — never to Archify's or frontend-slides' output, which carry their own mature, unrelated style systems (Section 11a). If a future deliverable needs similar taste discipline (e.g. a static-HTML wireframe/prototype), reference `skills/design-taste/SKILL.md` the same way rather than inventing a parallel rule set.
+This applies to `analysis.html`'s own styling, and to `prototype.html` (Step 6's static-HTML wireframe, milestone 2 — feature mode picks its own accent per §11b rule 1, enhancement mode's colors come from the extracted current design instead, per `enhancement-wireframe/SKILL.md`) — never to Archify's or frontend-slides' output, which carry their own mature, unrelated style systems (Section 11a).
 
 ---
 
@@ -385,6 +386,7 @@ This applies **only** to `analysis.html`'s own styling — never to Archify's or
 - [ ] `.steps/` path correct, report rebuilt
 - [ ] Enhancement: screenshots first — this is the one place a real blocker can still pause the run (Section 8)
 - [ ] Paste-ready Lovable prompt
+- [ ] `prototype.html` written at the topic-folder root, follows `skills/design-taste/SKILL.md` (Section 11b)
 - [ ] Scope matches wayfinding conclusion only
 
 ---

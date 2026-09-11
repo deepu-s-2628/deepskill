@@ -207,6 +207,17 @@ For each persona story from Step 1, verify the enhanced wireframe solves their c
 
 Write to `[feature-name]-enhancement/.steps/6_enhancement_wireframe.md`
 
+## Static Prototype (`prototype.html`)
+
+In addition to the Lovable prompt above, render **Page 1** (the enhanced main page, already specified above) as a real, self-contained static HTML mockup. This is the "see it now" deliverable; the Lovable prompt above is still the "keep iterating" one — both ship, neither replaces the other.
+
+- **Reuse the spec and the extracted design system, don't re-derive either.** Page 1's layout and its existing/enhanced/new element breakdown already exist above, and the actual colors/typography/component styles came from the PM's own screenshots (Step B/D above) — this prototype must match the real current OpManager Plus design, not a generic one.
+- **Mark what changed, per the Design Matching Rules above**: use the same existing/new/modified visual distinction this pipeline already uses elsewhere (green `#28A745` = existing/keep, blue `#0078D4` = new, orange `#FD7E14` = modified — the same coding used in this run's Archify flowchart and PRD) rather than inventing a different scheme for the prototype alone.
+- **Follow `skills/design-taste/SKILL.md`'s structural discipline** (shape consistency, table treatment, focus states, avoiding AI-slop defaults) for anything the extracted screenshots didn't already dictate — the screenshots win on color/layout specifics from Step B/D above; design-taste governs everything screenshots don't specify.
+- **Plain HTML + inline CSS, zero build step, zero framework** — same constraint as every other deliverable in this repo. A little vanilla JS is fine only for something genuinely interactive the screen needs; this is a mockup demonstrating the change, not a working app.
+
+Write to `[feature-name]-enhancement/prototype.html` (topic-folder root — a visible deliverable, not `.steps/`; it isn't built from markdown so it sits outside the Report rebuild mechanism below).
+
 
 
 
@@ -220,6 +231,7 @@ Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and,
 - [ ] Scope matches Step 4/5 findings (no silent expansion)
 - [ ] Screenshots analyzed before drafting (or run correctly marked `blocked_on_pm` if none were available)
 - [ ] Paste-ready for Lovable (single coherent prompt)
+- [ ] `prototype.html` written at the topic-folder root, renders Page 1 with the extracted design system + existing/new/modified color coding
 - [ ] `Progress.md` → `done`
 
 
@@ -238,7 +250,7 @@ After writing the file, display in chat:
 > **Enhanced elements:** [N] modifications to existing UI
 > **New elements added:** [N] new components in existing style
 >
-> The Lovable prompt in `6_enhancement_wireframe.md` matches the current OpManager Plus design language and shows exactly what changes with the enhancements.
+> The Lovable prompt in `6_enhancement_wireframe.md` matches the current OpManager Plus design language and shows exactly what changes with the enhancements. `prototype.html` renders the enhanced main page now.
 >
 > **To use:** Copy the prompt into Lovable to generate the prototype.
 >

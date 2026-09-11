@@ -118,9 +118,9 @@ Visual bar: real diagram structure, comparison matrices, KPI cards, layout diver
 ### Step 6 — Lovable Wireframe Prompt
 **Skill:** [skills/feature-pipeline/lovable-wireframe/SKILL.md](../../skills/feature-pipeline/lovable-wireframe/SKILL.md)
 
-**Output:** `.steps/6_lovable_wireframe.md` → rebuild report → mark `Progress.md` as `done`.
+**Output:** `.steps/6_lovable_wireframe.md` + `prototype.html` (topic-folder root, static HTML rendering the primary screen — see the skill for the exact spec) → rebuild report → mark `Progress.md` as `done`.
 
-Report the finished `analysis.html` path to the PM. This is the first and only point in the run where you present a result — there was nothing to approve in between.
+Report the finished `analysis.html` path to the PM, and mention `prototype.html` as the fastest way to actually see the idea. This is the first and only point in the run where you present a result — there was nothing to approve in between.
 
 ---
 
@@ -134,6 +134,7 @@ Report the finished `analysis.html` path to the PM. This is the first and only p
 ├── executive-brief.html        ← executive slide deck
 ├── engineering-brief.html      ← engineering slide deck
 ├── product-requirements.docx   ← PRD
+├── prototype.html              ← static-HTML mockup of the primary screen
 └── .steps/                     ← HIDDEN markdown sources + build script
     ├── 0_wayfinding.md
     ├── 1_brainstorm.md
