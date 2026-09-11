@@ -1,5 +1,35 @@
 # deepskill
 
+## 0.4.0
+
+### Minor Changes
+
+- [`0abc4b6`](https://github.com/deepu-s-2628/deepskill/commit/0abc4b685d563513da5064263a0b66899c9e4aa4) Thanks [@deepu-s-2628](https://github.com/deepu-s-2628)! - Milestone 1 of the design-taste/unlazy roadmap: vendored a curated, rewritten-for-this-repo adaptation of [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill)'s stack-agnostic design judgment at `skills/design-taste/`, and applied it to `analysis.html`'s styling via `build_report.py`.
+
+  This is a curated extraction, not a copy — the source skill's own scope note says it explicitly ("NOT for dashboards / dense product UI," which is exactly what a PM analysis report is), and most of its ~1,200 lines are React/Next.js/Motion/npm-component-library machinery or landing-page structure (heroes, bento grids, marquees) that doesn't fit this repo's zero-build-step static-HTML deliverables. What transferred: color restraint, typographic hierarchy, shape/spacing consistency, and the discipline of naming generic-AI defaults instead of drifting into them.
+
+  Concretely, `analysis.html` now uses: one accent color held identically everywhere (ManageEngine brand blue `#0078d4`, already this repo's documented brand color, replacing a generic Tailwind-blue default); a documented two-tier corner-radius scale (was an unplanned 4/6/10px mix); row-separator tables with an accent header rule instead of a full boxed grid with zebra striping (the single most common "AI spec sheet" tell, and the highest-leverage fix given how table-heavy these reports are); a readable ~75ch measure for prose paragraphs while tables and diagrams keep the full 1400px width; and real `:focus-visible` states, previously entirely absent.
+
+  Deliberately kept the system-font stack rather than following the source skill's webfont recommendation (Geist/Outfit/Satoshi) — this repo's HTML must render correctly with zero external network calls, the same constraint that keeps Archify and frontend-slides dependency-free.
+
+- [`a15823d`](https://github.com/deepu-s-2628/deepskill/commit/a15823d7b75c730145ab0d7f379d63b3e132a416) Thanks [@deepu-s-2628](https://github.com/deepu-s-2628)! - Token/file-discipline pass, grilled and verified before implementing (not just a size cleanup):
+
+  **Fixed a real correctness bug found along the way.** `deliverables/SKILL.md` and `enhancement-deliverables/SKILL.md` still instructed the model to design slides around `python-pptx`/`PresentationBuilder` method names (`add_kpi_slide()`, `add_icon_grid_slide()`, etc.) from `generate_pptx.py` — deleted two releases ago when this pipeline moved to frontend-slides. This almost certainly contributed to the earlier "slides are too thin" feedback: the design-notes sections were still steering toward a rigid PPTX function-call model instead of genuine frontend-slides authoring. Rewrote both files' layout-variety guidance in the same content-shape vocabulary `generate-documents`/`enhancement-generate-documents` already use (two-column, comparison matrix, icon grid, KPI cards, before/after panels — described as layouts, not API calls). Also fixed a second bug found in the same pass: existing/new/modified color-coding (an enhancement-only concept) had leaked into the _feature_ pipeline's engineering-deck instructions via copy-paste — removed, since a net-new feature has nothing "existing" to color-code against.
+
+  **Deduped the "Report rebuild" boilerplate.** The same ~19-line procedure was copy-pasted verbatim across all 14 pipeline skills (~266 lines of pure redundancy), duplicating what `pm-operating-system.md` §6 already documents once — and which every step already loads as mandatory context regardless. Replaced with a one-paragraph pointer in each file.
+
+  **Verified the two largest files (`deliverables`, `enhancement-deliverables`, the two biggest `SKILL.md` files installed on this machine) should NOT be split into on-demand references.** Confirmed their four deliverable templates (5a-5d) are unconditionally read in the same Step 5 pass with no cross-template dependencies — splitting a file whose every branch always fires adds tool-call overhead with no token savings (the opposite of what progressive disclosure is for). Left whole; fixed the real defects inside them instead.
+
+  **Added `pm-operating-system.md` §17** codifying this as a standing authoring convention for future skills: don't duplicate what's already mandatory context, only split content that's genuinely conditional, scope directory reads narrowly (matching Archify's own `SKILL.md` discipline), and verify a referenced file/method/format still exists rather than trusting prose that merely reads plausibly.
+
+### Patch Changes
+
+- [`5b5dc58`](https://github.com/deepu-s-2628/deepskill/commit/5b5dc5846782288970e3b6c5e1c5d4947a24e1f2) Thanks [@deepu-s-2628](https://github.com/deepu-s-2628)! - Aligned `md_to_html.py`'s fallback-render CSS with `build_report.py`'s new design-taste styling (milestone 1) — same brand-blue accent, row-separator tables, focus states, and radius scale. This path only runs when `build_report.py` itself is unavailable, but it was left visibly inconsistent (old generic Tailwind blue) after milestone 1 landed.
+
+- [`9f4628b`](https://github.com/deepu-s-2628/deepskill/commit/9f4628b9ee243b15153241b4e1b46fa9bb468d1f) Thanks [@deepu-s-2628](https://github.com/deepu-s-2628)! - Fixed the README's "Status" line, which still said `v0.2.0` after `v0.3.0` had already shipped — merging a "Version Packages" PR bumps `package.json`/`plugin.json` but never touches prose elsewhere that names the version. Added the missing `v0.3.0` Roadmap entry, and removed the hardcoded version number from the Status line entirely (points at `.claude-plugin/plugin.json`/`CHANGELOG.md` instead), so this can't silently drift again on the next release.
+
+- [`1373cb0`](https://github.com/deepu-s-2628/deepskill/commit/1373cb07540393c4d21e6dcf9800daab0b731379) Thanks [@deepu-s-2628](https://github.com/deepu-s-2628)! - Added an "Updating an existing install" section to the README — the install docs previously only covered a fresh `add`, with no mention of the `skills` CLI's dedicated `update` command (verified against the real CLI: it tracks each installed skill's source and re-fetches from there, so `update` is the right command, not re-running `add`). Also documented `skills list` for checking what's currently installed.
+
 ## 0.3.0
 
 ### Minor Changes
