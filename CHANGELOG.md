@@ -1,5 +1,13 @@
 # deepskill
 
+## 0.7.1
+
+### Patch Changes
+
+- [`3098bbe`](https://github.com/deepu-s-2628/deepskill/commit/3098bbe5cccdd80509e4366e143d1725b89f6d40) Thanks [@deepu-s-2628](https://github.com/deepu-s-2628)! - Fixed the README's `skills list` documentation — it only showed the bare command, which defaults to project scope and reports "No project skills found" for a global install (reproduced live: `npx skills@latest list` after a `-g` install says exactly this and suggests `-g`). Now documents both forms, matching how `update` already documents `-p`/`-g`. Also updated the `update` section's skill list, which was stale since `design-taste` and `unlazy-gates` were vendored.
+
+- [`4cb1263`](https://github.com/deepu-s-2628/deepskill/commit/4cb1263a8fb792f5b83f691a9d31ae9296babde0) Thanks [@deepu-s-2628](https://github.com/deepu-s-2628)! - Fixed stale Step 6 descriptions left over from the `prototype.html` and opt-in changes: README's Feature/Enhancement pipeline reference tables still said "Lovable Wireframe Prompt" only, with no mention of `prototype.html` or that Step 6 is now opt-in; both `lovable-wireframe` and `enhancement-wireframe` skills' own frontmatter `description` had the same gap.
+
 ## 0.7.0
 
 ### Minor Changes
