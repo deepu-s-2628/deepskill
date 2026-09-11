@@ -30,7 +30,20 @@ Describe what you want, prefixed with `ask-deepu`:
 
 Once that interrogation ("wayfinding") concludes "proceed," the matching pipeline runs every remaining step back-to-back with **no further pauses** — no `proceed`/`approve` replies needed. The one exception: the enhancement pipeline's wireframe step will still stop and ask for screenshots if none exist, since that's a real dependency, not a review gate.
 
-Everything lands in one place: `ITOM-PM-Result/[slug]/report.html` — a single navigable page with every step's findings, plus a diagram wherever one earns its place over plain text. Diagrams use the `archify` skill if it's installed (it's a separate, optional plugin this repo doesn't bundle — everything still works without it, just as plain tables/prose instead of interactive diagrams).
+Everything lands directly in your workspace, no wrapper folder — a topic folder named after the slug, e.g. `vxlan-monitoring/` (or `vxlan-monitoring-enhancement/`):
+
+```
+vxlan-monitoring/
+├── STATUS.md
+├── vxlan-monitoring.html                ← the one consolidated report — start here
+├── vxlan-monitoring-flowchart.html      ← interactive Archify diagram
+├── vxlan-monitoring-exec-slides.html    ← executive slide deck
+├── vxlan-monitoring-eng-slides.html     ← engineering slide deck
+├── vxlan-monitoring.docx                ← PRD
+└── .steps/                              ← hidden markdown history, kept for resume
+```
+
+`vxlan-monitoring.html` is a single navigable page with every step's findings, plus a diagram wherever one earns its place over plain text.
 
 ## Reference
 
@@ -64,21 +77,33 @@ Everything lands in one place: `ITOM-PM-Result/[slug]/report.html` — a single 
 |---|---|
 | `ask-deepu` | Entry point and the only interactive step — interrogates fit, mode, and scope, then hands off to the right pipeline |
 | `wait-what` | "That didn't land — re-pitch it simpler" |
+| `archify` | Vendored in full (`skills/archify/`) — renders the flowchart and any other diagrams as interactive HTML |
+| `frontend-slides` | Vendored in full (`skills/frontend-slides/`) — authors the executive/engineering slide decks as self-contained, animation-capable HTML |
 
-No skill in this repo depends on another plugin being installed to *work* — `ask-deepu`'s interrogation and every pipeline step are fully self-contained. The one optional enhancement is diagrams via the separate `archify` plugin, which degrades gracefully to plain tables/prose if it's not present (operating system §11a) — this repo does not assume any specific set of other plugins are on a teammate's machine.
+Everything in this repo, including Archify and frontend-slides, is bundled in `skills/` — installing this one package is enough. Nothing here depends on a teammate having a *different*, separately-installed plugin on their machine (operating system §11a) — if that ever changes for something added later, the same rule applies: try it, and degrade gracefully rather than fail the run if it's missing.
 
-## Generating the actual files (PPTX/DOCX/flowchart)
+## Generating the actual files (Archify flowchart / HTML slide decks / DOCX)
 
-The generators are Python, at `scripts/`. Bootstrap once with [`uv`](https://docs.astral.sh/uv/):
+The PRD generator is Python, at `scripts/`. Bootstrap once with [`uv`](https://docs.astral.sh/uv/):
 
 ```bash
 cd scripts
 uv sync
 ```
 
+No `uv` on the machine? Fall back to a plain virtualenv:
+
+```bash
+cd scripts
+python3 -m venv .venv && source .venv/bin/activate
+pip install python-docx Pillow matplotlib
+```
+
+Archify and frontend-slides need no install step — both are pure Node.js/static HTML, invoked directly from their vendored `skills/` paths.
+
 ## Roadmap
 
-`v0.1.0` covers: extraction, the glossary, plain-language output, dual-format skills, this release tooling — plus, pulled forward after real testing surfaced they weren't optional, `ask-deepu`'s wayfinding interrogation, optional Archify diagrams embedded in the report, and the single consolidated `report.html`.
+`v0.1.0` covers: extraction, the glossary, plain-language output, dual-format skills, this release tooling — plus, pulled forward after real testing surfaced they weren't optional: `ask-deepu`'s wayfinding interrogation, Archify diagrams and frontend-slides HTML decks (both fully vendored, replacing PPTX/PDF generation entirely), and the flat topic-folder layout with one consolidated `[slug].html`.
 
 Still planned for `v0.2.0`+:
 

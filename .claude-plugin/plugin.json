@@ -18,6 +18,8 @@
   "skills": [
     "./skills/ask-deepu",
     "./skills/wait-what",
+    "./skills/archify",
+    "./skills/frontend-slides",
     "./skills/feature-pipeline/brainstorm",
     "./skills/feature-pipeline/competitive-analysis",
     "./skills/feature-pipeline/technical-analysis",

@@ -12,9 +12,9 @@ Bring together the current state analysis, cross-module insights, and competitiv
 ## Input
 
 Read all prior steps:
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/1_current_state.md` — what exists today, its limitations, and **persona challenges**
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/2_cross_module_analysis.md` — internal reuse and consistency opportunities
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/3_competitive_analysis.md` — competitive gaps and customer demand
+- `[feature-name]-enhancement/.steps/1_current_state.md` — what exists today, its limitations, and **persona challenges**
+- `[feature-name]-enhancement/.steps/2_cross_module_analysis.md` — internal reuse and consistency opportunities
+- `[feature-name]-enhancement/.steps/3_competitive_analysis.md` — competitive gaps and customer demand
 
 **CRITICAL: Persona challenges are the ultimate prioritization filter.** When ranking enhancements, an enhancement that directly solves a persona challenge outranks one that doesn't — even if the latter has more competitive pressure. The persona stories represent real users with real pain. Every recommended enhancement should trace back to either a persona challenge, a competitive gap, or both.
 
@@ -80,7 +80,7 @@ For the top-priority enhancements, describe:
 
 ## Output Format
 
-Write to `ITOM-PM-Result/[feature-name]-enhancement/.steps/4_enhancement_findings.md`:
+Write to `[feature-name]-enhancement/.steps/4_enhancement_findings.md`:
 
 ```markdown
 # Enhancement Findings & Recommendations: [Feature/Area Name]
@@ -198,31 +198,29 @@ Final validation that every persona challenge from Step 1 is addressed:
 
 Every step artifact this skill writes must:
 
-1. **Markdown (source of truth, hidden):** `ITOM-PM-Result/[slug]/.steps/<name>.md`
-   - Enhancement mode: `ITOM-PM-Result/[slug]-enhancement/.steps/<name>.md`
+1. **Markdown (source of truth, hidden):** `[slug]/.steps/<name>.md`
+   - Enhancement mode: `[slug]-enhancement/.steps/<name>.md`
 2. **Rebuild the consolidated report** immediately after:
    ```bash
-   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[slug]/"
+   python "<scripts-dir>/build_report.py" "[slug]/"
    ```
    Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, reference it first with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker in the markdown, then rebuild.
+3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `[slug]-<name>.html`) and reference it first with a `<!-- diagram: [slug]-<name>.html -->` marker in the markdown, then rebuild.
 4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`report.html`** path.
-6. **Never delete** `.steps/*.md`, `report.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
+5. Final chat summary (end of the whole run) cites the **`[slug].html`** path.
+6. **Never delete** `.steps/*.md`, `[slug].html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
 
 ## Quality Gate (before marking complete)
 
-- [ ] Path: `ITOM-PM-Result/[slug]-enhancement/.steps/4_enhancement_findings.md`
+- [ ] Path: `[slug]-enhancement/.steps/4_enhancement_findings.md`
 - [ ] Prioritized (quick win / core / strategic / not recommended)
 - [ ] Each major item traces to persona and/or competitive gap
 - [ ] Single recommended first move is clear
 - [ ] `STATUS.md` updated
 
-- [ ] `.steps/` markdown written, `report.html` rebuilt
-- [ ] Markdown is hidden under `.steps/`; HTML visible under `steps/`; never delete either or Generated artifacts
 
 
 ## Completion
@@ -250,7 +248,7 @@ After writing the file, display in chat:
 >
 > **Recommended first move:** [The single most impactful thing to do first and why]
 >
-> Full details in `ITOM-PM-Result/[feature-name]-enhancement/.steps/4_enhancement_findings.md`
+> Full details in `[feature-name]-enhancement/.steps/4_enhancement_findings.md`
 >
 > Continuing immediately to Step 5 — Enhancement Deliverables.
 

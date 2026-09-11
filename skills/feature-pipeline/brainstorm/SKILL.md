@@ -81,17 +81,17 @@ These stories are reused in exec/eng decks, PRD, and wireframes.
 
 Every step artifact this skill writes must:
 
-1. **Markdown (source of truth, hidden):** `ITOM-PM-Result/[slug]/.steps/<name>.md`
-   - Enhancement mode: `ITOM-PM-Result/[slug]-enhancement/.steps/<name>.md`
+1. **Markdown (source of truth, hidden):** `[slug]/.steps/<name>.md`
+   - Enhancement mode: `[slug]-enhancement/.steps/<name>.md`
 2. **Rebuild the consolidated report** immediately after:
    ```bash
-   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[slug]/"
+   python "<scripts-dir>/build_report.py" "[slug]/"
    ```
    Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, reference it first with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker in the markdown, then rebuild.
+3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `[slug]-<name>.html`) and reference it first with a `<!-- diagram: [slug]-<name>.html -->` marker in the markdown, then rebuild.
 4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`report.html`** path.
-6. **Never delete** `.steps/*.md`, `report.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
+5. Final chat summary (end of the whole run) cites the **`[slug].html`** path.
+6. **Never delete** `.steps/*.md`, `[slug].html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
@@ -172,7 +172,7 @@ No RFC dumps.]
 
 ## Quality Gate (before marking complete)
 
-- [ ] Wrote `.steps/1_brainstorm.md` (not feature root), rebuilt `report.html`
+- [ ] Wrote `.steps/1_brainstorm.md` (not feature root), rebuilt `[slug].html`
 - [ ] Plain English throughout; jargon defined on first use
 - [ ] **Why This Technology Exists** covers what / why people use it / problem solved / easy example
 - [ ] 2–3 named persona stories with concrete failure examples + transformation
@@ -185,7 +185,7 @@ No RFC dumps.]
 
 ## Completion
 
-After writing the markdown and rebuilding `report.html`, display a short chat summary, then continue immediately to Step 2 — do not wait for a reply:
+After writing the markdown and rebuilding `[slug].html`, display a short chat summary, then continue immediately to Step 2 — do not wait for a reply:
 
 ---
 

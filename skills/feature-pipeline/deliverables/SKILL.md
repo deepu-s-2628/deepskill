@@ -1,13 +1,13 @@
 ---
 name: deliverables
-description: "Step 5 of PM Feature Pipeline: Generate all four deliverable documents — executive PPT, engineering PPT, feature flowchart, and PRD — as markdown drafts ready for PPTX/PDF/DOCX generation."
+description: "Step 5 of PM Feature Pipeline: Generate all four deliverable documents — executive slide deck, engineering slide deck, feature flowchart, and PRD — as markdown drafts ready for HTML/DOCX generation."
 ---
 
 # Step 5 — Deliverable Generation
 
 ## Purpose
 
-Generate production-quality content for four deliverables. These are written as structured markdown first (for review), then converted to actual PPTX/PDF/DOCX files using the `generate_documents` skill.
+Generate production-quality content for four deliverables. These are written as structured markdown first (for review), then converted to the actual HTML slide decks, Archify flowchart, and DOCX PRD using the `generate_documents` skill.
 
 
 ## Dense content bar (mandatory — no thin decks)
@@ -64,10 +64,10 @@ No “TBD”, “update later”, “lorem”, or empty speaker-note-only slides
 ## Input
 
 Read ALL prior step files:
-- `ITOM-PM-Result/[feature-name]/.steps/1_brainstorm.md` — feature understanding and **persona stories/challenges**
-- `ITOM-PM-Result/[feature-name]/.steps/2_competitive_analysis.md` — competitive landscape and **persona challenge coverage**
-- `ITOM-PM-Result/[feature-name]/.steps/3_technical_analysis.md` — technical approach and **persona challenge resolution**
-- `ITOM-PM-Result/[feature-name]/.steps/4_feature_definition.md` — capabilities with **persona challenge traceability**
+- `[feature-name]/.steps/1_brainstorm.md` — feature understanding and **persona stories/challenges**
+- `[feature-name]/.steps/2_competitive_analysis.md` — competitive landscape and **persona challenge coverage**
+- `[feature-name]/.steps/3_technical_analysis.md` — technical approach and **persona challenge resolution**
+- `[feature-name]/.steps/4_feature_definition.md` — capabilities with **persona challenge traceability**
 
 **Persona stories provide the motivational thread** — the executive PPT opens and closes with them (Slides 2 and 11), the engineering PPT opens with one (Slide 2), and the PRD includes a compact traceability table. Extract the best stories from `1_brainstorm.md` and reference them where needed.
 
@@ -77,7 +77,7 @@ Read ALL prior step files:
 
 ### 5a — Executive Presentation
 
-**File:** `ITOM-PM-Result/[feature-name]/.steps/5a_executive_presentation.md`
+**File:** `[feature-name]/.steps/5a_executive_presentation.md`
 **Audience:** Product Director / Leadership
 **Tone:** Strategic, visual, high-level. No deep technical content.
 **Slides:** 12-16 (add slides rather than dropping concrete analysis points)
@@ -180,7 +180,7 @@ Every presentation MUST use a mix of slide types. Never use more than 2 consecut
 
 ### 5b — Engineering Presentation
 
-**File:** `ITOM-PM-Result/[feature-name]/.steps/5b_engineering_presentation.md`
+**File:** `[feature-name]/.steps/5b_engineering_presentation.md`
 **Audience:** Engineering team
 **Tone:** Technically rigorous but accessible. Assume smart engineers who don't know this specific domain.
 **Slides:** 18-25 (use more if needed to avoid dropping metrics/OID-API detail)
@@ -291,7 +291,7 @@ Same rule as executive PPT — never more than 2 consecutive bullet slides. Use:
 
 ### 5c — Feature Flowchart
 
-**File:** `ITOM-PM-Result/[feature-name]/.steps/5c_feature_flowchart.md`
+**File:** `[feature-name]/.steps/5c_feature_flowchart.md`
 **Format:** Mermaid diagrams (converted to PDF)
 
 ```markdown
@@ -343,7 +343,7 @@ flowchart TD
 
 ### 5d — Product Requirements Document
 
-**File:** `ITOM-PM-Result/[feature-name]/.steps/5d_product_requirements.md`
+**File:** `[feature-name]/.steps/5d_product_requirements.md`
 **Audience:** Engineering, QA, and Design
 **Tone:** Precise, comprehensive, unambiguous
 
@@ -481,17 +481,17 @@ flowchart TD
 
 Every step artifact this skill writes must:
 
-1. **Markdown (source of truth, hidden):** `ITOM-PM-Result/[slug]/.steps/<name>.md`
-   - Enhancement mode: `ITOM-PM-Result/[slug]-enhancement/.steps/<name>.md`
+1. **Markdown (source of truth, hidden):** `[slug]/.steps/<name>.md`
+   - Enhancement mode: `[slug]-enhancement/.steps/<name>.md`
 2. **Rebuild the consolidated report** immediately after:
    ```bash
-   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[slug]/"
+   python "<scripts-dir>/build_report.py" "[slug]/"
    ```
    Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, reference it first with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker in the markdown, then rebuild.
+3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `[slug]-<name>.html`) and reference it first with a `<!-- diagram: [slug]-<name>.html -->` marker in the markdown, then rebuild.
 4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`report.html`** path.
-6. **Never delete** `.steps/*.md`, `report.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
+5. Final chat summary (end of the whole run) cites the **`[slug].html`** path.
+6. **Never delete** `.steps/*.md`, `[slug].html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
@@ -504,8 +504,6 @@ See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 - [ ] PRD requirements are testable
 - [ ] Persona traceability retained
 - [ ] `STATUS.md` updated (next: `document_generation`)
-- [ ] `.steps/` markdown written, `report.html` rebuilt
-- [ ] Markdown is hidden under `.steps/`; HTML visible under `steps/`; never delete either or Generated artifacts
 
 
 ## Completion
@@ -526,9 +524,9 @@ After producing all four files, display a **summary directly in chat**:
 > - [Key technical decision for engineers]
 > - [Most important success metric]
 >
-> Drafts written under `ITOM-PM-Result/[feature-name]/.steps/` (`5a`–`5d`), `report.html` rebuilt.
+> Drafts written under `[feature-name]/.steps/` (`5a`–`5d`), `[feature-name].html` rebuilt.
 > Update `STATUS.md` → Step 5 complete, next action `document_generation`.
 >
-> Continuing immediately into document generation (PPTX/PDF/DOCX), then Step 6.
+> Continuing immediately into document generation (HTML slide decks, Archify flowchart, DOCX), then Step 6.
 
 ---

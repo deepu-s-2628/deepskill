@@ -14,8 +14,8 @@ This document must be **engineer-usable**: after reading it, an OpManager develo
 ## Input
 
 Read:
-- `ITOM-PM-Result/[feature-name]/.steps/1_brainstorm.md`
-- `ITOM-PM-Result/[feature-name]/.steps/2_competitive_analysis.md`
+- `[feature-name]/.steps/1_brainstorm.md`
+- `[feature-name]/.steps/2_competitive_analysis.md`
 - [context/product-context.md](../../../context/product-context.md)
 - Relevant workspace context MDs for the domain (SNMP, REST framework, EE, etc.)
 
@@ -89,13 +89,13 @@ Discovery, polling path, storage, processing, alerting, UI patterns, EE/probe no
 
 ## Report rebuild (mandatory)
 
-1. Write: `ITOM-PM-Result/[feature-name]/.steps/3_technical_analysis.md`
+1. Write: `[feature-name]/.steps/3_technical_analysis.md`
 2. Rebuild the consolidated report:
    ```bash
-   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[feature-name]/"
+   python "<scripts-dir>/build_report.py" "[feature-name]/"
    ```
-3. If this step's collection-method comparison or architecture is worth diagramming, try an Archify diagram first, referenced with `<!-- diagram: Generated/diagrams/<name>.html -->` in the markdown, then rebuild. Archify is optional (operating system §11a) — if it's not installed, skip the diagram and keep the table/prose version; don't fail this step over it.
-4. Never delete the markdown or `report.html` after later binary generation.
+3. If this step's collection-method comparison or architecture is worth diagramming, render it with Archify — bundled at `skills/archify/`, always available (operating system §11a) — to `[feature-name]-<name>.html`, referenced with `<!-- diagram: [feature-name]-<name>.html -->` in the markdown, then rebuild.
+4. Never delete the markdown or `[feature-name].html` after later document generation.
 
 ## Output Format
 
@@ -225,7 +225,7 @@ Device → Collection → Normalize → Store → Threshold → UI / Notify
 
 ## Quality Gate (before marking complete)
 
-- [ ] `.steps/3_technical_analysis.md` written, `report.html` rebuilt
+- [ ] `.steps/3_technical_analysis.md` written, `[feature-name].html` rebuilt
 - [ ] All viable methods evaluated; one primary chosen
 - [ ] **Deep collection contract** with concrete OIDs and/or API endpoints/paths (not hand-wavy)
 - [ ] Uncertain items labeled Needs lab confirmation + source
@@ -244,6 +244,6 @@ Device → Collection → Normalize → Store → Threshold → UI / Notify
 > **Why:** [one sentence]
 > **Contract depth:** [N OIDs / N endpoints / paths documented]
 > **Metrics:** [N] in [M] categories
-> **Source (MD):** `ITOM-PM-Result/[feature-name]/.steps/3_technical_analysis.md`
+> **Source (MD):** `[feature-name]/.steps/3_technical_analysis.md`
 >
 > Continuing immediately to Step 4 — Feature Definition.

@@ -12,9 +12,9 @@ Define exactly what needs to be built. This is the bridge between technical anal
 ## Input
 
 Read all prior step files:
-- `ITOM-PM-Result/[feature-name]/.steps/1_brainstorm.md` — feature understanding, target users, and **persona challenges**
-- `ITOM-PM-Result/[feature-name]/.steps/2_competitive_analysis.md` — what to match and where to differentiate
-- `ITOM-PM-Result/[feature-name]/.steps/3_technical_analysis.md` — how it works technically
+- `[feature-name]/.steps/1_brainstorm.md` — feature understanding, target users, and **persona challenges**
+- `[feature-name]/.steps/2_competitive_analysis.md` — what to match and where to differentiate
+- `[feature-name]/.steps/3_technical_analysis.md` — how it works technically
 - [context/product-context.md](../../../context/product-context.md) — existing product patterns
 
 **CRITICAL: The persona challenges from Step 1 are your acceptance test.** Every must-have capability in v1 should trace back to at least one persona challenge. If a capability doesn't help solve any persona's problem, question whether it belongs in v1. When defining user flows, walk through them as each persona — does this flow prevent the bad scenario from their story?
@@ -56,7 +56,7 @@ What can the user configure?
 
 ## Output Format
 
-Write to `ITOM-PM-Result/[feature-name]/.steps/4_feature_definition.md`:
+Write to `[feature-name]/.steps/4_feature_definition.md`:
 
 ```markdown
 # Feature Definition: [Feature Name]
@@ -225,32 +225,30 @@ Write to `ITOM-PM-Result/[feature-name]/.steps/4_feature_definition.md`:
 
 Every step artifact this skill writes must:
 
-1. **Markdown (source of truth, hidden):** `ITOM-PM-Result/[slug]/.steps/<name>.md`
-   - Enhancement mode: `ITOM-PM-Result/[slug]-enhancement/.steps/<name>.md`
+1. **Markdown (source of truth, hidden):** `[slug]/.steps/<name>.md`
+   - Enhancement mode: `[slug]-enhancement/.steps/<name>.md`
 2. **Rebuild the consolidated report** immediately after:
    ```bash
-   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[slug]/"
+   python "<scripts-dir>/build_report.py" "[slug]/"
    ```
    Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, reference it first with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker in the markdown, then rebuild.
+3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `[slug]-<name>.html`) and reference it first with a `<!-- diagram: [slug]-<name>.html -->` marker in the markdown, then rebuild.
 4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`report.html`** path.
-6. **Never delete** `.steps/*.md`, `report.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
+5. Final chat summary (end of the whole run) cites the **`[slug].html`** path.
+6. **Never delete** `.steps/*.md`, `[slug].html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
 
 ## Quality Gate (before marking complete)
 
-- [ ] Path: `ITOM-PM-Result/[slug]/.steps/4_feature_definition.md`
+- [ ] Path: `[slug]/.steps/4_feature_definition.md`
 - [ ] Explicit in-scope vs out-of-scope
 - [ ] Persona challenge → capability traceability
 - [ ] Screens / settings / integrations concrete enough for Step 5–6
 - [ ] Phasing decisive (v1 / later)
 - [ ] `STATUS.md` updated
 
-- [ ] `.steps/` markdown written, `report.html` rebuilt
-- [ ] Markdown is hidden under `.steps/`; HTML visible under `steps/`; never delete either or Generated artifacts
 
 
 ## Completion
@@ -272,7 +270,7 @@ After writing the file, display a **summary directly in chat**:
 > **Integration points:** [Key modules this connects to]
 > **Deferred to v1.1:** [2-3 items pushed out]
 >
-> Full details in `ITOM-PM-Result/[feature-name]/.steps/4_feature_definition.md`
+> Full details in `[feature-name]/.steps/4_feature_definition.md`
 >
 > Continuing immediately to Step 5 — Deliverable Generation.
 

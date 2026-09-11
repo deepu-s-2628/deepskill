@@ -37,10 +37,10 @@ A PM's one-line request is not enough to safely run seven unattended pipeline st
    - **Proceed — Enhancement**: improves something existing. Name the slug, hand off to the `ask-deepu-enhancement` agent.
    - **Stop — Not a fit**: explain concretely why (which product surface it doesn't match, what it would actually be), and do not create a pipeline run folder. This is a first-class, expected outcome — not a failure.
 
-5. **Write the conclusion.** For a "Proceed" outcome, create `ITOM-PM-Result/[slug]/.steps/0_wayfinding.md` with: the fit reasoning, the mode and why, the positioning answer, and every scoping decision locked during the interview — anything a later step would otherwise have to re-ask or guess. This file is the first section of the eventual consolidated report; write it for that reader, not just as an internal note.
+5. **Write the conclusion.** For a "Proceed" outcome, create `[slug]/.steps/0_wayfinding.md` with: the fit reasoning, the mode and why, the positioning answer, and every scoping decision locked during the interview — anything a later step would otherwise have to re-ask or guess. This file is the first section of the eventual consolidated report; write it for that reader, not just as an internal note.
 
 ## Completion
 
-After reaching a "Proceed" conclusion, do not pause for approval — hand off immediately to the matching agent (`ask-deepu-feature` or `ask-deepu-enhancement`), which runs every remaining step back-to-back without further confirmation. Say so plainly in your conclusion message so the PM knows what happens next and when to expect the finished `report.html`. See `.github/agents/Ask-Deepu-feature.agent.md` / `Ask-Deepu-enhancement.agent.md` for the full workflow each pipeline follows.
+After reaching a "Proceed" conclusion, do not pause for approval — hand off immediately to the matching agent (`ask-deepu-feature` or `ask-deepu-enhancement`), which runs every remaining step back-to-back without further confirmation. Say so plainly in your conclusion message so the PM knows what happens next and when to expect the finished consolidated report (`[slug].html`, sitting directly in the topic folder). See `.github/agents/Ask-Deepu-feature.agent.md` / `Ask-Deepu-enhancement.agent.md` for the full workflow each pipeline follows.
 
 For a "Stop" conclusion, end there — no folder, no handoff, just the explanation and (if there's a plausible next step, like "this fits as an integration from a different product") a one-line suggestion of what that would look like.

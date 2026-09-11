@@ -82,7 +82,7 @@ Based on product docs, community forums, and your understanding:
 
 ## Output Format
 
-Write to `ITOM-PM-Result/[feature-name]-enhancement/.steps/1_current_state.md`:
+Write to `[feature-name]-enhancement/.steps/1_current_state.md`:
 
 ```markdown
 # Current State Analysis: [Feature/Area Name]
@@ -167,32 +167,30 @@ These are narrative-driven stories showing the real human impact of the current 
 
 Every step artifact this skill writes must:
 
-1. **Markdown (source of truth, hidden):** `ITOM-PM-Result/[slug]/.steps/<name>.md`
-   - Enhancement mode: `ITOM-PM-Result/[slug]-enhancement/.steps/<name>.md`
+1. **Markdown (source of truth, hidden):** `[slug]/.steps/<name>.md`
+   - Enhancement mode: `[slug]-enhancement/.steps/<name>.md`
 2. **Rebuild the consolidated report** immediately after:
    ```bash
-   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[slug]/"
+   python "<scripts-dir>/build_report.py" "[slug]/"
    ```
    Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, reference it first with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker in the markdown, then rebuild.
+3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `[slug]-<name>.html`) and reference it first with a `<!-- diagram: [slug]-<name>.html -->` marker in the markdown, then rebuild.
 4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`report.html`** path.
-6. **Never delete** `.steps/*.md`, `report.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
+5. Final chat summary (end of the whole run) cites the **`[slug].html`** path.
+6. **Never delete** `.steps/*.md`, `[slug].html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
 
 ## Quality Gate (before marking complete)
 
-- [ ] Path: `ITOM-PM-Result/[slug]-enhancement/.steps/1_current_state.md`
+- [ ] Path: `[slug]-enhancement/.steps/1_current_state.md`
 - [ ] Discovery → monitor → alert → UI → report map complete enough to enhance
 - [ ] Strengths and limitations are specific (not generic)
 - [ ] 2–3 persona pain stories at keynote quality
 - [ ] Screenshot requests made when UI truth is needed
 - [ ] `STATUS.md` updated
 
-- [ ] `.steps/` markdown written, `report.html` rebuilt
-- [ ] Markdown is hidden under `.steps/`; HTML visible under `steps/`; never delete either or Generated artifacts
 
 
 ## Completion
@@ -214,7 +212,7 @@ After writing the file, display in chat:
 >
 > **Early enhancement signals:** [1-2 sentences on what jumps out]
 >
-> Full details in `ITOM-PM-Result/[feature-name]-enhancement/.steps/1_current_state.md`
+> Full details in `[feature-name]-enhancement/.steps/1_current_state.md`
 >
 > Continuing immediately to Step 2 — Cross-Module Analysis.
 

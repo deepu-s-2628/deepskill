@@ -12,14 +12,14 @@ Generate a Lovable prompt that produces a wireframe/prototype showing the **enha
 ## Input
 
 Read all prior steps:
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/1_current_state.md` — what exists today and **persona challenges**
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/2_cross_module_analysis.md` — patterns from other modules
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/3_competitive_analysis.md` — competitive inspiration
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/4_enhancement_findings.md` — recommended enhancements and persona challenge resolution map
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/5a_executive_presentation.md` — executive summary of changes
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/5b_engineering_presentation.md` — technical details of changes
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/5c_enhancement_prd.md` — full PRD with metrics and requirements
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/5d_enhancement_flowchart.md` — enhanced flow diagrams
+- `[feature-name]-enhancement/.steps/1_current_state.md` — what exists today and **persona challenges**
+- `[feature-name]-enhancement/.steps/2_cross_module_analysis.md` — patterns from other modules
+- `[feature-name]-enhancement/.steps/3_competitive_analysis.md` — competitive inspiration
+- `[feature-name]-enhancement/.steps/4_enhancement_findings.md` — recommended enhancements and persona challenge resolution map
+- `[feature-name]-enhancement/.steps/5a_executive_presentation.md` — executive summary of changes
+- `[feature-name]-enhancement/.steps/5b_engineering_presentation.md` — technical details of changes
+- `[feature-name]-enhancement/.steps/5c_enhancement_prd.md` — full PRD with metrics and requirements
+- `[feature-name]-enhancement/.steps/5d_enhancement_flowchart.md` — enhanced flow diagrams
 
 **CRITICAL: Design for the personas.** The enhanced wireframe must visually demonstrate that each persona's challenge is resolved. Walk through each persona's bad-day scenario from Step 1 and verify: does the enhanced UI prevent it? Can they see the right data, get the right alert, find the right screen? If not, the wireframe is incomplete.
 
@@ -205,7 +205,7 @@ For each persona story from Step 1, verify the enhanced wireframe solves their c
 
 ## Output Format
 
-Write to `ITOM-PM-Result/[feature-name]-enhancement/.steps/6_enhancement_wireframe.md`
+Write to `[feature-name]-enhancement/.steps/6_enhancement_wireframe.md`
 
 
 
@@ -214,31 +214,29 @@ Write to `ITOM-PM-Result/[feature-name]-enhancement/.steps/6_enhancement_wirefra
 
 Every step artifact this skill writes must:
 
-1. **Markdown (source of truth, hidden):** `ITOM-PM-Result/[slug]/.steps/<name>.md`
-   - Enhancement mode: `ITOM-PM-Result/[slug]-enhancement/.steps/<name>.md`
+1. **Markdown (source of truth, hidden):** `[slug]/.steps/<name>.md`
+   - Enhancement mode: `[slug]-enhancement/.steps/<name>.md`
 2. **Rebuild the consolidated report** immediately after:
    ```bash
-   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[slug]/"
+   python "<scripts-dir>/build_report.py" "[slug]/"
    ```
    Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, reference it first with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker in the markdown, then rebuild.
+3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `[slug]-<name>.html`) and reference it first with a `<!-- diagram: [slug]-<name>.html -->` marker in the markdown, then rebuild.
 4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`report.html`** path.
-6. **Never delete** `.steps/*.md`, `report.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
+5. Final chat summary (end of the whole run) cites the **`[slug].html`** path.
+6. **Never delete** `.steps/*.md`, `[slug].html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
 
 ## Quality Gate (before marking complete)
 
-- [ ] Prompt written under correct `.steps/` path, `report.html` rebuilt
+- [ ] Prompt written under correct `.steps/` path, `[feature-name]-enhancement.html` rebuilt
 - [ ] Scope matches Step 4/5 findings (no silent expansion)
 - [ ] Screenshots analyzed before drafting (or run correctly marked `blocked_on_pm` if none were available)
 - [ ] Paste-ready for Lovable (single coherent prompt)
 - [ ] `STATUS.md` → `done`
 
-- [ ] `.steps/` markdown written, `report.html` rebuilt
-- [ ] Markdown is hidden under `.steps/`; HTML visible under `steps/`; never delete either or Generated artifacts
 
 
 ## Completion

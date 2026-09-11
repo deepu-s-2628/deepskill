@@ -12,10 +12,10 @@ Produce a comprehensive, ready-to-paste prompt for Lovable that will generate a 
 ## Input
 
 Read all prior step files, particularly:
-- `ITOM-PM-Result/[feature-name]/.steps/1_brainstorm.md` — persona challenges (the wireframe must visually solve these)
-- `ITOM-PM-Result/[feature-name]/.steps/4_feature_definition.md` — screens, user flows, settings
-- `ITOM-PM-Result/[feature-name]/.steps/3_technical_analysis.md` — metrics and data points
-- `ITOM-PM-Result/[feature-name]/.steps/5d_product_requirements.md` — requirements detail
+- `[feature-name]/.steps/1_brainstorm.md` — persona challenges (the wireframe must visually solve these)
+- `[feature-name]/.steps/4_feature_definition.md` — screens, user flows, settings
+- `[feature-name]/.steps/3_technical_analysis.md` — metrics and data points
+- `[feature-name]/.steps/5d_product_requirements.md` — requirements detail
 - [context/product-context.md](../../../context/product-context.md) — product UI patterns
 
 **CRITICAL: Design for the personas.** The wireframe should make each persona's challenge obviously solvable. When you define dashboards, think: "If Priya opened this at 6 AM, would she immediately see the degraded SD-WAN tunnel?" When you define alerting UI, think: "Would Marcus get the compliance data he needs from this view?" Walk through each persona's bad-day scenario and ensure the wireframe prevents it.
@@ -56,7 +56,7 @@ Give Lovable clear direction on visual style matching OpManager Plus.
 
 ## Output Format
 
-Write to `ITOM-PM-Result/[feature-name]/.steps/6_lovable_wireframe.md`:
+Write to `[feature-name]/.steps/6_lovable_wireframe.md`:
 
 ```markdown
 # Lovable Wireframe Prompt: [Feature Name] for OpManager Plus
@@ -191,28 +191,27 @@ For each persona story from Step 1, describe how the wireframe solves their chal
 
 Every step artifact this skill writes must:
 
-1. **Markdown (source of truth, hidden):** `ITOM-PM-Result/[slug]/.steps/<name>.md`
-   - Enhancement mode: `ITOM-PM-Result/[slug]-enhancement/.steps/<name>.md`
+1. **Markdown (source of truth, hidden):** `[slug]/.steps/<name>.md`
+   - Enhancement mode: `[slug]-enhancement/.steps/<name>.md`
 2. **Rebuild the consolidated report** immediately after:
    ```bash
-   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[slug]/"
+   python "<scripts-dir>/build_report.py" "[slug]/"
    ```
    Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, reference it first with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker in the markdown, then rebuild.
+3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `[slug]-<name>.html`) and reference it first with a `<!-- diagram: [slug]-<name>.html -->` marker in the markdown, then rebuild.
 4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`report.html`** path.
-6. **Never delete** `.steps/*.md`, `report.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
+5. Final chat summary (end of the whole run) cites the **`[slug].html`** path.
+6. **Never delete** `.steps/*.md`, `[slug].html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
 
 ## Quality Gate (before marking complete)
 
-- [ ] Prompt written under correct `.steps/` path, `report.html` rebuilt
+- [ ] Prompt written under correct `.steps/` path, `[feature-name].html` rebuilt
 - [ ] Scope matches Step 4/5 findings (no silent expansion)
 - [ ] Paste-ready for Lovable (single coherent prompt)
 - [ ] `STATUS.md` → `done`
-- [ ] Markdown is hidden under `.steps/`; HTML visible under `steps/`; never delete either or Generated artifacts
 
 
 ## Completion
@@ -221,4 +220,4 @@ After producing the document, say:
 
 > **Step 6 complete.** Review `6_lovable_wireframe.md`. When ready, copy the entire content of this file and paste it into Lovable's prompt to generate your prototype.
 >
-> **🎉 Feature pipeline complete!** All artifacts are in `ITOM-PM-Result/[feature-name]/`.
+> **🎉 Feature pipeline complete!** All artifacts are in `[feature-name]/`.

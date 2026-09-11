@@ -1,6 +1,6 @@
 ---
 name: enhancement-deliverables
-description: "Step 5 of Enhancement Pipeline: Generate all four enhancement deliverable documents — executive PPT, engineering PPT, enhancement flowcharts, and enhancement PRD — as markdown drafts ready for PPTX/PDF/DOCX generation."
+description: "Step 5 of Enhancement Pipeline: Generate all four enhancement deliverable documents — executive slide deck, engineering slide deck, enhancement flowchart, and enhancement PRD — as markdown drafts ready for HTML/DOCX generation."
 ---
 
 # Step 5 — Enhancement Deliverables (PPTs + Flowchart + PRD)
@@ -64,10 +64,10 @@ No “TBD”, “update later”, “lorem”, or empty speaker-note-only slides
 ## Input
 
 Read ALL prior steps:
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/1_current_state.md` — what exists today and **persona pain stories**
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/2_cross_module_analysis.md` — cross-module patterns and **persona challenge → cross-module solutions**
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/3_competitive_analysis.md` — competitive gaps and **persona challenge coverage**
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/4_enhancement_findings.md` — recommended enhancements with **persona challenge resolution map**
+- `[feature-name]-enhancement/.steps/1_current_state.md` — what exists today and **persona pain stories**
+- `[feature-name]-enhancement/.steps/2_cross_module_analysis.md` — cross-module patterns and **persona challenge → cross-module solutions**
+- `[feature-name]-enhancement/.steps/3_competitive_analysis.md` — competitive gaps and **persona challenge coverage**
+- `[feature-name]-enhancement/.steps/4_enhancement_findings.md` — recommended enhancements with **persona challenge resolution map**
 
 **Persona stories provide the motivational thread** — the executive PPT opens and closes with them (Slides 2 and 12), the engineering PPT opens with one (Slide 2), and the PRD includes a compact traceability table. Extract the best stories from `1_current_state.md` and reference them where needed.
 
@@ -77,7 +77,7 @@ Read ALL prior steps:
 
 ### 5a — Executive Presentation
 
-**File:** `ITOM-PM-Result/[feature-name]-enhancement/.steps/5a_executive_presentation.md`
+**File:** `[feature-name]-enhancement/.steps/5a_executive_presentation.md`
 **Audience:** Product Director / Leadership
 **Tone:** Strategic, visual, high-level. Focus on the business case for enhancing — why now, what impact, what's the competitive risk of NOT doing this.
 **Slides:** 12-16 (add slides rather than dropping concrete analysis points)
@@ -188,7 +188,7 @@ Every presentation MUST use a mix of slide types. Never use more than 2 consecut
 
 ### 5b — Engineering Presentation
 
-**File:** `ITOM-PM-Result/[feature-name]-enhancement/.steps/5b_engineering_presentation.md`
+**File:** `[feature-name]-enhancement/.steps/5b_engineering_presentation.md`
 **Audience:** Engineering team
 **Tone:** Technically detailed. Focus on what changes, what's reused, what's new, and how it integrates with existing architecture.
 **Slides:** 18-25 (use more if needed to avoid dropping metrics/OID-API detail)
@@ -308,7 +308,7 @@ Same rule as executive PPT — never more than 2 consecutive bullet slides. Use:
 
 ### 5c — Enhancement PRD
 
-**File:** `ITOM-PM-Result/[feature-name]-enhancement/.steps/5c_enhancement_prd.md`
+**File:** `[feature-name]-enhancement/.steps/5c_enhancement_prd.md`
 **Audience:** Engineering, QA, and Design
 **Tone:** Precise, comprehensive, unambiguous. This is the source of truth for what gets built.
 
@@ -500,7 +500,7 @@ Components from other modules to leverage (from Step 2):
 
 ### 5d — Enhancement Flowcharts
 
-**File:** `ITOM-PM-Result/[feature-name]-enhancement/.steps/5d_enhancement_flowchart.md`
+**File:** `[feature-name]-enhancement/.steps/5d_enhancement_flowchart.md`
 **Format:** Mermaid diagrams showing before/after flows
 
 Enhancement flowcharts are different from new feature flowcharts — they must show **what changes** relative to what exists today. Use color/style annotations to distinguish existing steps from new/modified steps.
@@ -586,17 +586,17 @@ flowchart LR
 
 Every step artifact this skill writes must:
 
-1. **Markdown (source of truth, hidden):** `ITOM-PM-Result/[slug]/.steps/<name>.md`
-   - Enhancement mode: `ITOM-PM-Result/[slug]-enhancement/.steps/<name>.md`
+1. **Markdown (source of truth, hidden):** `[slug]/.steps/<name>.md`
+   - Enhancement mode: `[slug]-enhancement/.steps/<name>.md`
 2. **Rebuild the consolidated report** immediately after:
    ```bash
-   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[slug]/"
+   python "<scripts-dir>/build_report.py" "[slug]/"
    ```
    Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, reference it first with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker in the markdown, then rebuild.
+3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `[slug]-<name>.html`) and reference it first with a `<!-- diagram: [slug]-<name>.html -->` marker in the markdown, then rebuild.
 4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`report.html`** path.
-6. **Never delete** `.steps/*.md`, `report.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
+5. Final chat summary (end of the whole run) cites the **`[slug].html`** path.
+6. **Never delete** `.steps/*.md`, `[slug].html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
@@ -609,8 +609,6 @@ See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 - [ ] PRD requirements are testable
 - [ ] Persona traceability retained
 - [ ] `STATUS.md` updated (next: `document_generation`)
-- [ ] `.steps/` markdown written, `report.html` rebuilt
-- [ ] Markdown is hidden under `.steps/`; HTML visible under `steps/`; never delete either or Generated artifacts
 
 
 ## Completion
@@ -631,9 +629,9 @@ After producing all four files, display in chat:
 > - [List diagram names — e.g., end-to-end flow, data pipeline, alert processing]
 > - Shows existing vs. new vs. modified steps
 >
-> Drafts written under `ITOM-PM-Result/[feature-name]-enhancement/.steps/` (`5a`–`5d`), `report.html` rebuilt.
+> Drafts written under `[feature-name]-enhancement/.steps/` (`5a`–`5d`), `[feature-name]-enhancement.html` rebuilt.
 > Update `STATUS.md` → Step 5 complete, next action `document_generation`.
 >
-> Continuing immediately into document generation (PPTX/PDF/DOCX), then Step 6.
+> Continuing immediately into document generation (HTML slide decks, Archify flowchart, DOCX), then Step 6.
 
 ---

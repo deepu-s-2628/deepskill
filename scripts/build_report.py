@@ -2,20 +2,27 @@
 """Assemble one navigable HTML report from a PM pipeline run's hidden step markdown.
 
 Usage:
-  python build_report.py <result-folder>
+  python build_report.py <topic-folder>
 
-Reads every ITOM-PM-Result/[slug]/.steps/*.md in filename order (0_wayfinding.md
+The topic folder (e.g. `vxlan-monitoring/` or `vxlan-monitoring-enhancement/`)
+lives directly in the workspace — there is no wrapper folder around it.
+
+Reads every <topic-folder>/.steps/*.md in filename order (0_wayfinding.md
 first, then 1_..., 2_..., etc.), converts each to HTML, and writes a single
-ITOM-PM-Result/[slug]/report.html with a sidebar table of contents and one
-anchored section per step.
+<topic-folder>/<topic-folder-name>.html with a sidebar table of contents and
+one anchored section per step. The output filename always matches the topic
+folder's own name, so it's the one visible, obviously-the-deliverable file
+sitting next to STATUS.md.
 
-A step's markdown can embed a diagram (e.g. an Archify-rendered HTML file
-under Generated/diagrams/) by putting a marker line on its own:
+A step's markdown can embed a diagram — typically an Archify-rendered HTML
+file that also exists as its own visible deliverable in the topic folder,
+e.g. `<topic-folder-name>-flowchart.html` — by putting a marker line on its
+own:
 
-  <!-- diagram: Generated/diagrams/architecture.html -->
+  <!-- diagram: vxlan-monitoring-flowchart.html -->
 
 Each marker becomes an <iframe> at that point in the section, sized to fit
-the diagram's own viewport. Paths in the marker are relative to the result
+the diagram's own viewport. Paths in the marker are relative to the topic
 folder.
 """
 
@@ -156,6 +163,9 @@ def main(argv: list[str]) -> int:
         return 2
 
     result_dir = Path(argv[1]).expanduser().resolve()
+    if not result_dir.is_dir():
+        print(f"error: no such topic folder: {result_dir}", file=sys.stderr)
+        return 1
     steps_dir = result_dir / ".steps"
     if not steps_dir.is_dir():
         print(f"error: no .steps/ under {result_dir}", file=sys.stderr)
@@ -173,7 +183,8 @@ def main(argv: list[str]) -> int:
         nav_items.append(f'<a href="#{anchor}">{html.escape(title)}</a>')
         sections.append(section_html)
 
-    feature_name = result_dir.name.replace("-enhancement", "").replace("-", " ").title()
+    slug = result_dir.name
+    feature_name = slug.replace("-enhancement", "").replace("-", " ").title()
 
     doc = f"""<!DOCTYPE html>
 <html lang="en">
@@ -197,7 +208,7 @@ def main(argv: list[str]) -> int:
 </html>
 """
 
-    out_path = result_dir / "report.html"
+    out_path = result_dir / f"{slug}.html"
     out_path.write_text(doc, encoding="utf-8")
     print(f"wrote {out_path}")
     return 0

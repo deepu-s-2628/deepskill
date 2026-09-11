@@ -12,8 +12,8 @@ Understand how competitors handle this specific feature area. Unlike the new-fea
 ## Input
 
 Read:
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/1_current_state.md` — what we currently do and **persona challenges**
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/2_cross_module_analysis.md` — internal opportunities
+- `[feature-name]-enhancement/.steps/1_current_state.md` — what we currently do and **persona challenges**
+- `[feature-name]-enhancement/.steps/2_cross_module_analysis.md` — internal opportunities
 
 **CRITICAL: The persona challenges from Step 1 are your competitive benchmark.** For each competitor, explicitly check: **would their implementation have prevented the bad scenarios in our persona stories?** If SolarWinds' version would have caught the issue Priya faced, that's a concrete competitive gap we must close. If no competitor solves it either, that's a differentiation opportunity.
 
@@ -86,7 +86,7 @@ Compare what competitors offer against our Step 1 findings:
 
 ## Output Format
 
-Write to `ITOM-PM-Result/[feature-name]-enhancement/.steps/3_competitive_analysis.md`:
+Write to `[feature-name]-enhancement/.steps/3_competitive_analysis.md`:
 
 ```markdown
 # Enhancement Competitive Analysis: [Feature/Area Name]
@@ -173,31 +173,29 @@ Map each persona challenge from Step 1 to competitive findings:
 
 Every step artifact this skill writes must:
 
-1. **Markdown (source of truth, hidden):** `ITOM-PM-Result/[slug]/.steps/<name>.md`
-   - Enhancement mode: `ITOM-PM-Result/[slug]-enhancement/.steps/<name>.md`
+1. **Markdown (source of truth, hidden):** `[slug]/.steps/<name>.md`
+   - Enhancement mode: `[slug]-enhancement/.steps/<name>.md`
 2. **Rebuild the consolidated report** immediately after:
    ```bash
-   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[slug]/"
+   python "<scripts-dir>/build_report.py" "[slug]/"
    ```
    Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, reference it first with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker in the markdown, then rebuild.
+3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `[slug]-<name>.html`) and reference it first with a `<!-- diagram: [slug]-<name>.html -->` marker in the markdown, then rebuild.
 4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`report.html`** path.
-6. **Never delete** `.steps/*.md`, `report.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
+5. Final chat summary (end of the whole run) cites the **`[slug].html`** path.
+6. **Never delete** `.steps/*.md`, `[slug].html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
 
 ## Quality Gate (before marking complete)
 
-- [ ] Path: `ITOM-PM-Result/[slug]-enhancement/.steps/3_competitive_analysis.md`
+- [ ] Path: `[slug]-enhancement/.steps/3_competitive_analysis.md`
 - [ ] Focused on our existing feature gaps (not generic market survey only)
 - [ ] Persona challenges used as competitive benchmark
 - [ ] Sources cited
 - [ ] `STATUS.md` updated
 
-- [ ] `.steps/` markdown written, `report.html` rebuilt
-- [ ] Markdown is hidden under `.steps/`; HTML visible under `steps/`; never delete either or Generated artifacts
 
 
 ## Completion
@@ -218,7 +216,7 @@ After writing the file, display in chat:
 > - P1: [Should-have enhancement]
 > - P2: [Nice-to-have enhancement]
 >
-> Full details in `ITOM-PM-Result/[feature-name]-enhancement/.steps/3_competitive_analysis.md`
+> Full details in `[feature-name]-enhancement/.steps/3_competitive_analysis.md`
 >
 > Continuing immediately to Step 4 — Enhancement Findings & Recommendations.
 

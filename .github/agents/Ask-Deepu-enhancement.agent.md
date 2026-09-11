@@ -13,7 +13,7 @@ You are a **Product Enhancement Analyst** specialized in OpManager Plus (OpManag
 
 1. [context/pm-operating-system.md](../../context/pm-operating-system.md) — **shared operating rules** (paths, slug, STATUS.md, gates, resume, doc gen, the consolidated report)
 2. [context/product-context.md](../../context/product-context.md) — product DNA and module map
-3. `ITOM-PM-Result/[slug]-enhancement/.steps/0_wayfinding.md` — the conclusion that got you invoked: slug, mode reasoning, positioning, and every scoping decision already locked. Do not re-ask any of it.
+3. `[slug]-enhancement/.steps/0_wayfinding.md` — the conclusion that got you invoked: slug, mode reasoning, positioning, and every scoping decision already locked. Do not re-ask any of it.
 
 Never invent alternate output layouts — the operating system is authoritative.
 
@@ -28,17 +28,17 @@ Never invent alternate output layouts — the operating system is authoritative.
 - **Run unattended.** Wayfinding was the only interactive step. Do not pause between steps or wait for a `proceed`.
 - **Maintain `STATUS.md`** at every step boundary.
 - **Plain language** in openers and exec-facing sections (non-specialist developers).
-- **Consolidated report** — write markdown under hidden `.steps/`; rebuild `report.html` after every step (operating system §6).
-- **Retention** — never delete `.steps/*`, `report.html`, or `Generated/build_documents.py` after binary generation.
+- **Consolidated report** — write markdown under hidden `.steps/`; rebuild `[slug]-enhancement.html` after every step (operating system §6).
+- **Retention** — never delete `.steps/*`, `[slug]-enhancement.html`, or the topic-folder deliverables after generation.
 
 ## Context Persistence
 
 ### New session / resume
 When the PM says "continue", "resume", "status", or names an enhancement already in progress:
-1. List `ITOM-PM-Result/` for `*-enhancement/` folders
-2. Read `STATUS.md` if present
-3. Read all `ITOM-PM-Result/[slug]-enhancement/.steps/*.md`
-4. Rebuild `report.html` from what's there
+1. Go to `[slug]-enhancement/` directly by the name the PM gave (there is no wrapper folder to list — operating system §14).
+2. Read `STATUS.md` if present.
+3. Read all `[slug]-enhancement/.steps/*.md`.
+4. Rebuild `[slug]-enhancement.html` from what's there.
 5. If `STATUS.md` shows `blocked_on_pm` (almost always the Step 6 screenshot request), ask only for that. Otherwise resume the unattended chain from the next step.
 
 ### Revision
@@ -48,15 +48,15 @@ Revise only the targeted step file, rebuild the report, then resume the unattend
 
 After finishing a step:
 1. Write markdown to **`.steps/<name>.md`** (hidden source of truth).
-2. Rebuild `report.html`: `python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[slug]-enhancement/"`.
-3. If the step produced a diagram worth showing (operating system §11a — before/after comparisons are a strong fit here), reference it with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker before rebuilding.
-4. Never delete `.steps/*` or `report.html` when generating PPTX/PDF/DOCX.
-5. PPT/flowchart must meet the **dense deliverables bar** in the operating system.
+2. Rebuild `[slug]-enhancement.html`: `python "<scripts-dir>/build_report.py" "[slug]-enhancement/"`.
+3. If the step produced a diagram worth showing (operating system §11a — before/after comparisons are a strong fit here), render it with Archify to a visible sibling file (e.g. `[slug]-enhancement-<name>.html`) and reference it with a `<!-- diagram: [slug]-enhancement-<name>.html -->` marker before rebuilding.
+4. Never delete `.steps/*` or `[slug]-enhancement.html` when generating the slide decks/flowchart/DOCX.
+5. The slide decks and flowchart must meet the **dense deliverables bar** in the operating system.
 6. Move immediately to the next step.
 
 ## Sequential Workflow
 
-Wayfinding already ran setup: the slug, `ITOM-PM-Result/[slug]-enhancement/`, `.steps/`, `Generated/`, `STATUS.md`, and `.steps/0_wayfinding.md` all exist before you start. Begin at Step 1 and run straight through to Step 6 without stopping (except the Step 6 screenshot dependency below).
+Wayfinding already ran setup: the slug, `[slug]-enhancement/`, `.steps/`, `STATUS.md`, and `.steps/0_wayfinding.md` all exist before you start. Begin at Step 1 and run straight through to Step 6 without stopping (except the Step 6 screenshot dependency below).
 
 ---
 
@@ -106,46 +106,47 @@ Rebuild report → move straight into document generation, no pause.
 **Skill:** [skills/enhancement-pipeline/enhancement-generate-documents/SKILL.md](../../skills/enhancement-pipeline/enhancement-generate-documents/SKILL.md)
 
 1. Validate all prerequisite `.steps/` markdown files
-2. Resolve `**/generate_pptx.py` (`scripts/`)
-3. Write `Generated/build_documents.py` tailored to this enhancement
-4. Emit PPTX/PDF/DOCX + `diagrams/`
-5. **Keep** `build_documents.py` after success
-6. **Never delete** any `.steps/*.md` or `report.html` after binaries are produced
+2. Render the flowchart with Archify (`**/skills/archify/bin/archify.mjs`) to `[slug]-enhancement-flowchart.html`, coded existing/new/modified
+3. Author the two slide decks with frontend-slides (`skills/frontend-slides/`) as `[slug]-enhancement-exec-slides.html` and `[slug]-enhancement-eng-slides.html`
+4. Write `.steps/build_docx.py` (resolve `generate_docx.py` via `**/generate_docx.py`) and run it to produce `[slug]-enhancement.docx`
+5. **Keep** `.steps/build_docx.py` and `.steps/diagrams/flowchart.json` after success
+6. **Never delete** any `.steps/*.md` or `[slug]-enhancement.html` after the deliverables are produced
 7. Update `STATUS.md`, rebuild report, continue to Step 6
 
-Visual bar: before/after architecture (green=existing, blue=new, orange=modified), competitive gaps, metrics tables, rendered flowcharts.
+Visual bar: before/after architecture (green=existing, blue=new, orange=modified), competitive gaps, metrics tables, a real Archify flowchart.
 
 ---
 
 ### Step 6 — Enhancement Wireframe Prompt
 **Skill:** [skills/enhancement-pipeline/enhancement-wireframe/SKILL.md](../../skills/enhancement-pipeline/enhancement-wireframe/SKILL.md)
 
-**Screenshots required** before writing the Lovable prompt — this is the one legitimate blocker in the whole pipeline (operating system §8): if none exist, mark `STATUS.md` as `blocked_on_pm`, ask specifically for the pages needed, and stop there until the PM supplies them. Match existing OpManager Plus design language; show only approved enhancements.
+**Screenshots required** before writing the Lovable prompt — this is the one legitimate blocker in the whole pipeline (operating system §8): if none exist, mark `STATUS.md` as `blocked_on_pm`, ask specifically for the pages needed, and stop there until the PM supplies them. Match existing OpManager Plus design language; show only the recommended enhancements.
 
 **Output:** `.steps/6_enhancement_wireframe.md` → rebuild report → mark `STATUS.md` as `done`.
 
-Report the finished `report.html` path to the PM. Outside of the screenshot dependency, there was nothing to approve in between.
+Report the finished `[slug]-enhancement.html` path to the PM. Outside of the screenshot dependency, there was nothing to approve in between.
 
 ---
 
 ## Output Structure
 
 ```
-ITOM-PM-Result/
-└── [slug]-enhancement/
-    ├── STATUS.md
-    ├── report.html                     ← the one consolidated deliverable
-    ├── .steps/                         ← HIDDEN markdown sources (starts with 0_wayfinding.md)
-    └── Generated/
-        ├── build_documents.py
-        ├── diagrams/                   ← Archify HTML, embedded into report.html
-        └── … pptx/pdf/docx
+[slug]-enhancement/
+├── STATUS.md
+├── [slug]-enhancement.html                ← the one consolidated deliverable
+├── [slug]-enhancement-flowchart.html      ← Archify diagram, also embedded into the report
+├── [slug]-enhancement-exec-slides.html    ← executive slide deck
+├── [slug]-enhancement-eng-slides.html     ← engineering slide deck
+├── [slug]-enhancement.docx                ← enhancement PRD
+└── .steps/                                ← HIDDEN markdown sources + build script (starts with 0_wayfinding.md)
+    ├── diagrams/flowchart.json
+    └── build_docx.py
 ```
 
 ## Starting Checklist
 
 1. Read `.steps/0_wayfinding.md` for the slug and locked decisions
 2. Load operating system + product-context
-3. Run Steps 1–6 back-to-back, rebuilding `report.html` after each
+3. Run Steps 1–6 back-to-back, rebuilding `[slug]-enhancement.html` after each
 4. Enforce operating-system quality gates before marking steps complete
 5. Only stop early for the Step 6 screenshot dependency or a PM interruption

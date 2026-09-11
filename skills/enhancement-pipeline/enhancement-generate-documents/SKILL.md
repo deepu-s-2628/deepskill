@@ -1,37 +1,36 @@
 ---
 name: enhancement-generate-documents
-description: "Generate production-quality PPTX, PDF, and DOCX files with professional design for enhancement deliverables. Runs automatically right after Step 5's drafts are done — not gated on a PM command."
+description: "Generate the enhancement deliverables — an Archify flowchart, executive and engineering HTML slide decks, and a DOCX PRD — with professional design for enhancement work. Runs automatically right after Step 5's drafts are done — not gated on a PM command."
 ---
 
 # Generate Enhancement Documents
 
 ## Purpose
 
-Generate production-quality deliverable files from the finished Step 5 enhancement markdown drafts. You (the LLM) are the designer — write custom Python code for this specific enhancement that produces visually appealing, professionally designed output.
+Generate production-quality deliverable files from the finished Step 5 enhancement markdown drafts. You (the LLM) are the designer — you decide what diagrams, slide layouts, and document structure best communicate this specific enhancement, using the tools this repo bundles (Archify, frontend-slides, `generate_docx.py`) rather than a generic template.
 
-
-## Dense binary bar (PPTX / flowchart PDF)
+## Dense deliverables bar (flowchart / slide decks / PRD)
 
 When generating files from Step 5 drafts:
 
-1. **Read Steps 1–4 as well as Step 5** so nothing important is lost if a draft under-specified a slide.
-2. Engineering PPTX must include table slides for metrics and collection-contract highlights (OIDs/APIs/paths) from technical analysis.
-3. Flowchart PDF must be multi-page with the sections required by the operating system dense-deliverables bar — not a single overview toy diagram.
-4. Executive PPTX must include concrete capabilities, competitive facts, and success metrics from prior steps.
+1. **Read Steps 1–4 as well as Step 5** so nothing important is lost if a draft under-specified content.
+2. The engineering deck must include table slides for metrics and collection-contract highlights (OIDs/APIs/paths) from technical analysis.
+3. The flowchart must be complete with the sections required by the operating system dense-deliverables bar — not a single overview toy diagram.
+4. The executive deck must include concrete capabilities, competitive facts, and success metrics from prior steps.
 5. If a Step 5 draft is thin, **expand content from Steps 1–4** while generating (do not ship a thin deck). Note expansions in chat.
-6. Quality fail: decks that still need a human to “fill in the real points.”
+6. Quality fail: decks that still need a human to "fill in the real points."
 
 ## Prerequisites
 
-### Locating the utility scripts
+### Locating the tools
 
-The generation scripts (`generate_pptx.py`, `generate_flowchart.py`, `generate_docx.py`) live at the repo root's `scripts/` directory — relative to this file: `../../../scripts/`.
-
-Install dependencies once via `uv sync` from the repo root (see `scripts/pyproject.toml`).
+- **DOCX:** `generate_docx.py` lives at the repo root's `scripts/` directory — relative to this file: `../../../scripts/`. Install its dependencies once via `uv sync` from the repo root (see `scripts/pyproject.toml`).
+- **Flowchart diagram:** Archify is bundled at `skills/archify/` (relative to this file: `../../archify/`). Its CLI is `bin/archify.mjs` — resolve it with `**/skills/archify/bin/archify.mjs`. No install step; it's pure Node.js.
+- **Slide decks:** frontend-slides is bundled at `skills/frontend-slides/` (relative to this file: `../../frontend-slides/`). Read its `SKILL.md` for templates, animation patterns, and style presets before authoring.
 
 ## MANDATORY: Validate Before Generating
 
-Before writing any code, verify ALL prerequisite **markdown** files exist in `ITOM-PM-Result/[feature-name]-enhancement/.steps/`:
+Before writing any code, verify ALL prerequisite **markdown** files exist in `[feature-name]-enhancement/.steps/`:
 
 | File | Step |
 |------|------|
@@ -39,8 +38,8 @@ Before writing any code, verify ALL prerequisite **markdown** files exist in `IT
 | `2_cross_module_analysis.md` | Step 2 — Cross-Module Analysis |
 | `3_competitive_analysis.md` | Step 3 — Competitive Analysis |
 | `4_enhancement_findings.md` | Step 4 — Enhancement Findings |
-| `5a_executive_presentation.md` | Step 5a — Executive PPT |
-| `5b_engineering_presentation.md` | Step 5b — Engineering PPT |
+| `5a_executive_presentation.md` | Step 5a — Executive deck |
+| `5b_engineering_presentation.md` | Step 5b — Engineering deck |
 | `5c_enhancement_prd.md` | Step 5c — Enhancement PRD |
 | `5d_enhancement_flowchart.md` | Step 5d — Enhancement Flowchart |
 
@@ -48,193 +47,148 @@ Before writing any code, verify ALL prerequisite **markdown** files exist in `IT
 > "Cannot generate files. Missing: [list missing files]. Please complete these steps first."
 
 Also check that `1_current_state.md` contains persona stories (search for "persona" or "story" or "Meet"). If missing, warn:
-> "Warning: No persona stories found in current state analysis. Presentations need persona narratives for Slides 2 and 12."
+> "Warning: No persona stories found in current state analysis. Slide decks need persona narratives for the challenge and transformation slides."
 
 ## CRITICAL: Your Role as Designer
 
-Do NOT just call a generic template script. For each enhancement, you must:
-1. **Read the finished content** from Step 5 files (5a–5d)
-2. **Design the visuals** — decide what diagrams, charts, layouts, and images best communicate this specific enhancement
-3. **Write a custom `build_documents.py`** script in `ITOM-PM-Result/[feature-name]-enhancement/Generated/` that generates all files with tailored visuals
-4. **Run it** to produce the final files
-
-Enhancement documents have a unique requirement: they must show **before vs. after** — what exists today and what changes. Use color coding consistently: green=existing/keep, blue=new, orange=modified.
+For each enhancement, you must:
+1. **Read the finished content** from Step 5 files (5a–5d).
+2. **Design the flowchart and decks** — decide what diagrams, charts, and layouts best communicate this specific enhancement.
+3. Enhancement documents have a unique requirement: they must show **before vs. after** — what exists today and what changes. Use consistent semantics throughout: **existing/unchanged**, **new**, **modified** — carry this coding into the Archify diagram's node styling and into the slide decks' before/after slides alike.
 
 ## Process
 
-### 1. Generate Enhancement Flowchart PDF
+### 1. Generate the Enhancement Flowchart (Archify)
 
-**This is a real visual flowchart, not Mermaid code in a PDF.**
+Author a JSON spec at `.steps/diagrams/flowchart.json` for Archify's `workflow` type (see `skills/archify/schemas/`), then render:
 
-Write Python code using `graphviz` to render actual flowchart diagrams:
-- Translate Mermaid from `5d_enhancement_flowchart.md` into graphviz dot language
-- Color coding for enhancement context:
-  - **Green** nodes/edges: existing steps (unchanged)
-  - **Blue** nodes/edges: new steps (added by enhancement)
-  - **Orange** nodes/edges: modified steps (changed by enhancement)
-  - **Red**: alert/error paths
-- Include before/after comparison diagrams
-- Multiple pages: enhanced end-to-end flow, discovery changes, data pipeline, alerting, user workflow
-- Professional styling: rounded rectangles, proper spacing, legible fonts
-- Export as PDF
-
-Example approach:
-```python
-from graphviz import Digraph
-
-dot = Digraph('Enhanced Feature Flow', format='pdf')
-dot.attr(rankdir='TB', size='11,8', dpi='150')
-
-# Existing steps (green)
-dot.node('existing1', 'Current Discovery', style='rounded,filled', fillcolor='#C8E6C9', color='#388E3C')
-
-# Modified steps (orange)
-dot.node('modified1', 'Enhanced Polling\n(+new metrics)', style='rounded,filled', fillcolor='#FFF3E0', color='#F57C00', penwidth='3')
-
-# New steps (blue, dashed)
-dot.node('new1', 'New Dashboard Widget', style='rounded,filled,dashed', fillcolor='#E3F2FD', color='#1976D2')
+```bash
+node "<archify-dir>/bin/archify.mjs" deliver workflow ".steps/diagrams/flowchart.json" "[feature-name]-enhancement-flowchart.html" --quality showcase --json
 ```
 
-### 2. Generate Executive Enhancement PPTX
+- Translate the Mermaid sketch from `5d_enhancement_flowchart.md` into the spec — this is a fresh authoring pass (new stable IDs, real domain wording), not a literal transcription.
+- Mark node/edge state so the diagram visually distinguishes **existing** (unchanged), **new** (added by the enhancement), and **modified** (changed by the enhancement) — Archify's schema supports per-node/edge styling; use it instead of inventing an ad hoc legend.
+- Cover: the enhanced end-to-end flow, discovery changes, data pipeline, alerting, user workflow — multiple linked views (`meta.views`) if one flat diagram can't hold all of it legibly.
+- Validate before delivering: `node "<archify-dir>/bin/archify.mjs" validate workflow ".steps/diagrams/flowchart.json" --quality showcase --json` must report a showcase pass with 0 errors/warnings.
+- Reference the output from `5d_enhancement_flowchart.md` with `<!-- diagram: [feature-name]-enhancement-flowchart.html -->` so it embeds into the consolidated report (Section 6).
+
+### 2. Generate the Executive Slide Deck (frontend-slides)
 
 **Focus on the business case for the enhancement — why, what changes, what impact.**
 
-**MANDATORY LAYOUT DIVERSITY RULE:** Never use more than 2 consecutive `add_content_slide()` (bullet) slides. At least 30% of slides must be non-bullet layouts. Plan slide types BEFORE writing code:
+Author `[feature-name]-enhancement-exec-slides.html` directly as self-contained HTML, following `skills/frontend-slides/SKILL.md`'s templates and animation patterns. Plan slide types before writing:
 
-| Slide | Recommended Method | Why |
-|-------|-------------------|-----|
-| Title | `add_title_slide()` | Dark background with brand accent |
-| Persona Pain (Slide 2) | `add_quote_slide()` | Emotional callout — NOT bullets |
-| Current State/Gap | `add_two_column_slide()` | Current vs. Missing split |
-| Competitive | `add_comparison_slide()` | Color-coded matrix |
-| Quick Wins | `add_before_after_slide()` | Before/after panels |
-| Core Improvements | `add_icon_grid_slide()` | 2x3 grid — NOT bullet list |
-| Key Impact Stat | `add_stat_slide()` | Single powerful number |
-| Success Metrics | `add_kpi_slide()` | Large numbers with color cards |
-| Timeline | `add_timeline_slide()` | Horizontal roadmap |
-| Transformation (Slide 12) | `add_before_after_slide()` | Before/after with green positive |
-| Closing | `add_closing_slide()` | Dark background |
+| Slide | Content | Why |
+|-------|---------|-----|
+| Title | — | Sets tone |
+| Persona Pain | Quote/callout, not bullets | Emotional grounding |
+| Current State vs. Gap | Two-column | What's missing today |
+| Competitive | Comparison matrix | Where we close gaps |
+| Quick Wins | Before/after panels | Concrete near-term value |
+| Core Improvements | Icon grid, not a bullet list | Capability overview |
+| Key Impact Stat | Single large number | Break up dense slides |
+| Success Metrics | KPI cards | Specific, measurable |
+| Timeline | Horizontal roadmap | Phasing |
+| Transformation | Before/after, green/positive | Mirrors the Persona Pain slide with the resolved outcome |
+| Closing | — | |
 
-Design slides that include:
-- **Before/after comparison visuals** — showing current state vs. enhanced state
-- **Competitive gap diagrams** — matrices or positioning maps showing where we close gaps
-- **Impact callout cards** — large numbers showing expected improvement
-- **Enhancement roadmap timeline** — visual phasing (quick wins → core → strategic)
-- **Cross-module benefit diagram** — showing ripple effects
+Design principles:
+- Max 4–5 bullet points per slide; never more than 2 consecutive bullet-only slides.
+- Before/after contrasts must be visual (two-panel layout, color-coded), not just paraphrased text.
+- Use frontend-slides' animation patterns deliberately on the transformation and impact slides — this is the moment a static bullet deck fails and a real presentation doesn't.
+- The persona-pain slide and the transformation slide must revisit the *same* named persona from Step 1.
+- Render the persona challenge resolution map from Step 4 as a comparison layout with status indicators (✅ Solved / ⚠️ Partial / ❌ Deferred).
 
-Slide design principles:
-- Max 4-5 bullet points per slide, large font
-- Use the full slide canvas
-- Before/after contrasts should be visual, not just text
-- Brand colors: `#0078d4` (blue), `#1a1a2e` (navy), `#28a745` (green), `#fd7e14` (orange)
-- **Slide 2 (The Challenge Today):** Use a persona quote callout box with a highlighted background. Use `add_stat_slide()` or a custom callout shape for the persona pain story.
-- **Slide 12 (The Transformation):** Mirror Slide 2's layout with green/positive coloring. Use `add_before_after_slide()` to contrast the current pain vs. enhanced outcome.
-- **Persona Challenge Resolution:** Render the persona challenge resolution map from Step 4 as a `add_comparison_slide()` with status indicators (✅ Solved / ⚠️ Partial / ❌ Deferred).
-
-### 3. Generate Engineering Enhancement PPTX
+### 3. Generate the Engineering Slide Deck (frontend-slides)
 
 **Focus on what changes technically — architecture modifications, new metrics, migration.**
 
-**MANDATORY LAYOUT DIVERSITY RULE:** Same as executive — never more than 2 consecutive bullet slides. Plan:
+Author `[feature-name]-enhancement-eng-slides.html` the same way. Plan:
 
-| Slide | Recommended Method | Why |
-|-------|-------------------|-----|
-| Title | `add_title_slide()` | Dark background |
-| Persona Story (Slide 2) | `add_quote_slide()` | Emotional grounding |
-| Current Architecture | `add_image_slide()` | Generated diagram |
-| Enhancement Overview | `add_process_flow_slide()` | Connected steps |
-| New Metrics | `add_table_slide()` | Split if >8 rows |
-| Modified Metrics | `add_two_column_slide()` | Current vs. Enhanced |
-| Architecture Changes | `add_before_after_slide()` | Before/after diagrams |
-| UI Changes | `add_icon_grid_slide()` | Component overview |
-| Scalability | `add_kpi_slide()` | Performance targets |
-| Phasing | `add_timeline_slide()` | Roadmap |
+| Slide | Content |
+|-------|---------|
+| Title | — |
+| Persona Story | Emotional grounding |
+| Current Architecture | Link/embed the flowchart's "before" view |
+| Enhancement Overview | Process-flow visualization |
+| New Metrics | Table (split if >8 rows) |
+| Modified Metrics | Current vs. enhanced, two-column |
+| Architecture Changes | Before/after diagrams |
+| UI Changes | Component overview grid |
+| Scalability | Performance targets as KPI cards |
+| Phasing | Roadmap |
 
-Include programmatically generated:
-- **Before/after architecture diagrams** — showing existing vs. enhanced data flow
-- **New metrics tables** — formatted with categories, thresholds, collection methods
-- **Modified component highlights** — color-coded to show what's changed
-- **Data model change diagrams** — schema modifications
-- **Cross-module reuse diagram** — showing borrowed components
+Include:
+- **Before/after architecture** — pull directly from the Archify flowchart's existing/new/modified node coding rather than re-drawing it.
+- **New metrics tables** — categories, thresholds, collection methods.
+- **Modified component highlights** — color-coded to match the flowchart's semantics.
+- **Cross-module reuse** — showing borrowed components (from Step 2).
 
-For complex diagrams, generate as PNG with matplotlib/graphviz first, then embed in slides.
-
-### 4. Generate Enhancement PRD DOCX
+### 4. Generate the Enhancement PRD (DOCX)
 
 Professional document with:
-- Styled heading hierarchy
-- Formatted tables with colored headers
-- Current-vs-enhanced comparison tables with color coding
-- **Technical Architecture Changes section** (Section 3) with embedded architecture diagram, decision logic changes, data model changes, and integration point changes
-- New metrics specification tables
-- Embedded diagrams (reuse from engineering PPT)
-- Page numbers, headers
-- Enhancement scope summary on page 1
-- **Persona Challenges section** (Section 2.3) as a COMPACT reference table — not multi-paragraph narratives
-- **Persona Challenge Traceability section** (Section 10) as a compact cross-reference table
-- **Functional requirement tables** must include "Current Behavior → Enhanced Behavior" columns
+- Styled heading hierarchy, formatted tables with colored headers.
+- Current-vs-enhanced comparison tables with color coding matching the flowchart/decks.
+- **Technical Architecture Changes section** (Section 3) with an embedded architecture image, decision logic changes, data model changes, and integration point changes. This image is a **simple static diagram rendered with `matplotlib`** purpose-built for the printed page — Archify's output is interactive HTML and isn't meant to be screenshotted into a document; draw a lightweight equivalent instead, using the same existing/new/modified color coding.
+- New metrics specification tables.
+- Page numbers, headers.
+- Enhancement scope summary on page 1.
+- **Persona Challenges section** (Section 2.3) as a COMPACT reference table — not multi-paragraph narratives.
+- **Persona Challenge Traceability section** (Section 10) as a compact cross-reference table.
+- **Functional requirement tables** must include "Current Behavior → Enhanced Behavior" columns.
 
-### 5. Write and Run the Build Script
+### 5. Write and Run the DOCX Build Script
 
-Create `ITOM-PM-Result/[feature-name]-enhancement/Generated/build_documents.py` that:
+Write `.steps/build_docx.py` that:
 1. Resolves the scripts directory (repo root's `scripts/`) and adds it to `sys.path`:
    ```python
    import sys
    SCRIPTS_DIR = "<repo-root>/scripts"
    sys.path.insert(0, SCRIPTS_DIR)
    ```
-2. Uses `generate_pptx.PresentationBuilder` for slide creation
-3. Uses `generate_flowchart.FlowchartBuilder` for visual flowcharts
-4. Uses `generate_docx` utilities for document formatting
-5. Reads content from `.steps/` Step 5 markdown files (and backfill from Steps 1–4 when drafts are thin) (5a–5d)
-6. Generates intermediate diagram PNGs
-7. Assembles all four output files
-8. Saves to the Generated/ folder
+2. Imports and uses `generate_docx.DocxBuilder`.
+3. Reads content from `.steps/` Step 5 markdown files (5a–5d), and Steps 1–4 for backfill when drafts are thin.
+4. Renders the small matplotlib architecture image as an intermediate PNG under `.steps/diagrams/`.
+5. Assembles `[feature-name]-enhancement.docx` at the topic-folder root.
 
 Then run it:
 ```bash
-cd "ITOM-PM-Result/[feature-name]-enhancement/Generated"
-python build_documents.py
+cd "[feature-name]-enhancement" && python .steps/build_docx.py
 ```
 
-**Keep `build_documents.py` after success** so the PM can regenerate without rewriting the designer script. Only rewrite it when content or layout must change. Optionally add `Generated/README.md` with the regenerate command and script-path notes.
+**Keep `.steps/build_docx.py` after success** so the PM can regenerate without rewriting the designer script. Only rewrite it when content or layout must change.
 
-If unsure of the absolute path, resolve it with `file_search` for `**/generate_pptx.py`.
+If unsure of the absolute path, resolve it with `file_search` for `**/generate_docx.py`.
 
 ## Output
 
 ```
-ITOM-PM-Result/[feature-name]-enhancement/Generated/
-├── diagrams/                           ← Intermediate diagram PNGs
-│   ├── current_architecture.png
-│   ├── enhanced_architecture.png
-│   ├── competitive_comparison.png
-│   ├── enhancement_roadmap.png
-│   └── cross_module_reuse.png
-├── build_documents.py                  ← keep for regeneration
-├── executive_presentation.pptx
-├── engineering_presentation.pptx
-├── enhancement_flowchart.pdf
-└── enhancement_prd.docx
+[feature-name]-enhancement/
+├── [feature-name]-enhancement-flowchart.html    ← Archify diagram (existing/new/modified coding)
+├── [feature-name]-enhancement-exec-slides.html  ← executive deck (frontend-slides)
+├── [feature-name]-enhancement-eng-slides.html   ← engineering deck (frontend-slides)
+├── [feature-name]-enhancement.docx              ← enhancement PRD
+└── .steps/
+    ├── diagrams/flowchart.json                  ← Archify source spec
+    └── build_docx.py                            ← keep for regeneration
 ```
-
 
 
 ## Report rebuild (mandatory)
 
 Every step artifact this skill writes must:
 
-1. **Markdown (source of truth, hidden):** `ITOM-PM-Result/[slug]/.steps/<name>.md`
-   - Enhancement mode: `ITOM-PM-Result/[slug]-enhancement/.steps/<name>.md`
+1. **Markdown (source of truth, hidden):** `[slug]/.steps/<name>.md`
+   - Enhancement mode: `[slug]-enhancement/.steps/<name>.md`
 2. **Rebuild the consolidated report** immediately after:
    ```bash
-   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[slug]/"
+   python "<scripts-dir>/build_report.py" "[slug]/"
    ```
    Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, reference it first with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker in the markdown, then rebuild.
+3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `[slug]-<name>.html`) and reference it first with a `<!-- diagram: [slug]-<name>.html -->` marker in the markdown, then rebuild.
 4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`report.html`** path.
-6. **Never delete** `.steps/*.md`, `report.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
+5. Final chat summary (end of the whole run) cites the **`[slug].html`** path.
+6. **Never delete** `.steps/*.md`, `[slug].html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
@@ -242,38 +196,29 @@ See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 ## Quality Gate / Checklist (before marking complete)
 
 Before declaring complete, verify:
-- [ ] Flowchart PDF has actual visual diagrams with green/blue/orange color coding
-- [ ] Executive PPT has before/after visuals (not just bullets)
-- [ ] Executive PPT has NO MORE THAN 2 consecutive bullet slides
-- [ ] Executive PPT uses at least 4 different slide types (content, two-column, KPI, before-after, comparison, timeline, etc.)
-- [ ] Executive PPT Slide 2 has a persona pain story callout (not generic gap list)
-- [ ] Executive PPT Slide 12 revisits the same persona with the enhanced outcome
-- [ ] Engineering PPT has architecture diagrams showing modifications
-- [ ] Engineering PPT has NO MORE THAN 2 consecutive bullet slides
-- [ ] Engineering PPT uses at least 4 different slide types
-- [ ] Engineering PPT Slide 2 has a persona story grounding the technical work
+- [ ] Flowchart has real diagram structure with existing/new/modified coding, not 5 generic boxes
+- [ ] Executive deck has before/after visuals (not just bullets)
+- [ ] Executive deck has NO MORE THAN 2 consecutive bullet-only slides
+- [ ] Executive deck's persona-pain slide and transformation slide revisit the same named persona
+- [ ] Engineering deck has architecture diagrams showing modifications
+- [ ] Engineering deck has NO MORE THAN 2 consecutive bullet-only slides
 - [ ] Enhancement PRD includes Technical Architecture Changes section with architecture, decision logic, data model, and integration changes
 - [ ] Enhancement PRD Persona Challenges table is compact (one row per challenge, no narratives)
 - [ ] New metrics tables are legible and complete
-- [ ] Color coding is consistent: green=existing, blue=new, orange=modified
-- [ ] All diagrams are specific to THIS enhancement (not generic placeholders)
-- [ ] Text is legible (minimum 14pt on slides, 10pt in tables)
-- [ ] At least 30% of presentation slides are non-bullet layouts
-- [ ] `Generated/build_documents.py` kept for regeneration (not deleted)
+- [ ] Color coding is consistent everywhere: existing=green, new=blue, modified=orange
+- [ ] All diagrams and slides are specific to THIS enhancement (not generic placeholders)
+- [ ] `.steps/build_docx.py` and `.steps/diagrams/flowchart.json` kept for regeneration
 - [ ] `STATUS.md` updated after successful generation
-
-- [ ] `.steps/` markdown written, `report.html` rebuilt
-- [ ] Markdown under `.steps/`; HTML under `steps/`; never delete either or Generated artifacts
 
 
 ## Completion
 
 After generating all files, say:
 
-> **Files generated!** Your enhancement deliverables are ready in `ITOM-PM-Result/[feature-name]-enhancement/Generated/`:
-> - 📊 `executive_presentation.pptx` — [N] slides with before/after visuals and competitive gap diagrams
-> - 📊 `engineering_presentation.pptx` — [N] slides with architecture changes, new metrics tables, and reuse diagrams
-> - 📋 `enhancement_flowchart.pdf` — [N]-page visual flowchart with color-coded existing/new/modified steps
-> - 📄 `enhancement_prd.docx` — Full enhancement PRD with embedded diagrams
+> **Files generated!** Your enhancement deliverables are ready in `[feature-name]-enhancement/`:
+> - 🗺️ `[feature-name]-enhancement-flowchart.html` — interactive Archify flowchart with color-coded existing/new/modified steps
+> - 📊 `[feature-name]-enhancement-exec-slides.html` — executive deck with before/after visuals and competitive gap diagrams
+> - 📊 `[feature-name]-enhancement-eng-slides.html` — engineering deck with architecture changes, new metrics tables, and reuse diagrams
+> - 📄 `[feature-name]-enhancement.docx` — Full enhancement PRD with embedded diagrams
 >
-> Rebuild `report.html`, then continue immediately to Step 6 — Wireframe.
+> Rebuild `[feature-name]-enhancement.html`, then continue immediately to Step 6 — Wireframe.

@@ -11,7 +11,7 @@ Research how competitors have implemented this feature, what customers think of 
 
 ## Input
 
-Read `ITOM-PM-Result/[feature-name]/.steps/1_brainstorm.md` for full context on the feature.
+Read `[feature-name]/.steps/1_brainstorm.md` for full context on the feature.
 
 **CRITICAL: Extract the persona challenges from Step 1.** Read the Persona Stories section carefully. These are the real human problems your competitive analysis must address. For each competitor you evaluate, explicitly check: **does their implementation solve the challenges described in the persona stories?** If a competitor solves Priya's 3 AM blind spot problem but not Marcus's compliance reporting gap, say so specifically.
 
@@ -62,7 +62,7 @@ Consolidate findings into actionable intelligence for OpManager Plus.
 
 ## Output Format
 
-Write to `ITOM-PM-Result/[feature-name]/.steps/2_competitive_analysis.md`:
+Write to `[feature-name]/.steps/2_competitive_analysis.md`:
 
 ```markdown
 # Competitive Analysis: [Feature Name]
@@ -150,24 +150,24 @@ Map each persona challenge from Step 1 to competitive findings:
 
 Every step artifact this skill writes must:
 
-1. **Markdown (source of truth, hidden):** `ITOM-PM-Result/[slug]/.steps/<name>.md`
-   - Enhancement mode: `ITOM-PM-Result/[slug]-enhancement/.steps/<name>.md`
+1. **Markdown (source of truth, hidden):** `[slug]/.steps/<name>.md`
+   - Enhancement mode: `[slug]-enhancement/.steps/<name>.md`
 2. **Rebuild the consolidated report** immediately after:
    ```bash
-   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[slug]/"
+   python "<scripts-dir>/build_report.py" "[slug]/"
    ```
    Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, reference it first with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker in the markdown, then rebuild.
+3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `[slug]-<name>.html`) and reference it first with a `<!-- diagram: [slug]-<name>.html -->` marker in the markdown, then rebuild.
 4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`report.html`** path.
-6. **Never delete** `.steps/*.md`, `report.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
+5. Final chat summary (end of the whole run) cites the **`[slug].html`** path.
+6. **Never delete** `.steps/*.md`, `[slug].html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
 
 ## Quality Gate (before marking complete)
 
-- [ ] Path: `ITOM-PM-Result/[slug]/.steps/2_competitive_analysis.md`
+- [ ] Path: `[slug]/.steps/2_competitive_analysis.md`
 - [ ] ≥4 competitors or explicit exception
 - [ ] Persona-challenge coverage tied to Step 1 stories
 - [ ] Table stakes vs differentiators clear
@@ -175,8 +175,6 @@ See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 - [ ] Sources cited with links
 - [ ] `STATUS.md` updated
 
-- [ ] `.steps/` markdown written, `report.html` rebuilt
-- [ ] Markdown is hidden under `.steps/`; HTML visible under `steps/`; never delete either or Generated artifacts
 
 
 ## Completion
@@ -198,7 +196,7 @@ After writing the file, display a **summary directly in chat**:
 >
 > **Recommended position:** [Feature parity / Differentiation / Leapfrog]
 >
-> Full details in `ITOM-PM-Result/[feature-name]/.steps/2_competitive_analysis.md`
+> Full details in `[feature-name]/.steps/2_competitive_analysis.md`
 >
 > Continuing immediately to Step 3 — Technical Analysis.
 
