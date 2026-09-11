@@ -38,10 +38,25 @@ A PM's one-line request is not enough to safely run seven unattended pipeline st
    - **Proceed — Enhancement**: improves something existing. Name the slug, hand off to the `ask-deepu-enhancement` agent.
    - **Stop — Not a fit**: explain concretely why (which product surface it doesn't match, what it would actually be), and do not create a pipeline run folder. This is a first-class, expected outcome — not a failure.
 
-5. **Write the conclusion.** For a "Proceed" outcome, create `[slug]/.steps/0_wayfinding.md` with: the fit reasoning, the mode and why, the positioning answer, and every scoping decision locked during the interview — anything a later step would otherwise have to re-ask or guess. This file is the first section of the eventual consolidated report; write it for that reader, not just as an internal note.
+5. **Write the conclusion.** For a "Proceed" outcome, create `[slug]/.steps/0_wayfinding.md`. This file is the first section of the eventual consolidated report (`analysis.html`) — write it for that reader, not just as an internal note. "Wayfinding" is this skill's own internal name for the process, not something a PM reviewer needs to see, so the file itself never uses that word:
+
+   ```markdown
+   # Scope & Requirements
+
+   [1-3 short paragraphs of prose: the fit reasoning (why this belongs in OpManager Plus/Nexus, and on which product surface), the mode and why (feature vs. enhancement), and the positioning answer if this is new ground. This is the only part that reads as a narrative — everything settled during the interview belongs in the table below, not repeated here.]
+
+   ## Decisions Locked
+
+   | Decision | Answer | Why |
+   |---|---|---|
+   | Mode | Feature / Enhancement | ... |
+   | Product surface | ... | ... |
+   | Scope | ... | ... |
+   | [one row per scoping decision from the interview — anything a later step would otherwise have to re-ask or guess] | | |
+   ```
 
 ## Completion
 
-After reaching a "Proceed" conclusion, do not pause for approval — hand off immediately to the matching agent (`ask-deepu-feature` or `ask-deepu-enhancement`), which runs every remaining step back-to-back without further confirmation. Say so plainly in your conclusion message so the PM knows what happens next and when to expect the finished consolidated report (`[slug].html`, sitting directly in the topic folder). See `.github/agents/Ask-Deepu-feature.agent.md` / `Ask-Deepu-enhancement.agent.md` for the full workflow each pipeline follows.
+After reaching a "Proceed" conclusion, do not pause for approval — hand off immediately to the matching agent (`ask-deepu-feature` or `ask-deepu-enhancement`), which runs every remaining step back-to-back without further confirmation. Say so plainly in your conclusion message so the PM knows what happens next and when to expect the finished consolidated report (`analysis.html`, sitting directly in the topic folder). See `.github/agents/Ask-Deepu-feature.agent.md` / `Ask-Deepu-enhancement.agent.md` for the full workflow each pipeline follows.
 
 For a "Stop" conclusion, end there — no folder, no handoff, just the explanation and (if there's a plausible next step, like "this fits as an integration from a different product") a one-line suggestion of what that would look like.

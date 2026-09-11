@@ -27,7 +27,7 @@ Read all prior steps:
 
 **You cannot generate the Lovable prompt without screenshots of the current UI.** The wireframe must match the existing design — colors, layout patterns, navigation structure, component styles, typography, spacing.
 
-This is the one sanctioned pause point in the whole pipeline (operating system §8) — every other step runs unattended. If no usable screenshots exist yet, mark `STATUS.md` as `blocked_on_pm`, ask exactly what's below, and stop the run there until they're supplied; do not fabricate UI details to keep going, and do not ask for screenshots at any earlier step (current-state-analysis explicitly does not block on this — see its Step 2).
+This is the one sanctioned pause point in the whole pipeline (operating system §8) — every other step runs unattended. If no usable screenshots exist yet, mark `Progress.md` as `blocked_on_pm`, ask exactly what's below, and stop the run there until they're supplied; do not fabricate UI details to keep going, and do not ask for screenshots at any earlier step (current-state-analysis explicitly does not block on this — see its Step 2).
 
 ### Step A — Request Initial Screenshots
 
@@ -221,21 +221,21 @@ Every step artifact this skill writes must:
    python "<scripts-dir>/build_report.py" "[slug]/"
    ```
    Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `[slug]-<name>.html`) and reference it first with a `<!-- diagram: [slug]-<name>.html -->` marker in the markdown, then rebuild.
+3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `architecture.html`) and reference it first with a `<!-- diagram: architecture.html -->` marker in the markdown, then rebuild.
 4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`[slug].html`** path.
-6. **Never delete** `.steps/*.md`, `[slug].html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
+5. Final chat summary (end of the whole run) cites the **`analysis.html`** path.
+6. **Never delete** `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
 
 ## Quality Gate (before marking complete)
 
-- [ ] Prompt written under correct `.steps/` path, `[feature-name]-enhancement.html` rebuilt
+- [ ] Prompt written under correct `.steps/` path, `analysis.html` rebuilt
 - [ ] Scope matches Step 4/5 findings (no silent expansion)
 - [ ] Screenshots analyzed before drafting (or run correctly marked `blocked_on_pm` if none were available)
 - [ ] Paste-ready for Lovable (single coherent prompt)
-- [ ] `STATUS.md` → `done`
+- [ ] `Progress.md` → `done`
 
 
 

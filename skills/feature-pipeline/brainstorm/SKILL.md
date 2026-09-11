@@ -88,10 +88,10 @@ Every step artifact this skill writes must:
    python "<scripts-dir>/build_report.py" "[slug]/"
    ```
    Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `[slug]-<name>.html`) and reference it first with a `<!-- diagram: [slug]-<name>.html -->` marker in the markdown, then rebuild.
+3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `architecture.html`) and reference it first with a `<!-- diagram: architecture.html -->` marker in the markdown, then rebuild.
 4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`[slug].html`** path.
-6. **Never delete** `.steps/*.md`, `[slug].html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
+5. Final chat summary (end of the whole run) cites the **`analysis.html`** path.
+6. **Never delete** `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
@@ -172,20 +172,20 @@ No RFC dumps.]
 
 ## Quality Gate (before marking complete)
 
-- [ ] Wrote `.steps/1_brainstorm.md` (not feature root), rebuilt `[slug].html`
+- [ ] Wrote `.steps/1_brainstorm.md` (not feature root), rebuilt `analysis.html`
 - [ ] Plain English throughout; jargon defined on first use
 - [ ] **Why This Technology Exists** covers what / why people use it / problem solved / easy example
 - [ ] 2–3 named persona stories with concrete failure examples + transformation
 - [ ] Module fit / reuse / new requirements filled
 - [ ] Open questions noted as assumptions, not batched for the PM (Step 0 wayfinding was the interactive step — this one runs unattended)
 - [ ] Sources cited when external claims are made
-- [ ] `STATUS.md` updated
+- [ ] `Progress.md` updated
 - [ ] No implementation code
 - [ ] No deletion of other pipeline files
 
 ## Completion
 
-After writing the markdown and rebuilding `[slug].html`, display a short chat summary, then continue immediately to Step 2 — do not wait for a reply:
+After writing the markdown and rebuilding `analysis.html`, display a short chat summary, then continue immediately to Step 2 — do not wait for a reply:
 
 ---
 

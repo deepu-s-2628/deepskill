@@ -30,20 +30,20 @@ Describe what you want, prefixed with `ask-deepu` (typing `/ask-deepu` shows a g
 
 Once that interrogation ("wayfinding") concludes "proceed," the matching pipeline runs every remaining step back-to-back with **no further pauses** — no `proceed`/`approve` replies needed. The one exception: the enhancement pipeline's wireframe step will still stop and ask for screenshots if none exist, since that's a real dependency, not a review gate.
 
-Everything lands directly in your workspace, no wrapper folder — a topic folder named after the slug, e.g. `vxlan-monitoring/` (or `vxlan-monitoring-enhancement/`):
+Everything lands directly in your workspace, no wrapper folder — a topic folder named after the slug, e.g. `vxlan-monitoring/` (or `vxlan-monitoring-enhancement/`). The files inside it are named for their role, not the slug — same name in every topic folder, same idea as `README.md`, so it's always obvious which one to open first:
 
 ```
 vxlan-monitoring/
-├── STATUS.md
-├── vxlan-monitoring.html                ← the one consolidated report — start here
-├── vxlan-monitoring-flowchart.html      ← interactive Archify diagram
-├── vxlan-monitoring-exec-slides.html    ← executive slide deck
-├── vxlan-monitoring-eng-slides.html     ← engineering slide deck
-├── vxlan-monitoring.docx                ← PRD
-└── .steps/                              ← hidden markdown history, kept for resume
+├── Progress.md
+├── analysis.html               ← the one consolidated report — start here
+├── architecture.html           ← interactive Archify diagram
+├── executive-brief.html        ← executive slide deck
+├── engineering-brief.html      ← engineering slide deck
+├── product-requirements.docx   ← PRD
+└── .steps/                     ← hidden markdown history, kept for resume
 ```
 
-`vxlan-monitoring.html` is a single navigable page with every step's findings, plus a diagram wherever one earns its place over plain text.
+`analysis.html` is a single navigable page — nested sub-headings and scroll-position highlighting in the left nav — with every step's findings, plus a diagram wherever one earns its place over plain text.
 
 ## Reference
 
@@ -105,7 +105,7 @@ Archify and frontend-slides need no install step — both are pure Node.js/stati
 
 `v0.1.0` covered the foundation: extraction, the glossary, plain-language output, dual-format skills, this release tooling.
 
-`v0.2.0` — pulled forward after real testing surfaced they weren't optional: `ask-deepu`'s wayfinding interrogation and the single consolidated `[slug].html` report; Archify and frontend-slides fully vendored under `skills/`, replacing PPTX/PDF generation entirely; the flat topic-folder layout with no `ITOM-PM-Result/` wrapper.
+`v0.2.0` — pulled forward after real testing surfaced they weren't optional: `ask-deepu`'s wayfinding interrogation and the single consolidated `analysis.html` report; Archify and frontend-slides fully vendored under `skills/`, replacing PPTX/PDF generation entirely; the flat topic-folder layout with no `ITOM-PM-Result/` wrapper.
 
 Still planned, unversioned:
 

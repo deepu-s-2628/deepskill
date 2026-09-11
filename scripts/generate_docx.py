@@ -27,6 +27,7 @@ from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.section import WD_ORIENT
 from docx.oxml.ns import qn
+from docx.oxml import OxmlElement
 
 try:
     from PIL import Image as PILImage
@@ -67,6 +68,9 @@ class DocxBuilder:
         self.doc = Document()
         self.title = title
         self.subtitle = subtitle
+        self._headings = []  # (text, level, bookmark_name), in document order
+        self._toc_anchor = None  # paragraph the real TOC gets inserted before, at save() time
+        self._bookmark_id = 1000
         self._setup_styles()
         self._setup_page()
 
@@ -117,7 +121,12 @@ class DocxBuilder:
             pass  # Style already exists
 
     def save(self, path):
-        """Save the document."""
+        """Save the document. Fills in the real Table of Contents (if
+        add_table_of_contents() was called) from every heading added via
+        add_heading() — regardless of call order, since headings are only
+        known once the whole document has been built."""
+        if self._toc_anchor is not None:
+            self._fill_table_of_contents()
         output_path = Path(path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         self.doc.save(str(output_path))
@@ -159,7 +168,7 @@ class DocxBuilder:
         table = self.doc.add_table(rows=4, cols=2)
         table.alignment = WD_TABLE_ALIGNMENT.CENTER
         metadata = [
-            ("Author", "[PM Name]"),
+            ("Author", "Deepu S"),
             ("Status", "Draft"),
             ("Last Updated", "2026"),
             ("Version", "1.0"),
@@ -179,33 +188,59 @@ class DocxBuilder:
         self.doc.add_page_break()
 
     def add_table_of_contents(self):
-        """Add a functional Table of Contents field."""
+        """Reserve a Table of Contents page. The real entries — one per
+        add_heading() call, each a clickable internal link — are filled in
+        at save() time, once every heading in the document is known. This
+        deliberately does not use a Word TOC field: those need a manual
+        right-click → Update Field in Word before they show anything, which
+        is not acceptable for a document meant to be opened and read as-is.
+        There are no page numbers (python-docx cannot compute real page
+        numbers without Word's own layout pass) — entries are indented by
+        heading level instead, which is what actually orients a reader in a
+        document this size."""
         self.doc.add_heading('Table of Contents', level=1)
-
-        # Insert a TOC field that can be updated in Word
-        p = self.doc.add_paragraph()
-        run = p.add_run()
-        fldChar1 = run._r.makeelement(qn('w:fldChar'), {qn('w:fldCharType'): 'begin'})
-        run._r.append(fldChar1)
-
-        run2 = p.add_run()
-        instrText = run2._r.makeelement(qn('w:instrText'), {})
-        instrText.text = ' TOC \\o "1-3" \\h \\z \\u '
-        run2._r.append(instrText)
-
-        run3 = p.add_run()
-        fldChar2 = run3._r.makeelement(qn('w:fldChar'), {qn('w:fldCharType'): 'separate'})
-        run3._r.append(fldChar2)
-
-        run4 = p.add_run('[Right-click → Update Field to generate Table of Contents]')
-        run4.font.italic = True
-        run4.font.color.rgb = MID_GRAY
-
-        run5 = p.add_run()
-        fldChar3 = run5._r.makeelement(qn('w:fldChar'), {qn('w:fldCharType'): 'end'})
-        run5._r.append(fldChar3)
-
+        self._toc_anchor = self.doc.add_paragraph()
         self.doc.add_page_break()
+
+    def _add_bookmark(self, paragraph, name):
+        self._bookmark_id += 1
+        bm_id = str(self._bookmark_id)
+        start = OxmlElement('w:bookmarkStart')
+        start.set(qn('w:id'), bm_id)
+        start.set(qn('w:name'), name)
+        end = OxmlElement('w:bookmarkEnd')
+        end.set(qn('w:id'), bm_id)
+        paragraph._p.insert(0, start)
+        paragraph._p.append(end)
+
+    def _fill_table_of_contents(self):
+        for text, level, bookmark in self._headings:
+            entry = self._toc_anchor.insert_paragraph_before()
+            entry.paragraph_format.left_indent = Cm(0.6 * (level - 1))
+            entry.paragraph_format.space_after = Pt(4 if level == 1 else 2)
+
+            hyperlink = OxmlElement('w:hyperlink')
+            hyperlink.set(qn('w:anchor'), bookmark)
+            run = OxmlElement('w:r')
+            rPr = OxmlElement('w:rPr')
+            color = OxmlElement('w:color')
+            color.set(qn('w:val'), '0078D4')
+            rPr.append(color)
+            if level == 1:
+                b = OxmlElement('w:b')
+                rPr.append(b)
+            underline = OxmlElement('w:u')
+            underline.set(qn('w:val'), 'single')
+            rPr.append(underline)
+            sz = OxmlElement('w:sz')
+            sz.set(qn('w:val'), '22' if level == 1 else '20')
+            rPr.append(sz)
+            run.append(rPr)
+            t = OxmlElement('w:t')
+            t.text = text
+            run.append(t)
+            hyperlink.append(run)
+            entry._p.append(hyperlink)
 
     def add_header_footer(self, header_text="", include_page_numbers=True):
         """Add header text and page numbers to all sections."""
@@ -249,8 +284,14 @@ class DocxBuilder:
     # ─── CONTENT ELEMENTS ─────────────────────────────────
 
     def add_heading(self, text, level=1):
-        """Add a heading."""
-        return self.doc.add_heading(text, level=level)
+        """Add a heading. Bookmarked and recorded so add_table_of_contents()
+        can link to it, regardless of which was called first."""
+        heading = self.doc.add_heading(text, level=level)
+        if level <= 3:
+            bookmark = f"h{len(self._headings) + 1}"
+            self._add_bookmark(heading, bookmark)
+            self._headings.append((text, level, bookmark))
+        return heading
 
     def add_paragraph(self, text, bold=False, italic=False, color=None):
         """Add a paragraph with optional formatting."""
@@ -542,7 +583,7 @@ def add_title_page(doc, title, subtitle="Product Requirements Document"):
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
 
     metadata = [
-        ("Author", "[PM Name]"),
+        ("Author", "Deepu S"),
         ("Status", "Draft"),
         ("Last Updated", "2026"),
         ("Version", "1.0"),

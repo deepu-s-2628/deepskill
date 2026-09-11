@@ -174,10 +174,10 @@ Every step artifact this skill writes must:
    python "<scripts-dir>/build_report.py" "[slug]/"
    ```
    Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `[slug]-<name>.html`) and reference it first with a `<!-- diagram: [slug]-<name>.html -->` marker in the markdown, then rebuild.
+3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `architecture.html`) and reference it first with a `<!-- diagram: architecture.html -->` marker in the markdown, then rebuild.
 4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`[slug].html`** path.
-6. **Never delete** `.steps/*.md`, `[slug].html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
+5. Final chat summary (end of the whole run) cites the **`analysis.html`** path.
+6. **Never delete** `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
@@ -189,7 +189,7 @@ See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 - [ ] Strengths and limitations are specific (not generic)
 - [ ] 2–3 persona pain stories at keynote quality
 - [ ] Screenshot requests made when UI truth is needed
-- [ ] `STATUS.md` updated
+- [ ] `Progress.md` updated
 
 
 

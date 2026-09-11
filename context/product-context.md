@@ -2,7 +2,7 @@
 
 > **Source:** ManageEngine public documentation, product pages, and help guides.
 > **Last updated:** May 2026.
-> **PM agents:** Also load [pm-operating-system.md](./pm-operating-system.md) for pipeline paths, STATUS.md, quality gates, and resume rules.
+> **PM agents:** Also load [pm-operating-system.md](./pm-operating-system.md) for pipeline paths, Progress.md, quality gates, and resume rules.
 
 ---
 

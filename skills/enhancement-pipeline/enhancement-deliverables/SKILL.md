@@ -161,7 +161,7 @@ Read ALL prior steps:
 - Slide 12 mirrors Slide 2 — same layout, showing the "after" story
 - Before/after visuals on slides 6-7
 - Competitive comparison visual on slide 4
-- Keep text minimal — 4-6 bullets max per slide
+- These are reading-first deliverables (async review, handoff), not a speaker-led talk — per frontend-slides' own density framework, aim for its "high density / reading-first" mode (4-8 bullets or structured cards per slide), not its sparse speaker-led one
 - Speaker notes included for context
 
 **SLIDE LAYOUT VARIETY — MANDATORY:**
@@ -593,10 +593,10 @@ Every step artifact this skill writes must:
    python "<scripts-dir>/build_report.py" "[slug]/"
    ```
    Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `[slug]-<name>.html`) and reference it first with a `<!-- diagram: [slug]-<name>.html -->` marker in the markdown, then rebuild.
+3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `architecture.html`) and reference it first with a `<!-- diagram: architecture.html -->` marker in the markdown, then rebuild.
 4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`[slug].html`** path.
-6. **Never delete** `.steps/*.md`, `[slug].html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
+5. Final chat summary (end of the whole run) cites the **`analysis.html`** path.
+6. **Never delete** `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
@@ -608,7 +608,7 @@ See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 - [ ] Flow content is complete enough to render as real diagrams
 - [ ] PRD requirements are testable
 - [ ] Persona traceability retained
-- [ ] `STATUS.md` updated (next: `document_generation`)
+- [ ] `Progress.md` updated (next: `document_generation`)
 
 
 ## Completion
@@ -629,8 +629,8 @@ After producing all four files, display in chat:
 > - [List diagram names — e.g., end-to-end flow, data pipeline, alert processing]
 > - Shows existing vs. new vs. modified steps
 >
-> Drafts written under `[feature-name]-enhancement/.steps/` (`5a`–`5d`), `[feature-name]-enhancement.html` rebuilt.
-> Update `STATUS.md` → Step 5 complete, next action `document_generation`.
+> Drafts written under `[feature-name]-enhancement/.steps/` (`5a`–`5d`), `analysis.html` rebuilt.
+> Update `Progress.md` → Step 5 complete, next action `document_generation`.
 >
 > Continuing immediately into document generation (HTML slide decks, Archify flowchart, DOCX), then Step 6.
 

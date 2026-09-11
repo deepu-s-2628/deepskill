@@ -94,8 +94,8 @@ Discovery, polling path, storage, processing, alerting, UI patterns, EE/probe no
    ```bash
    python "<scripts-dir>/build_report.py" "[feature-name]/"
    ```
-3. If this step's collection-method comparison or architecture is worth diagramming, render it with Archify — bundled at `skills/archify/`, always available (operating system §11a) — to `[feature-name]-<name>.html`, referenced with `<!-- diagram: [feature-name]-<name>.html -->` in the markdown, then rebuild.
-4. Never delete the markdown or `[feature-name].html` after later document generation.
+3. If this step's collection-method comparison or architecture is worth diagramming, render it with Archify — bundled at `skills/archify/`, always available (operating system §11a) — to `architecture.html`, referenced with `<!-- diagram: architecture.html -->` in the markdown, then rebuild.
+4. Never delete the markdown or `analysis.html` after later document generation.
 
 ## Output Format
 
@@ -225,7 +225,7 @@ Device → Collection → Normalize → Store → Threshold → UI / Notify
 
 ## Quality Gate (before marking complete)
 
-- [ ] `.steps/3_technical_analysis.md` written, `[feature-name].html` rebuilt
+- [ ] `.steps/3_technical_analysis.md` written, `analysis.html` rebuilt
 - [ ] All viable methods evaluated; one primary chosen
 - [ ] **Deep collection contract** with concrete OIDs and/or API endpoints/paths (not hand-wavy)
 - [ ] Uncertain items labeled Needs lab confirmation + source
@@ -233,7 +233,7 @@ Device → Collection → Normalize → Store → Threshold → UI / Notify
 - [ ] Scale, EE/probe, security, licensing covered when relevant
 - [ ] Persona challenges addressed
 - [ ] Sources section present
-- [ ] STATUS.md updated
+- [ ] Progress.md updated
 - [ ] No implementation source code dumps
 
 ## Completion

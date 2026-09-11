@@ -47,13 +47,13 @@ All paths are relative to the **opened workspace root**. There is no wrapper fol
 
 ```
 [slug]/
-├── STATUS.md                  ← always visible control plane
-├── [slug].html                ← THE deliverable: one navigable HTML, rebuilt after every step
-├── [slug]-flowchart.html      ← Archify-rendered flowchart, also embedded inside [slug].html
-├── [slug]-exec-slides.html    ← executive slide deck (frontend-slides, HTML)
-├── [slug]-eng-slides.html     ← engineering slide deck (frontend-slides, HTML)
-├── [slug].docx                ← PRD, python-docx
-└── .steps/                    ← HIDDEN: markdown source of truth + build scripts (agent edit/resume)
+├── Progress.md                 ← always visible control plane
+├── analysis.html               ← THE deliverable: one navigable HTML, rebuilt after every step
+├── architecture.html           ← Archify-rendered flowchart, also embedded inside analysis.html
+├── executive-brief.html        ← executive slide deck (frontend-slides, HTML)
+├── engineering-brief.html      ← engineering slide deck (frontend-slides, HTML)
+├── product-requirements.docx   ← PRD, python-docx
+└── .steps/                     ← HIDDEN: markdown source of truth + build scripts (agent edit/resume)
     ├── 0_wayfinding.md
     ├── 1_brainstorm.md
     ├── 2_competitive_analysis.md
@@ -66,27 +66,27 @@ All paths are relative to the **opened workspace root**. There is no wrapper fol
     ├── 6_lovable_wireframe.md
     ├── diagrams/                ← Archify JSON specs (source for the flowchart HTML)
     │   └── flowchart.json
-    └── build_docx.py            ← keep after success; regenerates [slug].docx
+    └── build_docx.py            ← keep after success; regenerates product-requirements.docx
 ```
 
 ### Enhancement pipeline
 
 Same flat pattern, folder named `[slug]-enhancement/`:
 - `.steps/*.md` — hidden sources, starting with `0_wayfinding.md`
-- `[slug]-enhancement.html` — the one consolidated deliverable
-- `[slug]-enhancement-flowchart.html`, `[slug]-enhancement-exec-slides.html`, `[slug]-enhancement-eng-slides.html`, `[slug]-enhancement.docx` — same deliverable set as feature mode
+- `analysis.html` — the one consolidated deliverable
+- `architecture.html`, `executive-brief.html`, `engineering-brief.html`, `product-requirements.docx` — same deliverable set as feature mode
 
 ### Hard rules
 
 1. **Markdown always under hidden `.steps/`** — never put step `.md` in the topic-folder root.
-2. **There is exactly one visible review artifact for the analysis itself: `[slug].html`** at the topic-folder root. No per-step HTML files.
-3. **After every step**, regenerate the report: `python "<scripts-dir>/build_report.py" "[slug]/"`. Never let `[slug].html` fall behind `.steps/`. (`build_report.py` derives the output filename from the folder name — it always matches.)
-4. **Diagrams are Archify HTML**, visible at the topic-folder root (e.g. `[slug]-flowchart.html`) *and* referenced from the relevant step's markdown with a `<!-- diagram: [slug]-flowchart.html -->` marker line — `build_report.py` turns that into an embedded, interactive `<iframe>` in the right section. There is no PDF flowchart.
-5. **Slide decks are HTML** (`frontend-slides`), not PPTX. Two decks — `[slug]-exec-slides.html` (executive audience) and `[slug]-eng-slides.html` (engineering audience) — each self-contained, animation-capable, and openable directly in a browser.
+2. **There is exactly one visible review artifact for the analysis itself: `analysis.html`** at the topic-folder root. No per-step HTML files.
+3. **After every step**, regenerate the report: `python "<scripts-dir>/build_report.py" "[slug]/"`. Never let `analysis.html` fall behind `.steps/`. (`build_report.py` derives the output filename from the folder name — it always matches.)
+4. **Diagrams are Archify HTML**, visible at the topic-folder root (e.g. `architecture.html`) *and* referenced from the relevant step's markdown with a `<!-- diagram: architecture.html -->` marker line — `build_report.py` turns that into an embedded, interactive `<iframe>` in the right section. There is no PDF flowchart.
+5. **Slide decks are HTML** (`frontend-slides`), not PPTX. Two decks — `executive-brief.html` (executive audience) and `engineering-brief.html` (engineering audience) — each self-contained, animation-capable, and openable directly in a browser.
 6. **The PRD stays DOCX** (`python-docx`), unchanged from before.
-7. **Retention — never delete** `.steps/*.md`, `[slug].html`, `STATUS.md`, the deliverable files at the topic-folder root, or `.steps/build_docx.py`.
+7. **Retention — never delete** `.steps/*.md`, `analysis.html`, `Progress.md`, the deliverable files at the topic-folder root, or `.steps/build_docx.py`.
 8. Do not invent alternate layout names (`output/`, `docs/`, `Generated/`, `steps/` without the dot).
-9. Chat summaries should **highlight the `[slug].html` path** for reviewers; mention MD only as internal source.
+9. Chat summaries should **highlight the `analysis.html` path** for reviewers; mention MD only as internal source.
 
 ### Report rebuild command
 
@@ -110,12 +110,12 @@ If a folder already exists for the same slug, **resume** it — do not create `*
 
 ---
 
-## 5. STATUS.md (Control Plane)
+## 5. Progress.md (Control Plane)
 
-Create/update `[folder]/STATUS.md` at every step boundary.
+Create/update `[folder]/Progress.md` at every step boundary.
 
 ```markdown
-# STATUS — [Feature Display Name]
+# Progress — [Feature Display Name]
 
 | Field | Value |
 |-------|-------|
@@ -142,7 +142,7 @@ Create/update `[folder]/STATUS.md` at every step boundary.
 - ...
 ```
 
-On resume: read `STATUS.md`, then all **`.steps/*.md`**, then rebuild `[slug].html` before continuing.
+On resume: read `Progress.md`, then all **`.steps/*.md`**, then rebuild `analysis.html` before continuing.
 
 ---
 
@@ -151,10 +151,10 @@ On resume: read `STATUS.md`, then all **`.steps/*.md`**, then rebuild `[slug].ht
 After writing or revising any step's markdown:
 
 1. Save markdown to **`.steps/<name>.md`**. This is the source of truth for edits and for regeneration.
-2. Rebuild the report: `python "<scripts-dir>/build_report.py" "[folder]/"`. This regenerates the **whole** `[slug].html` from every `.steps/*.md` file that exists so far — cheap, so do it after every step, not just at the end.
-3. If a step produced a diagram worth showing (see Section 11a), render it with Archify to a visible sibling file (e.g. `[slug]-flowchart.html`) and reference it from that step's markdown with a `<!-- diagram: [slug]-flowchart.html -->` marker before rebuilding — `build_report.py` turns it into an embedded, interactive frame.
-4. **Never delete** `.steps/*.md` or `[slug].html` after binary/HTML generation.
-5. Final chat completion (after the whole run finishes) must cite the **`[slug].html` path**.
+2. Rebuild the report: `python "<scripts-dir>/build_report.py" "[folder]/"`. This regenerates the **whole** `analysis.html` from every `.steps/*.md` file that exists so far — cheap, so do it after every step, not just at the end.
+3. If a step produced a diagram worth showing (see Section 11a), render it with Archify to a visible sibling file (e.g. `architecture.html`) and reference it from that step's markdown with a `<!-- diagram: architecture.html -->` marker before rebuilding — `build_report.py` turns it into an embedded, interactive frame.
+4. **Never delete** `.steps/*.md` or `analysis.html` after binary/HTML generation.
+5. Final chat completion (after the whole run finishes) must cite the **`analysis.html` path**.
 
 If `build_report.py` is unavailable, fall back to `md_to_html.py` per-step and note in chat that the consolidated report couldn't be built — this should not happen in a working checkout.
 
@@ -189,8 +189,8 @@ Applies hardest to **brainstorm / current-state openers**, and still applies to 
 For each step, in order:
 1. Produce the step.
 2. Write `.steps/*.md`.
-3. Rebuild `[slug].html` (Section 6).
-4. Update `STATUS.md`.
+3. Rebuild `analysis.html` (Section 6).
+4. Update `Progress.md`.
 5. Move immediately to the next step. Do not stop and wait.
 
 ### The two real exceptions
@@ -201,8 +201,8 @@ For each step, in order:
 | PM says | Action |
 |---------|--------|
 | `redo step N` / feedback on step N | Revise step N only, rebuild the report, then resume the autonomous chain from where it left off |
-| `status` / `where are we` | Summarize from `STATUS.md` + `.steps/` + `[slug].html` |
-| `pause` / `stop` | Stop; leave `STATUS.md` accurate so the run can resume later |
+| `status` / `where are we` | Summarize from `Progress.md` + `.steps/` + `analysis.html` |
+| `pause` / `stop` | Stop; leave `Progress.md` accurate so the run can resume later |
 
 There is no `generate files` command to wait for anymore — document generation (Section 13) runs automatically as part of the same unattended chain once Step 5's drafts are done.
 
@@ -295,7 +295,7 @@ Step 5 drafts and the document-generation outputs built from them must **transfe
 
 `archify` and `frontend-slides` live inside this repo, at `skills/archify/` and `skills/frontend-slides/` — vendored in full, not separately-installed plugins. They ship with every install of this plugin, so **there is no missing-skill case to degrade from for these two**, and no "try, then fall back to prose" pattern is needed here.
 
-- **Flowchart / architecture diagrams → Archify.** Use it for anything with real structure worth exploring: architecture/data-flow (Section 9's collection pipeline), the feature flowchart, a before/after comparison for an enhancement. Author a JSON spec under `.steps/diagrams/<name>.json`, render with `node <archify-dir>/bin/archify.mjs deliver <type> <spec.json> [slug]-<name>.html --quality showcase`, then reference the visible output from the relevant step's markdown with `<!-- diagram: [slug]-<name>.html -->` (Section 6). Resolve `<archify-dir>` via `**/skills/archify/bin/archify.mjs`.
+- **Flowchart / architecture diagrams → Archify.** Use it for anything with real structure worth exploring: architecture/data-flow (Section 9's collection pipeline), the feature flowchart, a before/after comparison for an enhancement. Author a JSON spec under `.steps/diagrams/<name>.json`, render with `node <archify-dir>/bin/archify.mjs deliver <type> <spec.json> architecture.html --quality showcase`, then reference the visible output from the relevant step's markdown with `<!-- diagram: architecture.html -->` (Section 6). Resolve `<archify-dir>` via `**/skills/archify/bin/archify.mjs`.
 - **Skip the diagram** and just write it out when a short table or a few sentences say the same thing without asking the reader to parse a shape — e.g. a two-option comparison, a short ordered list of steps. A diagram that doesn't earn more clarity than prose is padding.
 - **Slide decks → frontend-slides.** Both the executive and engineering decks (Section 11) are authored as self-contained HTML using `skills/frontend-slides/`'s templates and animation patterns — no PPTX is generated anywhere in this pipeline.
 - **License note:** both skills are MIT-licensed. Archify's vendored copy carries `THIRD_PARTY_NOTICES.md` disclosing that a small set of embedded brand-mark icons (used only when a diagram names a real product) carry their own upstream licenses, one of which (Vue.js) is CC-BY-NC-SA-4.0 with a non-commercial, share-alike condition. That notice ships as-is with the vendored copy — do not strip it, and do not use the Vue.js mark for anything beyond identifying the technology in a diagram.
@@ -313,9 +313,9 @@ This still applies to anything **not** vendored into this repo's own `skills/` �
 
 ### Global
 - [ ] Markdown under **`.steps/`** (hidden)
-- [ ] `[slug].html` rebuilt after this step (Section 6)
-- [ ] `STATUS.md` updated
-- [ ] Chat summary (final, end-of-run) cites the **`[slug].html`** path
+- [ ] `analysis.html` rebuilt after this step (Section 6)
+- [ ] `Progress.md` updated
+- [ ] Chat summary (final, end-of-run) cites the **`analysis.html`** path
 - [ ] No implementation source code in artifacts
 - [ ] No deletion of prior `.steps/` files or topic-folder deliverables
 - [ ] External claims cited or labeled assumptions
@@ -371,7 +371,7 @@ This still applies to anything **not** vendored into this repo's own `skills/` �
 - [ ] Slide decks and flowchart meet the dense deliverables bar (Section 11)
 - [ ] `.steps/build_docx.py` kept
 - [ ] `.steps/*.md` still present after generation
-- [ ] `[slug].docx`, `[slug]-exec-slides.html`, `[slug]-eng-slides.html`, `[slug]-flowchart.html` all openable and content-complete
+- [ ] `product-requirements.docx`, `executive-brief.html`, `engineering-brief.html`, `architecture.html` all openable and content-complete
 
 ### Step 6 wireframe
 - [ ] `.steps/` path correct, report rebuilt
@@ -386,14 +386,14 @@ This still applies to anything **not** vendored into this repo's own `skills/` �
 Runs automatically as part of the same unattended chain once Step 5's drafts are done — no `generate files` command to wait for.
 
 1. Validate prerequisites from **`.steps/`**; stop and flag as a blocker if any Step 5 MD missing.
-2. **Flowchart:** author a JSON spec (`.steps/diagrams/flowchart.json`) per Archify's schema for the `workflow` type, then render it — resolve the CLI with `**/skills/archify/bin/archify.mjs` — to `[slug]-flowchart.html` at the topic-folder root.
-3. **Slide decks:** using `skills/frontend-slides/`, author `[slug]-exec-slides.html` and `[slug]-eng-slides.html` directly as self-contained HTML — no build script, no PPTX.
-4. **PRD DOCX:** resolve `**/generate_docx.py`; write `.steps/build_docx.py` tailored to this feature, importing `generate_docx.DocxBuilder`. For the PRD's embedded architecture/data-flow image, render a simple static diagram with `matplotlib` (the Archify diagram is interactive HTML, not a static image source — don't try to screenshot it). Run the script to produce `[slug].docx`.
+2. **Flowchart:** author a JSON spec (`.steps/diagrams/flowchart.json`) per Archify's schema for the `workflow` type, then render it — resolve the CLI with `**/skills/archify/bin/archify.mjs` — to `architecture.html` at the topic-folder root.
+3. **Slide decks:** using `skills/frontend-slides/`, author `executive-brief.html` and `engineering-brief.html` directly as self-contained HTML — no build script, no PPTX.
+4. **PRD DOCX:** resolve `**/generate_docx.py`; write `.steps/build_docx.py` tailored to this feature, importing `generate_docx.DocxBuilder`. For the PRD's embedded architecture/data-flow image, render a simple static diagram with `matplotlib` (the Archify diagram is interactive HTML, not a static image source — don't try to screenshot it). Run the script to produce `product-requirements.docx`.
 5. Fix up to 3 times if generation errors.
 6. **Keep** `.steps/build_docx.py` and `.steps/diagrams/*.json` for regeneration.
 7. **Do not delete** `.steps/`.
 8. Content must be generated from the full analysis files (Steps 1–5), not from a thin paraphrase.
-9. Rebuild `[slug].html` afterward (Section 6) — the flowchart gets embedded via its diagram marker; mention the slide decks and DOCX in the report's relevant sections if useful, but they remain separate files, not embedded.
+9. Rebuild `analysis.html` afterward (Section 6) — the flowchart gets embedded via its diagram marker; mention the slide decks and DOCX in the report's relevant sections if useful, but they remain separate files, not embedded.
 
 ---
 
@@ -401,22 +401,22 @@ Runs automatically as part of the same unattended chain once Step 5's drafts are
 
 There is no single wrapper folder to list — a PM run's topic folder sits directly in the workspace root, named `[slug]/` or `[slug]-enhancement/`.
 
-1. If the PM names the slug (or it's obvious from context), go straight to `[slug]/STATUS.md` (or the `-enhancement` variant). Do not scan the workspace root — a directory only counts as a PM run if it actually contains both `STATUS.md` and `.steps/`.
-2. Read `STATUS.md`.
+1. If the PM names the slug (or it's obvious from context), go straight to `[slug]/Progress.md` (or the `-enhancement` variant). Do not scan the workspace root — a directory only counts as a PM run if it actually contains both `Progress.md` and `.steps/`.
+2. Read `Progress.md`.
 3. Read all `.steps/*.md`.
-4. Rebuild `[slug].html` (Section 6) so it reflects everything read.
+4. Rebuild `analysis.html` (Section 6) so it reflects everything read.
 5. Note which topic-folder deliverables already exist so regeneration doesn't start from scratch unnecessarily.
-6. If `STATUS.md` shows `blocked_on_pm`, summarize the specific blocker and ask for just that. Otherwise resume the autonomous chain from the next step — do not wait for a `proceed`.
+6. If `Progress.md` shows `blocked_on_pm`, summarize the specific blocker and ask for just that. Otherwise resume the autonomous chain from the next step — do not wait for a `proceed`.
 
-If the PM doesn't know the slug and asks what runs exist, it's fine to look for direct child directories of the workspace root that contain both `STATUS.md` and `.steps/` — but never treat an unrelated directory as a PM run just because it exists.
+If the PM doesn't know the slug and asks what runs exist, it's fine to look for direct child directories of the workspace root that contain both `Progress.md` and `.steps/` — but never treat an unrelated directory as a PM run just because it exists.
 
 ---
 
 ## 15. Chat UX Contract
 
 - Keep mid-step narration short; put detail in files.
-- Wayfinding is the only step that narrates interactively (Section 8) — every step after it just runs, with STATUS.md as the source of "where are we" if asked.
-- End the whole run with a summary + the **`[slug].html`** path.
+- Wayfinding is the only step that narrates interactively (Section 8) — every step after it just runs, with Progress.md as the source of "where are we" if asked.
+- End the whole run with a summary + the **`analysis.html`** path.
 - Batch questions (applies to wayfinding; nothing after it asks questions except a genuine blocker).
 - Be decisive.
 
@@ -429,7 +429,7 @@ If the PM doesn't know the slug and asks what runs exist, it's fine to look for 
 - Pausing between steps for review once wayfinding has concluded
 - Secrets/customer private data in a PM run's topic folder
 - Putting markdown anywhere but hidden `.steps/`
-- Per-step HTML files (superseded by the single `[slug].html`)
+- Per-step HTML files (superseded by the single `analysis.html`)
 - PPTX or PDF output of any kind (superseded by HTML slide decks and Archify diagrams)
 - Deleting md/deliverables after generation
 - Thin placeholder slide decks or flowcharts

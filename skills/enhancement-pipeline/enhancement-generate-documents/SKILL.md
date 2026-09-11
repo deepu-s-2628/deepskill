@@ -63,20 +63,20 @@ For each enhancement, you must:
 Author a JSON spec at `.steps/diagrams/flowchart.json` for Archify's `workflow` type (see `skills/archify/schemas/`), then render:
 
 ```bash
-node "<archify-dir>/bin/archify.mjs" deliver workflow ".steps/diagrams/flowchart.json" "[feature-name]-enhancement-flowchart.html" --quality showcase --json
+node "<archify-dir>/bin/archify.mjs" deliver workflow ".steps/diagrams/flowchart.json" "architecture.html" --quality showcase --json
 ```
 
 - Translate the Mermaid sketch from `5d_enhancement_flowchart.md` into the spec — this is a fresh authoring pass (new stable IDs, real domain wording), not a literal transcription.
 - Mark node/edge state so the diagram visually distinguishes **existing** (unchanged), **new** (added by the enhancement), and **modified** (changed by the enhancement) — Archify's schema supports per-node/edge styling; use it instead of inventing an ad hoc legend.
 - Cover: the enhanced end-to-end flow, discovery changes, data pipeline, alerting, user workflow — multiple linked views (`meta.views`) if one flat diagram can't hold all of it legibly.
 - Validate before delivering: `node "<archify-dir>/bin/archify.mjs" validate workflow ".steps/diagrams/flowchart.json" --quality showcase --json` must report a showcase pass with 0 errors/warnings. A showcase pass rarely happens on the first attempt — real layout errors (edge/node crossings, label overlaps, desktop-readability failures) are normal on early drafts and come with specific fix suggestions; keep revising the spec and re-validating until it's clean, don't stop or skip the diagram after the first failure.
-- Reference the output from `5d_enhancement_flowchart.md` with `<!-- diagram: [feature-name]-enhancement-flowchart.html -->` so it embeds into the consolidated report (Section 6).
+- Reference the output from `5d_enhancement_flowchart.md` with `<!-- diagram: architecture.html -->` so it embeds into the consolidated report (Section 6).
 
 ### 2. Generate the Executive Slide Deck (frontend-slides)
 
 **Focus on the business case for the enhancement — why, what changes, what impact.**
 
-Author `[feature-name]-enhancement-exec-slides.html` directly as self-contained HTML, following `skills/frontend-slides/SKILL.md`'s templates and animation patterns. Plan slide types before writing:
+Author `executive-brief.html` directly as self-contained HTML, following `skills/frontend-slides/SKILL.md`'s templates and animation patterns. Plan slide types before writing:
 
 | Slide | Content | Why |
 |-------|---------|-----|
@@ -93,7 +93,8 @@ Author `[feature-name]-enhancement-exec-slides.html` directly as self-contained 
 | Closing | — | |
 
 Design principles:
-- Max 4–5 bullet points per slide; never more than 2 consecutive bullet-only slides.
+- These decks are read async (handoff, review), not presented live — explicitly use frontend-slides' "high density / reading-first" mode (its own SKILL.md §"How dense should the deck feel?"), not its sparse speaker-led default: 4-8 bullets or 4-6 structured cards per slide, self-contained slides that don't need a narrator. Still never more than 2 consecutive bullet-only slides — reach for a table, grid, or comparison layout instead.
+- **Navigation is mandatory, not optional polish.** Every deck must ship the full navigation contract from `skills/frontend-slides/html-template.md` — keyboard (arrows, space, page up/down), mouse wheel, and visible on-screen prev/next controls — built directly into the self-contained HTML. Read `html-template.md` in full before authoring; a deck with no way to move to the next slide is incomplete, not just unpolished.
 - Before/after contrasts must be visual (two-panel layout, color-coded), not just paraphrased text.
 - Use frontend-slides' animation patterns deliberately on the transformation and impact slides — this is the moment a static bullet deck fails and a real presentation doesn't.
 - The persona-pain slide and the transformation slide must revisit the *same* named persona from Step 1.
@@ -103,7 +104,7 @@ Design principles:
 
 **Focus on what changes technically — architecture modifications, new metrics, migration.**
 
-Author `[feature-name]-enhancement-eng-slides.html` the same way. Plan:
+Author `engineering-brief.html` the same way. Plan:
 
 | Slide | Content |
 |-------|---------|
@@ -128,6 +129,8 @@ Include:
 
 Professional document with:
 - Styled heading hierarchy, formatted tables with colored headers.
+- A real Table of Contents (`DocxBuilder.add_table_of_contents()` + `add_heading()` — every heading links automatically, no manual "Update Field" step needed).
+- **A short plain-language intro (2-4 sentences, wait-what-style: plain words, no unexplained jargon) before every major section's tables** — this document must read as a narrative with supporting tables, not a wall of tables with no framing.
 - Current-vs-enhanced comparison tables with color coding matching the flowchart/decks.
 - **Technical Architecture Changes section** (Section 3) with an embedded architecture image, decision logic changes, data model changes, and integration point changes. This image is a **simple static diagram rendered with `matplotlib`** purpose-built for the printed page — Archify's output is interactive HTML and isn't meant to be screenshotted into a document; draw a lightweight equivalent instead, using the same existing/new/modified color coding.
 - New metrics specification tables.
@@ -136,6 +139,7 @@ Professional document with:
 - **Persona Challenges section** (Section 2.3) as a COMPACT reference table — not multi-paragraph narratives.
 - **Persona Challenge Traceability section** (Section 10) as a compact cross-reference table.
 - **Functional requirement tables** must include "Current Behavior → Enhanced Behavior" columns.
+- Author metadata defaults to "Deepu S" (`DocxBuilder.add_title_page()`) — no `[PM Name]`-style placeholder ships in the document.
 
 ### 5. Write and Run the DOCX Build Script
 
@@ -149,7 +153,7 @@ Write `.steps/build_docx.py` that:
 2. Imports and uses `generate_docx.DocxBuilder`.
 3. Reads content from `.steps/` Step 5 markdown files (5a–5d), and Steps 1–4 for backfill when drafts are thin.
 4. Renders the small matplotlib architecture image as an intermediate PNG under `.steps/diagrams/`.
-5. Assembles `[feature-name]-enhancement.docx` at the topic-folder root.
+5. Assembles `product-requirements.docx` at the topic-folder root.
 
 Then run it:
 ```bash
@@ -164,13 +168,13 @@ If unsure of the absolute path, resolve it with `file_search` for `**/generate_d
 
 ```
 [feature-name]-enhancement/
-├── [feature-name]-enhancement-flowchart.html    ← Archify diagram (existing/new/modified coding)
-├── [feature-name]-enhancement-exec-slides.html  ← executive deck (frontend-slides)
-├── [feature-name]-enhancement-eng-slides.html   ← engineering deck (frontend-slides)
-├── [feature-name]-enhancement.docx              ← enhancement PRD
+├── architecture.html          ← Archify diagram (existing/new/modified coding)
+├── executive-brief.html       ← executive deck (frontend-slides)
+├── engineering-brief.html     ← engineering deck (frontend-slides)
+├── product-requirements.docx  ← enhancement PRD
 └── .steps/
-    ├── diagrams/flowchart.json                  ← Archify source spec
-    └── build_docx.py                            ← keep for regeneration
+    ├── diagrams/flowchart.json  ← Archify source spec
+    └── build_docx.py            ← keep for regeneration
 ```
 
 
@@ -185,10 +189,10 @@ Every step artifact this skill writes must:
    python "<scripts-dir>/build_report.py" "[slug]/"
    ```
    Resolve helper via `**/build_report.py` (`scripts/`).
-3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `[slug]-<name>.html`) and reference it first with a `<!-- diagram: [slug]-<name>.html -->` marker in the markdown, then rebuild.
+3. If this step produced a diagram worth showing, render it with Archify (bundled at `skills/archify/`) to a visible sibling file (e.g. `architecture.html`) and reference it first with a `<!-- diagram: architecture.html -->` marker in the markdown, then rebuild.
 4. On revise, rewrite the markdown and rebuild the report again.
-5. Final chat summary (end of the whole run) cites the **`[slug].html`** path.
-6. **Never delete** `.steps/*.md`, `[slug].html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
+5. Final chat summary (end of the whole run) cites the **`analysis.html`** path.
+6. **Never delete** `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py` after DOCX/slide-deck/diagram generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
@@ -208,7 +212,7 @@ Before declaring complete, verify:
 - [ ] Color coding is consistent everywhere: existing=green, new=blue, modified=orange
 - [ ] All diagrams and slides are specific to THIS enhancement (not generic placeholders)
 - [ ] `.steps/build_docx.py` and `.steps/diagrams/flowchart.json` kept for regeneration
-- [ ] `STATUS.md` updated after successful generation
+- [ ] `Progress.md` updated after successful generation
 
 
 ## Completion
@@ -216,9 +220,9 @@ Before declaring complete, verify:
 After generating all files, say:
 
 > **Files generated!** Your enhancement deliverables are ready in `[feature-name]-enhancement/`:
-> - 🗺️ `[feature-name]-enhancement-flowchart.html` — interactive Archify flowchart with color-coded existing/new/modified steps
-> - 📊 `[feature-name]-enhancement-exec-slides.html` — executive deck with before/after visuals and competitive gap diagrams
-> - 📊 `[feature-name]-enhancement-eng-slides.html` — engineering deck with architecture changes, new metrics tables, and reuse diagrams
-> - 📄 `[feature-name]-enhancement.docx` — Full enhancement PRD with embedded diagrams
+> - 🗺️ `architecture.html` — interactive Archify flowchart with color-coded existing/new/modified steps
+> - 📊 `executive-brief.html` — executive deck with before/after visuals and competitive gap diagrams
+> - 📊 `engineering-brief.html` — engineering deck with architecture changes, new metrics tables, and reuse diagrams
+> - 📄 `product-requirements.docx` — Full enhancement PRD with embedded diagrams
 >
-> Rebuild `[feature-name]-enhancement.html`, then continue immediately to Step 6 — Wireframe.
+> Rebuild `analysis.html`, then continue immediately to Step 6 — Wireframe.
