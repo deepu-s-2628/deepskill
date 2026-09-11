@@ -1,17 +1,17 @@
 # ITOM PM Toolkit — Operating System
 
-> Shared rules for **PM Feature Agent** and **PM Enhancement Agent**.
+> Shared rules for **wayfind**, **PM Feature Agent**, and **PM Enhancement Agent**.
 > Load this file at the start of every PM pipeline run (new or resume).
-> **Last updated:** 2026-08-10.
+> **Last updated:** 2026-09-11.
 >
-> **What is this file?** Single shared rulebook so Feature and Enhancement pipelines stay consistent (paths, language bar, dual MD→HTML output, retention, quality gates, dense deliverables, resume).
+> **What is this file?** Single shared rulebook so wayfind and both pipelines stay consistent (paths, language bar, wayfinding-then-autonomous execution, the consolidated report, retention, quality gates, dense deliverables, resume).
 
 ---
 
 ## 1. Mission
 
 Produce opinionated, **immediately usable** product work for **OpManager Plus / OpManager Nexus**:
-research → analysis → definition → **HTML review drafts** → **dense PPTX/PDF/DOCX** → Lovable wireframe prompt.
+wayfind → research → analysis → definition → **dense PPTX/PDF/DOCX** → Lovable wireframe prompt → **one consolidated HTML report**.
 
 Agents are **product operators**, not brainstorming chatbots. Prefer one clear recommendation over option menus.
 
@@ -21,19 +21,23 @@ Agents are **product operators**, not brainstorming chatbots. Prefer one clear r
 
 ---
 
-## 2. Pipeline Modes
+## 2. Wayfinding Comes First — Always
 
-| Mode | Trigger language | Folder suffix | Step 1 skill |
-|------|------------------|---------------|--------------|
-| **Feature** (net-new) | build / new feature / add support for | `[slug]/` | `brainstorm` |
-| **Enhancement** (existing) | enhance / improve / what's missing | `[slug]-enhancement/` | `current-state-analysis` |
+Before any research step runs, the `wayfind` skill interrogates the request: does this actually belong in OpManager Plus/Nexus, is it a feature or an enhancement, and what does the rest of the pipeline need locked down before it can run unattended. See `skills/wayfind/SKILL.md` for the full interview process.
 
-If intent is ambiguous, ask **one** batch of clarifying questions, then pick a mode and proceed.
-Do **not** mix pipelines in the same result folder.
+Wayfind is the **only** interactive step in the whole pipeline (Section 8). It concludes one of three ways, and nothing downstream may skip or second-guess this conclusion:
+
+| Conclusion | What happens next |
+|---|---|
+| **Proceed — Feature** | `.steps/0_wayfinding.md` written; hand off to the feature pipeline, Step 1 = `brainstorm` |
+| **Proceed — Enhancement** | `.steps/0_wayfinding.md` written; hand off to the enhancement pipeline, Step 1 = `current-state-analysis` |
+| **Stop — Not a fit** | No result folder created. Explain why plainly and stop. |
+
+Trigger language (`build` / `new feature` vs `enhance` / `improve`) is a starting signal for wayfind's mode question — never a substitute for actually asking it. Do **not** mix pipelines in the same result folder.
 
 ---
 
-## 3. Canonical Paths (HTML visible; Markdown hidden)
+## 3. Canonical Paths (one consolidated report; Markdown hidden)
 
 ### Workspace root
 All paths are relative to the **opened workspace root**.
@@ -43,7 +47,9 @@ All paths are relative to the **opened workspace root**.
 ITOM-PM-Result/
 └── [slug]/
     ├── STATUS.md                 ← always visible control plane
+    ├── report.html               ← THE deliverable: one navigable HTML, rebuilt after every step
     ├── .steps/                   ← HIDDEN markdown source of truth (agent edit/resume)
+    │   ├── 0_wayfinding.md
     │   ├── 1_brainstorm.md
     │   ├── 2_competitive_analysis.md
     │   ├── 3_technical_analysis.md
@@ -53,19 +59,9 @@ ITOM-PM-Result/
     │   ├── 5c_feature_flowchart.md
     │   ├── 5d_product_requirements.md
     │   └── 6_lovable_wireframe.md
-    ├── steps/                    ← VISIBLE HTML for human review (open in browser)
-    │   ├── 1_brainstorm.html
-    │   ├── 2_competitive_analysis.html
-    │   ├── 3_technical_analysis.html
-    │   ├── 4_feature_definition.html
-    │   ├── 5a_executive_presentation.html
-    │   ├── 5b_engineering_presentation.html
-    │   ├── 5c_feature_flowchart.html
-    │   ├── 5d_product_requirements.html
-    │   └── 6_lovable_wireframe.html
     └── Generated/                ← binary deliverables + diagrams + build script
         ├── build_documents.py    ← keep after success
-        ├── diagrams/
+        ├── diagrams/              ← Archify-rendered HTML diagrams live here, referenced from .steps/*.md
         ├── executive_presentation.pptx
         ├── engineering_presentation.pptx
         ├── feature_flowchart.pdf
@@ -74,26 +70,24 @@ ITOM-PM-Result/
 
 ### Enhancement pipeline
 Same pattern under `ITOM-PM-Result/[slug]-enhancement/`:
-- `.steps/*.md` — hidden sources
-- `steps/*.html` — visible review HTML
-- `Generated/` — binaries
+- `.steps/*.md` — hidden sources, starting with `0_wayfinding.md`
+- `report.html` — the one consolidated deliverable
+- `Generated/` — binaries + diagrams
 
 ### Hard rules
-1. **Markdown always under hidden `.steps/`** — never put step `.md` in feature root or in visible `steps/`.
-2. **HTML always under visible `steps/`** — every step must produce a browser-openable `.html` with the **same basename** as its `.md`.
-3. **Every step is dual-format:** write `.steps/N_name.md` then generate `steps/N_name.html`.
-4. **Binaries always under `Generated/`**.
-5. **Retention — never delete** `.steps/*.md`, `steps/*.html`, `STATUS.md`, or `Generated/*` (including `build_documents.py`) after PPTX/PDF/DOCX generation.
-6. Do not invent alternate layout names (`output/`, `docs/`).
-7. Chat summaries should **highlight the HTML path** for reviewers; mention MD only as internal source.
+1. **Markdown always under hidden `.steps/`** — never put step `.md` in the feature root.
+2. **There is exactly one visible review artifact per run: `report.html`** at the feature-root level. No per-step HTML files.
+3. **After every step**, regenerate the report: `python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[folder]/"`. Never let `report.html` fall behind `.steps/`.
+4. **Binaries always under `Generated/`**; Archify diagrams go in `Generated/diagrams/` and get referenced from the relevant step's markdown with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker line — `build_report.py` turns that into an embedded, interactive `<iframe>` in the right section.
+5. **Retention — never delete** `.steps/*.md`, `report.html`, `STATUS.md`, or `Generated/*` (including `build_documents.py`) after PPTX/PDF/DOCX generation.
+6. Do not invent alternate layout names (`output/`, `docs/`, `steps/`).
+7. Chat summaries should **highlight the `report.html` path** for reviewers; mention MD only as internal source.
 
-### Convert command
+### Report rebuild command
 ```bash
-python "<scripts-dir>/md_to_html.py" \
-  "ITOM-PM-Result/[folder]/.steps/1_brainstorm.md" \
-  "ITOM-PM-Result/[folder]/steps/1_brainstorm.html"
+python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[folder]/"
 ```
-Resolve helper via `**/md_to_html.py` (`scripts/ITOM-PM/` or `assets/scripts/ITOM-PM/`).
+Resolve helpers via `**/build_report.py` and `**/md_to_html.py` (both live in `scripts/`).
 
 ---
 
@@ -123,41 +117,40 @@ Create/update `ITOM-PM-Result/[folder]/STATUS.md` at every step boundary.
 | Slug | [slug] |
 | Folder | ITOM-PM-Result/[folder]/ |
 | Current step | [N] — [name] |
-| Step status | in_progress \| blocked_on_pm \| complete |
+| Step status | running_autonomously \| blocked_on_pm \| complete |
 | Last updated | [YYYY-MM-DD] |
-| Next action | wait_for_proceed \| revise_step_N \| generate_files \| step_N+1 \| done |
+| Next action | resolve_blocker \| step_N+1 \| done |
 
 ## Completed steps
-- [x] Step 1 — ... (`.steps/1_….md` → `steps/1_….html`)
+- [x] Step 0 — Wayfinding (`.steps/0_wayfinding.md`)
+- [x] Step 1 — ... (`.steps/1_….md`)
 - [ ] Step 2 — ...
 
 ## Open questions for PM
-1. ...
+1. ... (only ever populated if genuinely blocked — Section 8)
 
 ## Key decisions locked
-- ...
+- ... (carried forward from wayfinding, Section 2)
 
 ## Risks / blockers
 - ...
 ```
 
-On resume: read `STATUS.md`, then all **`.steps/*.md`** (HTML is for humans).
+On resume: read `STATUS.md`, then all **`.steps/*.md`**, then rebuild `report.html` before continuing.
 
 ---
 
-## 6. Dual output: Markdown (hidden) + HTML (visible)
+## 6. Markdown (hidden source) → consolidated report (visible)
 
-After writing or revising any step markdown:
+After writing or revising any step's markdown:
 
-1. Save markdown to **`.steps/<name>.md`**.
-2. Generate HTML to **`steps/<name>.html`** with `md_to_html.py`.
-3. Markdown = source of truth for edits and `generate files`.
-4. HTML = what DOE/developers open and review.
-5. On revise, regenerate **both**.
-6. **Never delete** either after binary generation.
-7. Chat completion must cite the **HTML path first**.
+1. Save markdown to **`.steps/<name>.md`**. This is the source of truth for edits and for `generate files`.
+2. Rebuild the report: `python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[folder]/"`. This regenerates the **whole** `report.html` from every `.steps/*.md` file that exists so far — cheap, so do it after every step, not just at the end.
+3. If a step produced a diagram worth showing (see Section 11a), reference it from that step's markdown with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker before rebuilding — `build_report.py` turns it into an embedded, interactive frame.
+4. **Never delete** `.steps/*.md` or `report.html` after binary generation.
+5. Final chat completion (after the whole run finishes) must cite the **`report.html` path**.
 
-If the helper is unavailable, write a simple styled HTML document — prefer the helper.
+If `build_report.py` is unavailable, fall back to `md_to_html.py` per-step and note in chat that the consolidated report couldn't be built — this should not happen in a working checkout.
 
 ---
 
@@ -183,26 +176,29 @@ Applies hardest to **brainstorm / current-state openers**, and still applies to 
 
 ---
 
-## 8. Sequential Workflow & Approval Gates
+## 8. Sequential Workflow: Wayfind Interacts, Everything After Runs Unattended
 
-1. Produce **one step** at a time.
-2. Write `.steps/*.md` **and** `steps/*.html`.
-3. Update `STATUS.md`.
-4. Post chat summary with **HTML path** (and MD path as source).
-5. **PAUSE** for PM review.
-6. Proceed only on explicit approval: `proceed`, `approved`, `lgtm`, `continue`.
-7. On feedback: revise **only that step** (md+html).
+**Wayfind is the only checkpoint.** Once it reaches a "Proceed" conclusion (Section 2), the matching orchestrator runs every remaining step — including document generation (Section 13) and the wireframe prompt — back-to-back with **no pause for approval between steps**. The PM does not need to reply `proceed` at any point after wayfinding.
 
-### Special commands
+For each step, in order:
+1. Produce the step.
+2. Write `.steps/*.md`.
+3. Rebuild `report.html` (Section 6).
+4. Update `STATUS.md`.
+5. Move immediately to the next step. Do not stop and wait.
+
+### The two real exceptions
+- **Hard blocker with no safe default** (e.g. the wireframe step needs real screenshots and none exist, or a step's own quality gate fails and can't be self-corrected): pause, ask the *specific* thing needed, resume the same run once answered. This is a genuine dependency gap, not a review gate.
+- **The PM interrupts mid-run** (sends a new message while a run is in progress): stop what you're doing, address what they said, then resume the autonomous chain unless they've asked you to stop for good.
+
+### Special commands (still honored if the PM uses them mid- or post-run)
 | PM says | Action |
 |---------|--------|
-| `proceed` / `continue` | Next step |
-| `redo step N` / feedback on step N | Revise step N only |
-| `generate files` | Doc-gen skill; **do not delete** `.steps/` or `steps/` afterward |
-| `status` / `where are we` | Summarize from STATUS + `.steps/` + visible `steps/*.html` |
-| `pause` / `stop` | Stop; leave STATUS accurate |
+| `redo step N` / feedback on step N | Revise step N only, rebuild the report, then resume the autonomous chain from where it left off |
+| `status` / `where are we` | Summarize from `STATUS.md` + `.steps/` + `report.html` |
+| `pause` / `stop` | Stop; leave `STATUS.md` accurate so the run can resume later |
 
-Do **not** auto-run `generate files` or Step 6 without approval.
+There is no `generate files` command to wait for anymore — document generation (Section 13) runs automatically as part of the same unattended chain once Step 5's drafts are done.
 
 ---
 
@@ -249,7 +245,7 @@ Reuse the same named personas later. Weak generic personas = fail.
 ## 11. Dense deliverables bar (PPT / Flowchart / PRD)
 
 ### Principle
-Step 5 drafts and Step “generate files” outputs must **transfer the analysis**, not summarize it into a few vague bullets. A reader who only opens the PPT or flowchart PDF should still get the full decision trail.
+Step 5 drafts and the document-generation outputs built from them must **transfer the analysis**, not summarize it into a few vague bullets. A reader who only opens the PPT or flowchart PDF should still get the full decision trail.
 
 ### Must pull forward from prior steps
 - Persona challenges and how each is solved
@@ -288,30 +284,47 @@ Step 5 drafts and Step “generate files” outputs must **transfer the analysis
 
 ---
 
+## 11a. Diagrams in the report: Archify vs. plain text
+
+`report.html` can embed real, interactive diagrams — use judgment on when one earns its place:
+
+- **Use Archify** (the `archify` skill) for anything with real structure worth exploring: architecture/data-flow (Section 9's collection pipeline), the feature flowchart, a before/after comparison for an enhancement. Save the rendered HTML to `Generated/diagrams/<name>.html`, then reference it from the relevant step's markdown with `<!-- diagram: Generated/diagrams/<name>.html -->` (Section 6).
+- **Skip the diagram** and just write it out when a short table or a few sentences say the same thing without asking the reader to parse a shape — e.g. a two-option comparison, a short ordered list of steps. A diagram that doesn't earn more clarity than prose is padding.
+- The flowchart PDF (`generate_flowchart.py`, Section 13) still gets generated separately for the binary deliverables — Archify is for `report.html`, not a replacement for the PDF.
+
+---
+
 ## 12. Quality Gates (Do Not Mark Step Complete If Failed)
 
 ### Global
 - [ ] Markdown under **`.steps/`** (hidden)
-- [ ] HTML under visible **`steps/`**
+- [ ] `report.html` rebuilt after this step (Section 6)
 - [ ] `STATUS.md` updated
-- [ ] Chat summary cites **HTML path** for review
+- [ ] Chat summary (final, end-of-run) cites the **`report.html`** path
 - [ ] No implementation source code in artifacts
-- [ ] No deletion of prior `.steps` / `steps` / `Generated` files
+- [ ] No deletion of prior `.steps` / `Generated` files
 - [ ] External claims cited or labeled assumptions
-- [ ] Plain language where required (esp. Steps 1–2)
+- [ ] Plain language where required (esp. Steps 0–2)
+
+### Step 0 — Wayfinding
+- [ ] Fit question asked and answered explicitly, not assumed
+- [ ] Mode (feature/enhancement) locked with reasoning
+- [ ] Positioning question asked if this is genuinely new ground
+- [ ] Conclusion is one of exactly three outcomes (Section 2)
+- [ ] `.steps/0_wayfinding.md` written (Proceed outcomes only)
 
 ### Feature Step 1 — Brainstorm
 - [ ] Plain English; jargon defined on first use
 - [ ] What / why people use it / problem / easy example
 - [ ] 2–3 named persona stories
 - [ ] Module fit + reuse
-- [ ] `.steps/1_brainstorm.md` + `steps/1_brainstorm.html`
+- [ ] `.steps/1_brainstorm.md` written, report rebuilt
 
 ### Feature Step 2 / Enhancement Step 3 — Competitive
 - [ ] ≥4 competitors or exception
 - [ ] Persona-challenge matrix
 - [ ] Recommended market position
-- [ ] md + html paths correct
+- [ ] `.steps/` path correct, report rebuilt
 
 ### Feature Step 3 — Technical
 - [ ] All viable collection methods evaluated
@@ -321,49 +334,52 @@ Step 5 drafts and Step “generate files” outputs must **transfer the analysis
 - [ ] Scale + failure modes + EE/security
 - [ ] Persona challenges solved technically
 - [ ] Sources cited
-- [ ] md + html paths correct
+- [ ] `.steps/` path correct, report rebuilt
 
 ### Feature Step 4 / Enhancement Step 4
 - [ ] In-scope vs out-of-scope
 - [ ] Persona → capability traceability
 - [ ] Decisive phasing
-- [ ] md + html paths correct
+- [ ] `.steps/` path correct, report rebuilt
 
 ### Step 5 drafts
-- [ ] All four under `.steps/` + HTML twins in `steps/`
+- [ ] All four under `.steps/`
 - [ ] Exec and eng decks are not near-duplicates
 - [ ] Eng deck + flowchart carry full analysis density (metrics, collection contract, flows)
 - [ ] No TBD/lorem placeholders
 - [ ] PRD testable
 
-### Generate files
+### Document generation (runs automatically once Step 5 is done — Section 8)
 - [ ] All prerequisite **`.steps/`** markdown files exist
 - [ ] Generators resolved via `**/generate_pptx.py`
 - [ ] PPT/flowchart meet dense deliverables bar (section 11)
 - [ ] Layout diversity rules met
 - [ ] `build_documents.py` kept
-- [ ] `.steps/*.md` and `steps/*.html` still present after generation
+- [ ] `.steps/*.md` still present after generation
 - [ ] PPTX/PDF/DOCX openable and content-complete
 
 ### Step 6 wireframe
-- [ ] md in `.steps/`, html in `steps/`
-- [ ] Enhancement: screenshots first
+- [ ] `.steps/` path correct, report rebuilt
+- [ ] Enhancement: screenshots first — this is the one place a real blocker can still pause the run (Section 8)
 - [ ] Paste-ready Lovable prompt
-- [ ] Scope matches approval only
+- [ ] Scope matches wayfinding conclusion only
 
 ---
 
 ## 13. Document Generation Rules
 
-1. Validate prerequisites from **`.steps/`**; stop if any Step 5 MD missing.
+Runs automatically as part of the same unattended chain once Step 5's drafts are done — no `generate files` command to wait for.
+
+1. Validate prerequisites from **`.steps/`**; stop and flag as a blocker if any Step 5 MD missing.
 2. Resolve generators with `file_search` `**/generate_pptx.py`.
 3. `pip install -r requirements.txt` if imports fail.
 4. Write `Generated/build_documents.py` tailored to this feature.
 5. Run it; fix up to 3 times.
 6. **Keep** `build_documents.py`.
-7. **Do not delete** `.steps/` or `steps/`.
+7. **Do not delete** `.steps/`.
 8. Intermediate PNGs under `Generated/diagrams/`.
 9. Content must be generated from the full analysis files (Steps 1–5), not from a thin paraphrase.
+10. Rebuild `report.html` afterward (Section 6) — mention the generated binaries in the report's relevant sections if useful, but they remain separate files, not embedded.
 
 ---
 
@@ -372,16 +388,18 @@ Step 5 drafts and Step “generate files” outputs must **transfer the analysis
 1. List `ITOM-PM-Result/`.
 2. Read `STATUS.md`.
 3. Read all `.steps/*.md`.
-4. Note `steps/*.html` and `Generated/`.
-5. Summarize 3–6 bullets; ask next action.
+4. Rebuild `report.html` (Section 6) so it reflects everything read.
+5. Note `Generated/`.
+6. If `STATUS.md` shows `blocked_on_pm`, summarize the specific blocker and ask for just that. Otherwise resume the autonomous chain from the next step — do not wait for a `proceed`.
 
 ---
 
 ## 15. Chat UX Contract
 
 - Keep mid-step narration short; put detail in files.
-- End every step with summary + **HTML review path** + required reply keyword.
-- Batch questions.
+- Wayfinding is the only step that narrates interactively (Section 8) — every step after it just runs, with STATUS.md as the source of "where are we" if asked.
+- End the whole run with a summary + the **`report.html`** path.
+- Batch questions (applies to wayfinding; nothing after it asks questions except a genuine blocker).
 - Be decisive.
 
 ---
@@ -389,10 +407,10 @@ Step 5 drafts and Step “generate files” outputs must **transfer the analysis
 ## 16. Non-Goals
 
 - Production Java/JS implementation code in PM artifacts
-- Silent scope expansion after approval
-- Auto-cascading later steps after an early rewrite
+- Silent scope expansion beyond the wayfinding conclusion
+- Pausing between steps for review once wayfinding has concluded
 - Secrets/customer private data in `ITOM-PM-Result/`
-- Putting review HTML only in hidden folders
-- Putting markdown in the visible `steps/` folder
-- Deleting md/html after binary generation
+- Putting markdown anywhere but hidden `.steps/`
+- Per-step HTML files (superseded by the single `report.html`)
+- Deleting md/report after binary generation
 - Thin placeholder PPT/flowcharts

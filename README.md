@@ -26,7 +26,11 @@ Describe what you want, prefixed with `ask-deepu`:
 
 > `/ask-deepu: I want to add Cisco SD-WAN monitoring support`
 
-`ask-deepu` figures out whether that's a new feature or an improvement to something that already exists, and starts the matching pipeline. Each step pauses for your review (a hidden `.md` source + a visible `.html` file you open in a browser) before moving on.
+`ask-deepu` hands your request to `wayfind` — the only interactive step. Wayfind interrogates it before anything else happens: does this actually belong in OpManager Plus/Nexus, is it a net-new feature or an improvement to something existing, and what does the rest of the pipeline need to know. It can conclude the request doesn't fit at all and stop there — that's a first-class outcome, not a failure.
+
+Once wayfind concludes "proceed," the matching pipeline runs every remaining step back-to-back with **no further pauses** — no `proceed`/`approve` replies needed. The one exception: the enhancement pipeline's wireframe step will still stop and ask for screenshots if none exist, since that's a real dependency, not a review gate.
+
+Everything lands in one place: `ITOM-PM-Result/[slug]/report.html` — a single navigable page with every step's findings, plus any diagrams rendered as real interactive Archify views where a diagram earns its place over plain text.
 
 ## Reference
 
@@ -58,7 +62,8 @@ Describe what you want, prefixed with `ask-deepu`:
 
 | Skill | Purpose |
 |---|---|
-| `ask-deepu` | Entry point — routes to the right pipeline |
+| `ask-deepu` | Entry point — hands the request to `wayfind` |
+| `wayfind` | The only interactive step: interrogates fit, mode, and scope before anything runs unattended |
 | `wait-what` | "That didn't land — re-pitch it simpler" |
 
 ## Generating the actual files (PPTX/DOCX/flowchart)
@@ -72,12 +77,12 @@ uv sync
 
 ## Roadmap
 
-`v0.1.0` is the foundation: extraction, the glossary, plain-language output, dual-format skills, this release tooling. Not yet included, planned for `v0.2.0`+:
+`v0.1.0` covers: extraction, the glossary, plain-language output, dual-format skills, this release tooling — plus, pulled forward after real testing surfaced they weren't optional, the `wayfind` interrogation step, Archify diagrams embedded in the report, and the single consolidated `report.html`.
 
-- A reusable adaptive-question ("grilling") engine for the brainstorm and current-state-analysis steps
-- Archify-based interactive diagrams in place of the static flowchart generator
-- A single consolidated, anchor-navigable HTML report per pipeline run
-- A ticket/milestone breakdown stage handing off from PRD to engineering
+Still planned for `v0.2.0`+:
+
+- A ticket/milestone breakdown stage handing off from PRD to engineering (mattpocock's `to-tickets` pattern, adapted to group tickets into milestones by dependency-free batches)
+- Auto-creating tracker issues from that breakdown (currently: markdown/HTML output only, reviewed and entered manually)
 
 ## Status
 

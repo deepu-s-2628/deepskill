@@ -477,36 +477,34 @@ flowchart TD
 
 
 
-## Dual output: hidden MD + visible HTML (mandatory)
+## Report rebuild (mandatory)
 
-Every step artifact this skill writes must be dual-format:
+Every step artifact this skill writes must:
 
 1. **Markdown (source of truth, hidden):** `ITOM-PM-Result/[slug]/.steps/<name>.md`
    - Enhancement mode: `ITOM-PM-Result/[slug]-enhancement/.steps/<name>.md`
-2. **HTML (human review, visible):** `ITOM-PM-Result/[slug]/steps/<name>.html`
-   - Same basename; always under visible `steps/` (never put `.md` here).
-3. Generate HTML after markdown is final:
+2. **Rebuild the consolidated report** immediately after:
    ```bash
-   python "<scripts-dir>/md_to_html.py"      "ITOM-PM-Result/[slug]/.steps/<name>.md"      "ITOM-PM-Result/[slug]/steps/<name>.html"
+   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[slug]/"
    ```
-   Resolve helper via `**/md_to_html.py` (`scripts/`).
-4. On revise, regenerate **both**.
-5. Chat summary must cite the **HTML path first** (what reviewers open).
-6. **Never delete** `.steps/*.md`, `steps/*.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
+   Resolve helper via `**/build_report.py` (`scripts/`).
+3. If this step produced a diagram worth showing, reference it first with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker in the markdown, then rebuild.
+4. On revise, rewrite the markdown and rebuild the report again.
+5. Final chat summary (end of the whole run) cites the **`report.html`** path.
+6. **Never delete** `.steps/*.md`, `report.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
 
 ## Quality Gate (before marking complete)
 
-- [ ] All four Step 5 drafts written under `steps/` with correct filenames for this pipeline mode
+- [ ] All four Step 5 drafts written under `.steps/` with correct filenames for this pipeline mode
 - [ ] Exec and engineering decks are not near-duplicates
 - [ ] Flow content is complete enough to render as real diagrams
 - [ ] PRD requirements are testable
 - [ ] Persona traceability retained
-- [ ] `STATUS.md` updated (next: `generate_files` or `step_6`)
-
-- [ ] HTML twin written under visible `steps/`; markdown under hidden `.steps/`
+- [ ] `STATUS.md` updated (next: `document_generation`)
+- [ ] `.steps/` markdown written, `report.html` rebuilt
 - [ ] Markdown is hidden under `.steps/`; HTML visible under `steps/`; never delete either or Generated artifacts
 
 
@@ -528,9 +526,9 @@ After producing all four files, display a **summary directly in chat**:
 > - [Key technical decision for engineers]
 > - [Most important success metric]
 >
-> Files ready for review under `ITOM-PM-Result/[feature-name]/steps/` (`5a`–`5d`).
-> Update `STATUS.md` → Step 5 complete, next action `generate_files` or `step_6`.
+> Drafts written under `ITOM-PM-Result/[feature-name]/.steps/` (`5a`–`5d`), `report.html` rebuilt.
+> Update `STATUS.md` → Step 5 complete, next action `document_generation`.
 >
-> Reply **'generate files'** to produce the actual PPTX/PDF/DOCX with visual diagrams, **'proceed'** to skip to Step 6, or provide feedback for revision.
+> Continuing immediately into document generation (PPTX/PDF/DOCX), then Step 6.
 
 ---

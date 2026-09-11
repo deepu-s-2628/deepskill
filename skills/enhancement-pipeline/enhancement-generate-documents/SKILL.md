@@ -220,22 +220,21 @@ ITOM-PM-Result/[feature-name]-enhancement/Generated/
 
 
 
-## Dual output: hidden MD + visible HTML (mandatory)
+## Report rebuild (mandatory)
 
-Every step artifact this skill writes must be dual-format:
+Every step artifact this skill writes must:
 
 1. **Markdown (source of truth, hidden):** `ITOM-PM-Result/[slug]/.steps/<name>.md`
    - Enhancement mode: `ITOM-PM-Result/[slug]-enhancement/.steps/<name>.md`
-2. **HTML (human review, visible):** `ITOM-PM-Result/[slug]/steps/<name>.html`
-   - Same basename; always under visible `steps/` (never put `.md` here).
-3. Generate HTML after markdown is final:
+2. **Rebuild the consolidated report** immediately after:
    ```bash
-   python "<scripts-dir>/md_to_html.py"      "ITOM-PM-Result/[slug]/.steps/<name>.md"      "ITOM-PM-Result/[slug]/steps/<name>.html"
+   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[slug]/"
    ```
-   Resolve helper via `**/md_to_html.py` (`scripts/`).
-4. On revise, regenerate **both**.
-5. Chat summary must cite the **HTML path first** (what reviewers open).
-6. **Never delete** `.steps/*.md`, `steps/*.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
+   Resolve helper via `**/build_report.py` (`scripts/`).
+3. If this step produced a diagram worth showing, reference it first with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker in the markdown, then rebuild.
+4. On revise, rewrite the markdown and rebuild the report again.
+5. Final chat summary (end of the whole run) cites the **`report.html`** path.
+6. **Never delete** `.steps/*.md`, `report.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
@@ -263,7 +262,7 @@ Before declaring complete, verify:
 - [ ] `Generated/build_documents.py` kept for regeneration (not deleted)
 - [ ] `STATUS.md` updated after successful generation
 
-- [ ] HTML twin written under visible `steps/`; markdown under hidden `.steps/`
+- [ ] `.steps/` markdown written, `report.html` rebuilt
 - [ ] Markdown under `.steps/`; HTML under `steps/`; never delete either or Generated artifacts
 
 
@@ -277,5 +276,4 @@ After generating all files, say:
 > - 📋 `enhancement_flowchart.pdf` — [N]-page visual flowchart with color-coded existing/new/modified steps
 > - 📄 `enhancement_prd.docx` — Full enhancement PRD with embedded diagrams
 >
->
-> Reply **'proceed'** to continue to Step 6 (Wireframe).
+> Rebuild `report.html`, then continue immediately to Step 6 — Wireframe.

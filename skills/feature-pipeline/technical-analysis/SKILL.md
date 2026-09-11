@@ -87,16 +87,15 @@ Discovery, polling path, storage, processing, alerting, UI patterns, EE/probe no
 
 1000+ instances, poller load, DB growth, vendor API limits, licensing.
 
-## Dual output: hidden MD + visible HTML (mandatory)
+## Report rebuild (mandatory)
 
 1. Write: `ITOM-PM-Result/[feature-name]/.steps/3_technical_analysis.md`
-2. Generate: `ITOM-PM-Result/[feature-name]/steps/3_technical_analysis.html`
+2. Rebuild the consolidated report:
    ```bash
-   python "<scripts-dir>/md_to_html.py" \
-     "ITOM-PM-Result/[feature-name]/.steps/3_technical_analysis.md" \
-     "ITOM-PM-Result/[feature-name]/steps/3_technical_analysis.html"
+   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[feature-name]/"
    ```
-3. Never delete either after later binary generation.
+3. If this step's collection-method comparison or architecture is worth diagramming, reference an Archify diagram first with `<!-- diagram: Generated/diagrams/<name>.html -->` in the markdown, then rebuild.
+4. Never delete the markdown or `report.html` after later binary generation.
 4. Chat summary cites **HTML first**.
 
 ## Output Format
@@ -227,7 +226,7 @@ Device → Collection → Normalize → Store → Threshold → UI / Notify
 
 ## Quality Gate (before marking complete)
 
-- [ ] `.steps/3_technical_analysis.md` + `steps/3_technical_analysis.html`
+- [ ] `.steps/3_technical_analysis.md` written, `report.html` rebuilt
 - [ ] All viable methods evaluated; one primary chosen
 - [ ] **Deep collection contract** with concrete OIDs and/or API endpoints/paths (not hand-wavy)
 - [ ] Uncertain items labeled Needs lab confirmation + source
@@ -246,7 +245,6 @@ Device → Collection → Normalize → Store → Threshold → UI / Notify
 > **Why:** [one sentence]
 > **Contract depth:** [N OIDs / N endpoints / paths documented]
 > **Metrics:** [N] in [M] categories
-> **Review (HTML):** `ITOM-PM-Result/[feature-name]/steps/3_technical_analysis.html`
 > **Source (MD):** `ITOM-PM-Result/[feature-name]/.steps/3_technical_analysis.md`
 >
-> Reply **`proceed`** for Step 4, or send feedback.
+> Continuing immediately to Step 4 — Feature Definition.

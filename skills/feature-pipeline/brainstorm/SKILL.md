@@ -77,22 +77,21 @@ These stories are reused in exec/eng decks, PRD, and wireframes.
 > Network administrators need SD-WAN monitoring to track tunnel health.
 
 
-## Dual output: hidden MD + visible HTML (mandatory)
+## Report rebuild (mandatory)
 
-Every step artifact this skill writes must be dual-format:
+Every step artifact this skill writes must:
 
 1. **Markdown (source of truth, hidden):** `ITOM-PM-Result/[slug]/.steps/<name>.md`
    - Enhancement mode: `ITOM-PM-Result/[slug]-enhancement/.steps/<name>.md`
-2. **HTML (human review, visible):** `ITOM-PM-Result/[slug]/steps/<name>.html`
-   - Same basename; always under visible `steps/` (never put `.md` here).
-3. Generate HTML after markdown is final:
+2. **Rebuild the consolidated report** immediately after:
    ```bash
-   python "<scripts-dir>/md_to_html.py"      "ITOM-PM-Result/[slug]/.steps/<name>.md"      "ITOM-PM-Result/[slug]/steps/<name>.html"
+   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[slug]/"
    ```
-   Resolve helper via `**/md_to_html.py` (`scripts/`).
-4. On revise, regenerate **both**.
-5. Chat summary must cite the **HTML path first** (what reviewers open).
-6. **Never delete** `.steps/*.md`, `steps/*.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
+   Resolve helper via `**/build_report.py` (`scripts/`).
+3. If this step produced a diagram worth showing, reference it first with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker in the markdown, then rebuild.
+4. On revise, rewrite the markdown and rebuild the report again.
+5. Final chat summary (end of the whole run) cites the **`report.html`** path.
+6. **Never delete** `.steps/*.md`, `report.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
@@ -173,24 +172,20 @@ No RFC dumps.]
 
 ## Quality Gate (before marking complete)
 
-- [ ] Wrote visible `.steps/1_brainstorm.md` **and** `steps/1_brainstorm.html` (not `.steps/`, not feature root)
+- [ ] Wrote `.steps/1_brainstorm.md` (not feature root), rebuilt `report.html`
 - [ ] Plain English throughout; jargon defined on first use
 - [ ] **Why This Technology Exists** covers what / why people use it / problem solved / easy example
 - [ ] 2–3 named persona stories with concrete failure examples + transformation
 - [ ] Module fit / reuse / new requirements filled
-- [ ] Key questions batched
+- [ ] Open questions noted as assumptions, not batched for the PM (Step 0 wayfinding was the interactive step — this one runs unattended)
 - [ ] Sources cited when external claims are made
 - [ ] `STATUS.md` updated
 - [ ] No implementation code
 - [ ] No deletion of other pipeline files
 
-- [ ] HTML twin written under visible `steps/`; markdown under hidden `.steps/`
-- [ ] Markdown is hidden under `.steps/`; HTML visible under `steps/`; never delete either or Generated artifacts
-
-
 ## Completion
 
-After writing **both** files, display a short chat summary:
+After writing the markdown and rebuilding `report.html`, display a short chat summary, then continue immediately to Step 2 — do not wait for a reply:
 
 ---
 
@@ -201,16 +196,12 @@ After writing **both** files, display a short chat summary:
 > **Why people use it:** [One sentence]
 > **Why it matters for us:** [One sentence on strategic value]
 > **Target users:** [2–3 key roles]
-> **Key questions needing your input:**
+> **Assumptions made** (things a human would normally be asked, resolved here instead of blocking):
 > 1. …
 > 2. …
-> 3. …
 >
-> **Review (open in browser):** `ITOM-PM-Result/[slug]/steps/1_brainstorm.html`
-> Source MD (hidden): `ITOM-PM-Result/[slug]/.steps/1_brainstorm.md`
->
-> Reply **`proceed`** for Step 2 (Competitive Analysis), or send feedback.
+> Continuing immediately to Step 2 — Competitive Analysis.
 
 ---
 
-If the PM has feedback, revise **only this step** (md + html). Move to Step 2 only on explicit approval.
+If the PM interrupts with feedback mid-run, revise **only this step** and rebuild the report, then resume the unattended chain from where it left off (operating system §8).

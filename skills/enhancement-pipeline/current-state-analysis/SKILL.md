@@ -170,22 +170,21 @@ These are narrative-driven stories showing the real human impact of the current 
 
 
 
-## Dual output: hidden MD + visible HTML (mandatory)
+## Report rebuild (mandatory)
 
-Every step artifact this skill writes must be dual-format:
+Every step artifact this skill writes must:
 
 1. **Markdown (source of truth, hidden):** `ITOM-PM-Result/[slug]/.steps/<name>.md`
    - Enhancement mode: `ITOM-PM-Result/[slug]-enhancement/.steps/<name>.md`
-2. **HTML (human review, visible):** `ITOM-PM-Result/[slug]/steps/<name>.html`
-   - Same basename; always under visible `steps/` (never put `.md` here).
-3. Generate HTML after markdown is final:
+2. **Rebuild the consolidated report** immediately after:
    ```bash
-   python "<scripts-dir>/md_to_html.py"      "ITOM-PM-Result/[slug]/.steps/<name>.md"      "ITOM-PM-Result/[slug]/steps/<name>.html"
+   python "<scripts-dir>/build_report.py" "ITOM-PM-Result/[slug]/"
    ```
-   Resolve helper via `**/md_to_html.py` (`scripts/`).
-4. On revise, regenerate **both**.
-5. Chat summary must cite the **HTML path first** (what reviewers open).
-6. **Never delete** `.steps/*.md`, `steps/*.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
+   Resolve helper via `**/build_report.py` (`scripts/`).
+3. If this step produced a diagram worth showing, reference it first with a `<!-- diagram: Generated/diagrams/<name>.html -->` marker in the markdown, then rebuild.
+4. On revise, rewrite the markdown and rebuild the report again.
+5. Final chat summary (end of the whole run) cites the **`report.html`** path.
+6. **Never delete** `.steps/*.md`, `report.html`, or `Generated/build_documents.py` after PPTX/PDF/DOCX generation.
 
 See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 
@@ -199,7 +198,7 @@ See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 - [ ] Screenshot requests made when UI truth is needed
 - [ ] `STATUS.md` updated
 
-- [ ] HTML twin written under visible `steps/`; markdown under hidden `.steps/`
+- [ ] `.steps/` markdown written, `report.html` rebuilt
 - [ ] Markdown is hidden under `.steps/`; HTML visible under `steps/`; never delete either or Generated artifacts
 
 
@@ -224,6 +223,6 @@ After writing the file, display in chat:
 >
 > Full details in `ITOM-PM-Result/[feature-name]-enhancement/.steps/1_current_state.md`
 >
-> Reply **'proceed'** to continue to Step 2 (Cross-Module Analysis), or provide feedback.
+> Continuing immediately to Step 2 — Cross-Module Analysis.
 
 ---

@@ -4,11 +4,12 @@ description: "Start the PM pipeline for OpManager Plus: describe a feature idea 
 disable-model-invocation: true
 ---
 
-Read what the PM just described.
+Run the `wayfind` skill on what the PM just described. Do not guess feature-vs-enhancement or fit-for-product yourself — that is wayfind's entire job, and it's the only step that talks to the PM.
 
-- If it is a net-new capability (something OpManager Plus does not do today), start the **feature pipeline**: run the `ask-deepu-feature` agent.
-- If it is an improvement to something that already exists, start the **enhancement pipeline**: run the `ask-deepu-enhancement` agent.
+Wayfind concludes one of three ways:
 
-If it is genuinely unclear which one applies, ask one direct question before picking — do not guess silently.
+- **Proceed — Feature**: hand off to the `ask-deepu-feature` agent.
+- **Proceed — Enhancement**: hand off to the `ask-deepu-enhancement` agent.
+- **Stop — Not a fit**: stop here. Do not start a pipeline run.
 
-Both agents load `context/pm-operating-system.md` and `context/product-context.md` first, then begin Step 1 immediately. See `.github/agents/Ask-Deepu-feature.agent.md` / `Ask-Deepu-enhancement.agent.md` for the full sequential workflow each pipeline follows.
+Once wayfind hands off, the matching agent runs every remaining step back-to-back with no further pauses, and finishes with a single `report.html` under `ITOM-PM-Result/[slug]/`. See `.github/agents/Ask-Deepu-feature.agent.md` / `Ask-Deepu-enhancement.agent.md` for the full workflow each pipeline follows.
