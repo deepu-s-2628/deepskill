@@ -2,6 +2,7 @@
 name: ask-deepu
 description: "Start the PM pipeline for OpManager Plus: describe a feature idea or an existing-feature improvement. Interrogates fit and mode before running anything, then hands off to the right pipeline."
 disable-model-invocation: true
+argument-hint: "A feature idea, or an existing feature to improve"
 ---
 
 # Ask Deepu

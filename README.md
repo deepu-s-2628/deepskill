@@ -22,7 +22,7 @@ The ITOM PM pipeline used to live inside `itom-ai-toolkit`, tangled up with that
 
 ## Getting started
 
-Describe what you want, prefixed with `ask-deepu`:
+Describe what you want, prefixed with `ask-deepu` (typing `/ask-deepu` shows a greyed-out example prompt to nudge you):
 
 > `/ask-deepu: I want to add Cisco SD-WAN monitoring support`
 
