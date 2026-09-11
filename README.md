@@ -10,7 +10,23 @@ npx skills@latest add deepu-s-2628/deepskill
 
 Run it from anywhere — no cloning, no local copy of this repo needed. It fetches directly from GitHub (using the git credentials you already have configured, so this works against a private repo the same as a public one) and walks you through the rest: whether to install for just the current project or globally for every project, and which agent(s) to install for (Claude Code, Codex, Copilot — this repo ships compatibility shims for all three).
 
-Restart your agent afterward. Re-run the same command after a repo update to pick up new/changed skills.
+Restart your agent afterward.
+
+## Updating an existing install
+
+The `skills` CLI tracks where each installed skill came from, so updating doesn't mean re-running `add` — use its dedicated `update` command instead:
+
+```bash
+npx skills@latest update
+```
+
+Add `-p` to update only project-scoped skills or `-g` for only global ones, and `-y` to skip the scope prompt. This re-fetches every skill whose source is `deepu-s-2628/deepskill` — `ask-deepu`, all 14 pipeline skills, `wait-what`, Archify, and frontend-slides — straight from `main`, and reports each one it touched. Restart your agent afterward to pick up the changes.
+
+To check what's currently installed (and confirm it really came from this repo) before or after updating:
+
+```bash
+npx skills@latest list
+```
 
 ## Why this exists
 
