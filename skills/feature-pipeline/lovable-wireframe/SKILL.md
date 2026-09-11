@@ -1,6 +1,6 @@
 ---
 name: lovable-wireframe
-description: "Step 6 of PM Feature Pipeline: Produce a complete, detailed prompt for Lovable to build a wireframe/prototype of the feature within OpManager Plus."
+description: "Step 6 of PM Feature Pipeline, opt-in after Step 5's documents are ready: produce a detailed Lovable wireframe prompt and/or a static-HTML prototype.html mockup of the primary screen, per the PM's choice."
 ---
 
 # Step 6 — Lovable Wireframe Prompt

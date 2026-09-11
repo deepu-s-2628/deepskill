@@ -1,6 +1,6 @@
 ---
 name: enhancement-wireframe
-description: "Step 6 of Enhancement Pipeline: Produce a Lovable wireframe prompt that matches the current OpManager Plus design language and incorporates the recommended enhancements from Step 4. Requires screenshots of current UI before generating the prompt."
+description: "Step 6 of Enhancement Pipeline, opt-in after Step 5's documents are ready: produce a Lovable wireframe prompt and/or a static-HTML prototype.html mockup, per the PM's choice, matching current OpManager Plus design language and incorporating Step 4's recommended enhancements. Requires screenshots of current UI first."
 ---
 
 # Step 6 — Enhancement Wireframe Prompt (Lovable)

@@ -76,7 +76,7 @@ vxlan-monitoring/
 | 4 — Feature Definition | `feature-definition` |
 | 5 — Deliverable Drafts | `deliverables` |
 | 5 (render) — Generate Documents | `generate-documents` |
-| 6 — Lovable Wireframe Prompt | `lovable-wireframe` |
+| 6 — Lovable Prompt + `prototype.html`, opt-in* | `lovable-wireframe` |
 
 ### Enhancement pipeline (`skills/enhancement-pipeline/`)
 
@@ -88,7 +88,9 @@ vxlan-monitoring/
 | 4 — Findings | `enhancement-findings` |
 | 5 — Deliverable Drafts | `enhancement-deliverables` |
 | 5 (render) — Generate Documents | `enhancement-generate-documents` |
-| 6 — Lovable Wireframe Prompt | `enhancement-wireframe` |
+| 6 — Lovable Prompt + `prototype.html`, opt-in* | `enhancement-wireframe` |
+
+\* After Step 5's documents are ready, the PM is asked whether they want either, both, or neither of Step 6's deliverables — the only other sanctioned check-in besides wayfinding (operating system §8).
 
 ### Utilities
 
