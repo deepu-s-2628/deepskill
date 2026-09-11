@@ -1,5 +1,23 @@
 # deepskill
 
+## 0.3.0
+
+### Minor Changes
+
+- [`0ae2157`](https://github.com/deepu-s-2628/deepskill/commit/0ae2157ddfae774c058c99b7d47e7a74e83c36a6) Thanks [@deepu-s-2628](https://github.com/deepu-s-2628)! - Second round of real-usage feedback (Firewall Analyzer IP-reputation test run), all implemented:
+
+  **Filenames.** Deliverables are now named for their role, not the slug — `analysis.html`, `architecture.html`, `executive-brief.html`, `engineering-brief.html`, `product-requirements.docx` — the same names in every topic folder, so it's always obvious which to open first. `STATUS.md` is renamed to `Progress.md` (still visible at the topic-folder root).
+
+  **PRD (DOCX).** Author metadata now defaults to "Deepu S" instead of a `[PM Name]` placeholder. The Table of Contents is no longer a Word field that needs a manual "right-click → Update Field" — every heading is bookmarked as it's written and the TOC is filled in with real internal hyperlinks at save time, so it's correct and clickable the moment the file opens. Every major section now opens with a short plain-language intro paragraph instead of jumping straight into tables.
+
+  **Consolidated report (`analysis.html`).** The left nav is now nested — each step's own subsections appear underneath it — with scroll-position highlighting showing which section you're currently reading. The main content column is wider (1400px cap, was 980px). The wayfinding step is renamed "Scope & Requirements" in both the report heading and the nav, and its locked decisions render as a table instead of prose sub-headings.
+
+  **Slide decks.** Both decks now ship full keyboard/mouse-wheel/on-screen navigation (frontend-slides' own template contract, previously not enforced by our instructions) and target frontend-slides' "high density / reading-first" mode (4-8 bullets/cards per slide) instead of its sparse speaker-led default, which is what produced thin one-line slides in testing.
+
+### Patch Changes
+
+- [`cdcdb8d`](https://github.com/deepu-s-2628/deepskill/commit/cdcdb8ddb43555bc5c7e378efe3e8622d6018088) Thanks [@deepu-s-2628](https://github.com/deepu-s-2628)! - Fixed a real version-drift bug: `changeset version` only bumps `package.json`, which left `.claude-plugin/plugin.json` — the manifest that actually matters for the installed plugin — stuck at `0.1.0` after the `0.2.0` release merged. Added `scripts/sync-plugin-version.mjs` and wired it into the `version` npm script so both manifests move together on every future release.
+
 ## 0.2.0
 
 ### Minor Changes
