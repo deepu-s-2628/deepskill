@@ -36,6 +36,11 @@ from pathlib import Path
 
 from md_to_html import md_to_body_html
 
+# Styling follows skills/design-taste/SKILL.md — one accent color (ManageEngine
+# brand blue, #0078d4, already this repo's documented brand color) held
+# identically everywhere, a documented two-tier corner-radius scale, row-
+# separator tables instead of a full boxed grid, a readable measure for prose
+# while tables/diagrams keep the full width, and real :focus-visible states.
 CSS = """
 :root { color-scheme: light; }
 * { box-sizing: border-box; }
@@ -70,10 +75,11 @@ nav a {
   margin-bottom: 2px;
 }
 nav a:hover { background: #1e293b; color: #fff; }
-nav a.active { background: #1d4ed8; color: #fff; font-weight: 600; }
+nav a.active { background: #0078d4; color: #fff; font-weight: 600; }
+nav a:focus-visible { outline: 2px solid #4db8ff; outline-offset: 1px; }
 nav .subnav { margin: 0 0 4px 10px; border-left: 1px solid #334155; }
 nav .subnav a { font-size: 12px; padding: 5px 10px; color: #94a3b8; }
-nav .subnav a.active { background: #1e3a8a; color: #fff; font-weight: 500; }
+nav .subnav a.active { background: #005a9e; color: #fff; font-weight: 500; }
 main { flex: 1; padding: 40px 56px 96px; max-width: 1400px; }
 section { margin-bottom: 56px; padding-top: 8px; border-top: 1px solid #e2e8f0; }
 section:first-of-type { border-top: none; }
@@ -82,27 +88,38 @@ h1 { font-size: 1.7rem; }
 h2 { font-size: 1.3rem; margin-top: 1.4em; }
 h3 { font-size: 1.05rem; }
 p, li { font-size: 15px; line-height: 1.6; }
-a { color: #2563eb; }
+p { max-width: 75ch; }
+a { color: #0078d4; }
+a:focus-visible { outline: 2px solid #0078d4; outline-offset: 2px; }
 code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   background: #f1f5f9;
   padding: .1em .35em;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: .92em;
 }
-pre { background: #0f172a; color: #e2e8f0; padding: 14px 16px; border-radius: 8px; overflow-x: auto; }
+pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 14px 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, .08);
+}
 pre code { background: transparent; color: inherit; padding: 0; }
-blockquote { margin: 1em 0; padding: .6em 1em; border-left: 4px solid #3b82f6; background: #eff6ff; color: #1e3a8a; }
-table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 14px; }
-th, td { border: 1px solid #e5e7eb; padding: 8px 10px; text-align: left; vertical-align: top; }
-th { background: #f1f5f9; font-weight: 600; }
-tr:nth-child(even) td { background: #fafafa; }
+blockquote { margin: 1em 0; padding: .6em 1em; border-left: 4px solid #0078d4; background: #eaf4fc; color: #004578; }
+table { border-collapse: collapse; width: 100%; margin: 1.4em 0; font-size: 14px; }
+th, td { padding: 10px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid #e5e7eb; }
+th { background: transparent; font-weight: 600; color: #0f172a; border-bottom: 2px solid #0078d4; }
+tr:last-child td { border-bottom: none; }
+tr:nth-child(even) td { background: #fafbfc; }
 .diagram-frame {
   width: 100%;
   height: 640px;
   border: 1px solid #e2e8f0;
-  border-radius: 10px;
+  border-radius: 8px;
   margin: 1.2em 0;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, .06);
 }
 .banner { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
 """

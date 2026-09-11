@@ -125,7 +125,13 @@ Archify and frontend-slides need no install step — both are pure Node.js/stati
 
 `v0.3.0` — real-usage feedback from a full pipeline run: role-based deliverable filenames (`analysis.html`, `architecture.html`, `executive-brief.html`, `engineering-brief.html`, `product-requirements.docx`) instead of slug-prefixed ones; a real bookmark-linked PRD Table of Contents (no manual Word "Update Field" step); nested report navigation with scroll-position highlighting; mandatory slide-deck navigation at reading-first density; this README's install/update docs.
 
-Still planned, unversioned:
+Unreleased — three sequential milestones (each its own changeset, shipped in this order — the later ones depend on groundwork the earlier ones lay):
+
+1. **Done.** Design taste for `analysis.html`. Curated the stack-agnostic parts of [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) (`design-taste-frontend` v2) into `skills/design-taste/` — its color/typography/shape/spacing discipline and its process of naming and avoiding generic-AI defaults, not its React/Motion/npm-component-library machinery or landing-page structure rules, neither of which fit this repo's zero-build-step static-HTML deliverables — and applied it to the report's styling: one held accent color (ManageEngine brand blue), row-separator tables instead of a full boxed grid, a readable prose measure, real focus states.
+2. **Planned.** A `prototype.html` deliverable for Step 6. Additive alongside the existing Lovable-prompt output: a real, static-HTML wireframe generated using the same taste groundwork from milestone 1, for a PM who wants to see the idea fast rather than iterate further in an external tool.
+3. **Planned.** `unlazy` gates for the pipeline's Quality Gate checklists. Translates today's self-reported, qualitative gates (e.g. "2–3 named persona stories") into mechanically-verified `CHECK:`/`EXPECT:` pairs — self-correcting only, never pausing the autonomous run (Section 8's never-pause contract stays intact). Shipped last and standalone since it's the least-proven pattern of the three; isolating it keeps a rough edge here from entangling the (lower-risk) taste and prototype work.
+
+Also still planned, unversioned:
 
 - A ticket/milestone breakdown stage handing off from PRD to engineering (mattpocock's `to-tickets` pattern, adapted to group tickets into milestones by dependency-free batches)
 - Auto-creating tracker issues from that breakdown (currently: markdown/HTML output only, reviewed and entered manually)

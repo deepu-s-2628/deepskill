@@ -309,6 +309,14 @@ This still applies to anything **not** vendored into this repo's own `skills/` �
 
 ---
 
+## 11b. Design taste for `analysis.html`
+
+`build_report.py`'s CSS follows `skills/design-taste/SKILL.md` — a curated, rewritten-for-this-repo adaptation of the stack-agnostic taste judgment from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill), not a copy of it (that skill's own React/Motion/npm machinery, and its landing-page structure rules, don't apply to a self-contained static-HTML report). Read that file for the full rationale and rule set; the short version: one accent color held identically everywhere (ManageEngine brand blue, `#0078d4`), a documented two-tier corner-radius scale, row-separator tables instead of a full boxed grid, a readable measure for prose while tables/diagrams keep the full width, and real `:focus-visible` states.
+
+This applies **only** to `analysis.html`'s own styling — never to Archify's or frontend-slides' output, which carry their own mature, unrelated style systems (Section 11a). If a future deliverable needs similar taste discipline (e.g. a static-HTML wireframe/prototype), reference `skills/design-taste/SKILL.md` the same way rather than inventing a parallel rule set.
+
+---
+
 ## 12. Quality Gates (Do Not Mark Step Complete If Failed)
 
 ### Global
