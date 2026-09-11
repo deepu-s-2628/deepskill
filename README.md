@@ -103,13 +103,17 @@ Archify and frontend-slides need no install step — both are pure Node.js/stati
 
 ## Roadmap
 
-`v0.1.0` covers: extraction, the glossary, plain-language output, dual-format skills, this release tooling — plus, pulled forward after real testing surfaced they weren't optional: `ask-deepu`'s wayfinding interrogation, Archify diagrams and frontend-slides HTML decks (both fully vendored, replacing PPTX/PDF generation entirely), and the flat topic-folder layout with one consolidated `[slug].html`.
+`v0.1.0` covered the foundation: extraction, the glossary, plain-language output, dual-format skills, this release tooling.
 
-Still planned for `v0.2.0`+:
+`v0.2.0` — pulled forward after real testing surfaced they weren't optional: `ask-deepu`'s wayfinding interrogation and the single consolidated `[slug].html` report; Archify and frontend-slides fully vendored under `skills/`, replacing PPTX/PDF generation entirely; the flat topic-folder layout with no `ITOM-PM-Result/` wrapper.
+
+Still planned, unversioned:
 
 - A ticket/milestone breakdown stage handing off from PRD to engineering (mattpocock's `to-tickets` pattern, adapted to group tickets into milestones by dependency-free batches)
 - Auto-creating tracker issues from that breakdown (currently: markdown/HTML output only, reviewed and entered manually)
 
+See `CHANGELOG.md` for the exact, generated release history — this section is a summary, not the source of truth.
+
 ## Status
 
-Internal tool, `v0.1.0`, private. Not published to any registry — install directly from this repo via `npx skills add` above.
+Internal tool, `v0.2.0`, private. Not published to any registry — install directly from this repo via `npx skills add` above. Releases are cut with [Changesets](https://github.com/changesets/changesets): every change lands with a `.changeset/*.md` file, and merging the bot-opened "Version Packages" PR bumps `package.json` and `.claude-plugin/plugin.json` together and updates `CHANGELOG.md`.
