@@ -123,6 +123,8 @@ Archify and frontend-slides need no install step — both are pure Node.js/stati
 
 `v0.2.0` — pulled forward after real testing surfaced they weren't optional: `ask-deepu`'s wayfinding interrogation and the single consolidated `analysis.html` report; Archify and frontend-slides fully vendored under `skills/`, replacing PPTX/PDF generation entirely; the flat topic-folder layout with no `ITOM-PM-Result/` wrapper.
 
+`v0.3.0` — real-usage feedback from a full pipeline run: role-based deliverable filenames (`analysis.html`, `architecture.html`, `executive-brief.html`, `engineering-brief.html`, `product-requirements.docx`) instead of slug-prefixed ones; a real bookmark-linked PRD Table of Contents (no manual Word "Update Field" step); nested report navigation with scroll-position highlighting; mandatory slide-deck navigation at reading-first density; this README's install/update docs.
+
 Still planned, unversioned:
 
 - A ticket/milestone breakdown stage handing off from PRD to engineering (mattpocock's `to-tickets` pattern, adapted to group tickets into milestones by dependency-free batches)
@@ -132,4 +134,4 @@ See `CHANGELOG.md` for the exact, generated release history — this section is 
 
 ## Status
 
-Internal tool, `v0.2.0`, private. Not published to any registry — install directly from this repo via `npx skills add` above. Releases are cut with [Changesets](https://github.com/changesets/changesets): every change lands with a `.changeset/*.md` file, and merging the bot-opened "Version Packages" PR bumps `package.json` and `.claude-plugin/plugin.json` together and updates `CHANGELOG.md`.
+Internal tool, private. Not published to any registry — install directly from this repo via `npx skills add` above. Releases are cut with [Changesets](https://github.com/changesets/changesets): every change lands with a `.changeset/*.md` file, and merging the bot-opened "Version Packages" PR bumps `package.json` and `.claude-plugin/plugin.json` together and updates `CHANGELOG.md`. Current version lives in [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json) / [`CHANGELOG.md`](CHANGELOG.md) — not restated here, so this line can't go stale the way it did through v0.2.0.
