@@ -157,17 +157,33 @@ No RFC dumps.]
 
 ## Quality Gate (before marking complete)
 
-- [ ] Wrote `.steps/1_brainstorm.md` (not feature root), rebuilt `analysis.html`
-- [ ] Plain English throughout; jargon defined on first use
-- [ ] **Why This Technology Exists** covers what / why people use it / problem solved / easy example
-- [ ] 2–3 named persona stories with concrete failure examples + transformation
-- [ ] Module fit / reuse / new requirements filled
-- [ ] Open questions noted as assumptions, not batched for the PM (Step 0 wayfinding was the interactive step — this one runs unattended)
-- [ ] Sources cited when external claims are made
-- [ ] `Progress.md` updated
-- [ ] No implementation code
-- [ ] No deletion of other pipeline files
+Gate ledger for this step — write `.steps/GATES-1.md` from `skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `context/pm-operating-system.md` §18.
 
+
+- [ ] G1: File written under `.steps/`, `analysis.html` rebuilt after it
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('analysis.html').mtimeMs>=fs.statSync('.steps/1_brainstorm.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
+- [ ] G2: Plain English throughout; jargon defined on first use
+  (manual — no command can decide this)
+- [ ] G3: "Why This Technology Exists" covers what / why people use it / problem solved / easy example
+  (manual — no command can decide this)
+- [ ] G4: 2–3 named persona stories with concrete failure examples + transformation
+  CHECK: node -e "const c=(require('fs').readFileSync('.steps/1_brainstorm.md','utf8').match(/^### Story \d+/gm)||[]).length;console.log(c)"
+  EXPECT: a printed count of 2 or 3
+- [ ] G5: Module fit / reuse / new requirements filled
+  (manual — no command can decide this)
+- [ ] G6: Open questions noted as assumptions, not batched for the PM (Step 0 wayfinding was the interactive step — this one runs unattended)
+  (manual — no command can decide this)
+- [ ] G7: Sources cited when external claims are made
+  (manual — no command can decide this)
+- [ ] G8: `Progress.md` updated
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('Progress.md').mtimeMs>=fs.statSync('.steps/1_brainstorm.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
+- [ ] G9: No implementation code
+  (manual — no command can decide this)
+- [ ] G10: `.steps/0_wayfinding.md` still present (nothing deleted)
+  CHECK: node -e "process.exit(require('fs').existsSync('.steps/0_wayfinding.md')?0:1)"
+  EXPECT: (exits zero)
 ## Completion
 
 After writing the markdown and rebuilding `analysis.html`, display a short chat summary, then continue immediately to Step 2 — do not wait for a reply:

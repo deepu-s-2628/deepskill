@@ -227,15 +227,25 @@ Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and,
 
 ## Quality Gate (before marking complete)
 
-- [ ] Path: `[slug]/.steps/4_feature_definition.md`
-- [ ] Explicit in-scope vs out-of-scope
-- [ ] Persona challenge → capability traceability
-- [ ] Screens / settings / integrations concrete enough for Step 5–6
-- [ ] Phasing decisive (v1 / later)
-- [ ] `Progress.md` updated
+Gate ledger for this step — write `.steps/GATES-4.md` from `skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `context/pm-operating-system.md` §18.
 
 
-
+- [ ] G1: Written at `[slug]/.steps/4_feature_definition.md`, `analysis.html` rebuilt
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('analysis.html').mtimeMs>=fs.statSync('.steps/4_feature_definition.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
+- [ ] G2: Explicit in-scope vs out-of-scope
+  CHECK: node -e "const t=require('fs').readFileSync('.steps/4_feature_definition.md','utf8');process.exit(/in.scope/i.test(t)&&/out.of.scope/i.test(t)?0:1)"
+  EXPECT: (exits zero)
+- [ ] G3: Persona challenge → capability traceability
+  (manual — no command can decide this)
+- [ ] G4: Screens / settings / integrations concrete enough for Step 5–6
+  (manual — no command can decide this)
+- [ ] G5: Phasing decisive (v1 / later)
+  CHECK: node -e "process.exit(/\bv1\b/i.test(require('fs').readFileSync('.steps/4_feature_definition.md','utf8'))?0:1)"
+  EXPECT: (exits zero)
+- [ ] G6: `Progress.md` updated
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('Progress.md').mtimeMs>=fs.statSync('.steps/4_feature_definition.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
 ## Completion
 
 After writing the file, display a **summary directly in chat**:

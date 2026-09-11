@@ -155,13 +155,19 @@ Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and,
 
 ## Quality Gate (before marking complete)
 
-- [ ] Path: `[slug]-enhancement/.steps/2_cross_module_analysis.md`
-- [ ] Concrete reuse / duplication / inconsistency findings
-- [ ] Ties back to persona challenges where possible
-- [ ] `Progress.md` updated
+Gate ledger for this step — write `.steps/GATES-2.md` from `skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `context/pm-operating-system.md` §18.
 
 
-
+- [ ] G1: Written at `[slug]-enhancement/.steps/2_cross_module_analysis.md`
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('analysis.html').mtimeMs>=fs.statSync('.steps/2_cross_module_analysis.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
+- [ ] G2: Concrete reuse / duplication / inconsistency findings
+  (manual — no command can decide this)
+- [ ] G3: Ties back to persona challenges where possible
+  (manual — no command can decide this)
+- [ ] G4: `Progress.md` updated
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('Progress.md').mtimeMs>=fs.statSync('.steps/2_cross_module_analysis.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
 ## Completion
 
 After writing the file, display in chat:

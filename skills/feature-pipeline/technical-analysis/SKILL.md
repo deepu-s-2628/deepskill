@@ -219,17 +219,32 @@ Device → Collection → Normalize → Store → Threshold → UI / Notify
 
 ## Quality Gate (before marking complete)
 
-- [ ] `.steps/3_technical_analysis.md` written, `analysis.html` rebuilt
-- [ ] All viable methods evaluated; one primary chosen
-- [ ] **Deep collection contract** with concrete OIDs and/or API endpoints/paths (not hand-wavy)
-- [ ] Uncertain items labeled Needs lab confirmation + source
-- [ ] Metrics complete with source column
-- [ ] Scale, EE/probe, security, licensing covered when relevant
-- [ ] Persona challenges addressed
-- [ ] Sources section present
-- [ ] Progress.md updated
-- [ ] No implementation source code dumps
+Gate ledger for this step — write `.steps/GATES-3.md` from `skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `context/pm-operating-system.md` §18.
 
+
+- [ ] G1: Written at `.steps/3_technical_analysis.md`, `analysis.html` rebuilt
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('analysis.html').mtimeMs>=fs.statSync('.steps/3_technical_analysis.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
+- [ ] G2: All viable methods evaluated; one primary chosen
+  (manual — no command can decide this)
+- [ ] G3: Deep collection contract with concrete OIDs and/or API endpoints/paths (not hand-wavy)
+  (manual — no command can decide this)
+- [ ] G4: Uncertain items labeled Needs lab confirmation + source
+  (manual — no command can decide this)
+- [ ] G5: Metrics complete with source column
+  (manual — no command can decide this)
+- [ ] G6: Scale, EE/probe, security, licensing covered when relevant
+  (manual — no command can decide this)
+- [ ] G7: Persona challenges addressed
+  (manual — no command can decide this)
+- [ ] G8: Sources section present
+  CHECK: node -e "const t=require('fs').readFileSync('.steps/3_technical_analysis.md','utf8');process.exit(/## Sources[\s\S]*\[.+\]\(http/.test(t)?0:1)"
+  EXPECT: (exits zero)
+- [ ] G9: `Progress.md` updated
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('Progress.md').mtimeMs>=fs.statSync('.steps/3_technical_analysis.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
+- [ ] G10: No implementation source code dumps
+  (manual — no command can decide this)
 ## Completion
 
 > **Step 3 Complete — Technical Analysis**

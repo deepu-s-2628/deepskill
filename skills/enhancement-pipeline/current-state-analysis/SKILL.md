@@ -169,15 +169,24 @@ Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and,
 
 ## Quality Gate (before marking complete)
 
-- [ ] Path: `[slug]-enhancement/.steps/1_current_state.md`
-- [ ] Discovery → monitor → alert → UI → report map complete enough to enhance
-- [ ] Strengths and limitations are specific (not generic)
-- [ ] 2–3 persona pain stories at keynote quality
-- [ ] Screenshot requests made when UI truth is needed
-- [ ] `Progress.md` updated
+Gate ledger for this step — write `.steps/GATES-1.md` from `skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `context/pm-operating-system.md` §18.
 
 
-
+- [ ] G1: Written at `[slug]-enhancement/.steps/1_current_state.md`
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('analysis.html').mtimeMs>=fs.statSync('.steps/1_current_state.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
+- [ ] G2: Discovery → monitor → alert → UI → report map complete enough to enhance
+  (manual — no command can decide this)
+- [ ] G3: Strengths and limitations are specific (not generic)
+  (manual — no command can decide this)
+- [ ] G4: 2–3 persona pain stories at keynote quality
+  CHECK: node -e "const c=(require('fs').readFileSync('.steps/1_current_state.md','utf8').match(/^### Story \d+/gm)||[]).length;console.log(c)"
+  EXPECT: a printed count of 2 or 3
+- [ ] G5: Screenshot requests made when UI truth is needed
+  (manual — no command can decide this)
+- [ ] G6: `Progress.md` updated
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('Progress.md').mtimeMs>=fs.statSync('.steps/1_current_state.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
 ## Completion
 
 After writing the file, display in chat:

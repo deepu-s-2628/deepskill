@@ -152,16 +152,28 @@ Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and,
 
 ## Quality Gate (before marking complete)
 
-- [ ] Path: `[slug]/.steps/2_competitive_analysis.md`
-- [ ] ≥4 competitors or explicit exception
-- [ ] Persona-challenge coverage tied to Step 1 stories
-- [ ] Table stakes vs differentiators clear
-- [ ] Recommended position stated (parity / differentiate / leapfrog)
-- [ ] Sources cited with links
-- [ ] `Progress.md` updated
+Gate ledger for this step — write `.steps/GATES-2.md` from `skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `context/pm-operating-system.md` §18.
 
 
-
+- [ ] G1: Written at `[slug]/.steps/2_competitive_analysis.md`, `analysis.html` rebuilt
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('analysis.html').mtimeMs>=fs.statSync('.steps/2_competitive_analysis.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
+- [ ] G2: ≥4 competitors or explicit exception
+  CHECK: node -e "const t=require('fs').readFileSync('.steps/2_competitive_analysis.md','utf8');const c=(t.match(/^### .+/gm)||[]).length;process.exit(c>=4||/exception/i.test(t)?0:1)"
+  EXPECT: (exits zero)
+- [ ] G3: Persona-challenge coverage tied to Step 1 stories
+  (manual — no command can decide this)
+- [ ] G4: Table stakes vs differentiators clear
+  (manual — no command can decide this)
+- [ ] G5: Recommended position stated (parity / differentiate / leapfrog)
+  CHECK: node -e "process.exit(/parity|differentiate|leapfrog/i.test(require('fs').readFileSync('.steps/2_competitive_analysis.md','utf8'))?0:1)"
+  EXPECT: (exits zero)
+- [ ] G6: Sources cited with links
+  CHECK: node -e "const t=require('fs').readFileSync('.steps/2_competitive_analysis.md','utf8');process.exit(/## Sources[\s\S]*\[.+\]\(http/.test(t)?0:1)"
+  EXPECT: (exits zero)
+- [ ] G7: `Progress.md` updated
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('Progress.md').mtimeMs>=fs.statSync('.steps/2_competitive_analysis.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
 ## Completion
 
 After writing the file, display a **summary directly in chat**:

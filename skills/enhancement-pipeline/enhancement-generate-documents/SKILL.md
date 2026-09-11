@@ -182,24 +182,42 @@ If unsure of the absolute path, resolve it with `file_search` for `**/generate_d
 
 Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
 
-## Quality Gate / Checklist (before marking complete)
+## Quality Gate (before marking complete)
 
-Before declaring complete, verify:
-- [ ] Flowchart has real diagram structure with existing/new/modified coding, not 5 generic boxes
-- [ ] Executive deck has before/after visuals (not just bullets)
-- [ ] Executive deck has NO MORE THAN 2 consecutive bullet-only slides
-- [ ] Executive deck's persona-pain slide and transformation slide revisit the same named persona
-- [ ] Engineering deck has architecture diagrams showing modifications
-- [ ] Engineering deck has NO MORE THAN 2 consecutive bullet-only slides
-- [ ] Enhancement PRD includes Technical Architecture Changes section with architecture, decision logic, data model, and integration changes
-- [ ] Enhancement PRD Persona Challenges table is compact (one row per challenge, no narratives)
-- [ ] New metrics tables are legible and complete
-- [ ] Color coding is consistent everywhere: existing=green, new=blue, modified=orange
-- [ ] All diagrams and slides are specific to THIS enhancement (not generic placeholders)
-- [ ] `.steps/build_docx.py` and `.steps/diagrams/flowchart.json` kept for regeneration
-- [ ] `Progress.md` updated after successful generation
+Gate ledger for this step — write `.steps/GATES-5-render.md` from `skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `context/pm-operating-system.md` §18.
 
 
+- [ ] G1: Flowchart has real diagram structure with existing/new/modified coding, not 5 generic boxes
+  (manual — no command can decide this)
+- [ ] G2: Executive deck has before/after visuals (not just bullets)
+  (manual — no command can decide this)
+- [ ] G3: Executive deck has NO MORE THAN 2 consecutive bullet-only slides
+  (manual — no command can decide this)
+- [ ] G4: Executive deck's persona-pain slide and transformation slide revisit the same named persona
+  (manual — no command can decide this)
+- [ ] G5: Engineering deck has architecture diagrams showing modifications
+  (manual — no command can decide this)
+- [ ] G6: Engineering deck has NO MORE THAN 2 consecutive bullet-only slides
+  (manual — no command can decide this)
+- [ ] G7: Enhancement PRD includes Technical Architecture Changes section with architecture, decision logic, data model, and integration changes
+  (manual — no command can decide this)
+- [ ] G8: Enhancement PRD Persona Challenges table is compact (one row per challenge, no narratives)
+  (manual — no command can decide this)
+- [ ] G9: New metrics tables are legible and complete
+  (manual — no command can decide this)
+- [ ] G10: Color coding is consistent everywhere: existing=green, new=blue, modified=orange
+  (manual — no command can decide this)
+- [ ] G11: All diagrams and slides are specific to THIS enhancement (not generic placeholders)
+  (manual — no command can decide this)
+- [ ] G12: `.steps/build_docx.py` and `.steps/diagrams/flowchart.json` kept for regeneration
+  CHECK: node -e "const fs=require('fs');process.exit(fs.existsSync('.steps/build_docx.py')&&fs.existsSync('.steps/diagrams/flowchart.json')?0:1)"
+  EXPECT: (exits zero)
+- [ ] G13: All four rendered deliverables exist (`architecture.html`, `executive-brief.html`, `engineering-brief.html`, `product-requirements.docx`)
+  CHECK: node -e "const fs=require('fs');process.exit(['architecture.html','executive-brief.html','engineering-brief.html','product-requirements.docx'].every(f=>fs.existsSync(f))?0:1)"
+  EXPECT: (exits zero)
+- [ ] G14: `Progress.md` updated after successful generation
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('Progress.md').mtimeMs>=fs.statSync('product-requirements.docx').mtimeMs?0:1)"
+  EXPECT: (exits zero)
 ## Completion
 
 After generating all files, say:

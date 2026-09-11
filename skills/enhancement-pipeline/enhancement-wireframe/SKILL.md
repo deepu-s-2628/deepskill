@@ -229,16 +229,26 @@ Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and,
 
 ## Quality Gate (before marking complete)
 
-- [ ] PM's Step 6 choice (A/B/C from operating system §8) respected exactly — nothing built beyond what was chosen
-- [ ] Spec written under correct `.steps/` path, `analysis.html` rebuilt
-- [ ] Scope matches Step 4/5 findings (no silent expansion)
-- [ ] Screenshots analyzed before drafting (or run correctly marked `blocked_on_pm` if none were available) — unconditional, applies whenever this step runs at all
-- [ ] If the Lovable prompt was chosen (A/B): paste-ready (single coherent prompt)
-- [ ] If the prototype was chosen (A/C): `prototype.html` written at the topic-folder root, renders Page 1 with the extracted design system + existing/new/modified color coding
-- [ ] `Progress.md` → `done`
+Gate ledger for this step — write `.steps/GATES-6.md` from `skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `context/pm-operating-system.md` §18.
 
 
-
+- [ ] G1: PM's Step 6 choice (A/B/C from operating system §8) respected exactly — nothing built beyond what was chosen
+  (manual — no command can decide this)
+- [ ] G2: Spec written under correct `.steps/` path, `analysis.html` rebuilt
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('analysis.html').mtimeMs>=fs.statSync('.steps/6_enhancement_wireframe.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
+- [ ] G3: Scope matches Step 4/5 findings (no silent expansion)
+  (manual — no command can decide this)
+- [ ] G4: Screenshots analyzed before drafting (or run correctly marked `blocked_on_pm` if none were available) — unconditional, applies whenever this step runs at all
+  (manual — no command can decide this)
+- [ ] G5: If the Lovable prompt was chosen (A/B): paste-ready (single coherent prompt)
+  (manual — no command can decide this)
+- [ ] G6: If the prototype was chosen (A/C): `prototype.html` exists at the topic-folder root
+  CHECK: node -e "process.exit(require('fs').existsSync('prototype.html')?0:1)"
+  EXPECT: (exits zero — only run when the prototype was chosen)
+- [ ] G7: `Progress.md` → `done`
+  CHECK: node -e "process.exit(/\| Next action \| done/.test(require('fs').readFileSync('Progress.md','utf8'))?0:1)"
+  EXPECT: (exits zero)
 ## Completion
 
 After producing the chosen artifact(s), display in chat (include only the lines matching what was actually chosen):

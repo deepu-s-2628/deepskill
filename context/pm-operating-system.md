@@ -65,6 +65,7 @@ All paths are relative to the **opened workspace root**. There is no wrapper fol
     ├── 5c_feature_flowchart.md
     ├── 5d_product_requirements.md
     ├── 6_lovable_wireframe.md
+    ├── GATES-N.md               ← per-step unlazy-gates ledger (§18), one per step, e.g. GATES-3.md
     ├── diagrams/                ← Archify JSON specs (source for the flowchart HTML)
     │   └── flowchart.json
     └── build_docx.py            ← keep after success; regenerates product-requirements.docx
@@ -85,7 +86,7 @@ Same flat pattern, folder named `[slug]-enhancement/`:
 4. **Diagrams are Archify HTML**, visible at the topic-folder root (e.g. `architecture.html`) *and* referenced from the relevant step's markdown with a `<!-- diagram: architecture.html -->` marker line — `build_report.py` turns that into an embedded, interactive `<iframe>` in the right section. There is no PDF flowchart.
 5. **Slide decks are HTML** (`frontend-slides`), not PPTX. Two decks — `executive-brief.html` (executive audience) and `engineering-brief.html` (engineering audience) — each self-contained, animation-capable, and openable directly in a browser.
 6. **The PRD stays DOCX** (`python-docx`), unchanged from before.
-7. **Retention — never delete** `.steps/*.md`, `analysis.html`, `Progress.md`, the deliverable files at the topic-folder root (including `prototype.html`, when the PM opted into it), or `.steps/build_docx.py`.
+7. **Retention — never delete** `.steps/*.md`, `analysis.html`, `Progress.md`, the deliverable files at the topic-folder root (including `prototype.html`, when the PM opted into it), `.steps/build_docx.py`, or `.steps/GATES-N.md` (§18) — a gate ledger is evidence of what was checked, not scratch work.
 8. Do not invent alternate layout names (`output/`, `docs/`, `Generated/`, `steps/` without the dot).
 9. Chat summaries should **highlight the `analysis.html` path** for reviewers; mention MD only as internal source.
 
@@ -334,6 +335,8 @@ This applies to `analysis.html`'s own styling, and to `prototype.html` (Step 6's
 
 ## 12. Quality Gates (Do Not Mark Step Complete If Failed)
 
+The checklists below are the substance of every step's quality bar — what has to be true before a step counts as done. Each of the 14 pipeline skills expresses its own step-specific list here as a real `unlazy-gates` ledger (`.steps/GATES-N.md`), not just prose: a mechanically-checkable item becomes a runnable `CHECK:`/`EXPECT:` gate, a genuine judgment call stays a manual gate — see each skill's own "Quality Gate" section for its exact ledger, and Section 18 for the resolution rule (self-correct on a failed gate, document the gap and continue if it still fails — **never abandon, never pause the run**). The lists below stay the readable summary of what those ledgers check; Section 18 documents the mechanism itself.
+
 ### Global
 - [ ] Markdown under **`.steps/`** (hidden)
 - [ ] `analysis.html` rebuilt after this step (Section 6)
@@ -484,3 +487,29 @@ When a step needs to consult a large directory (schemas, examples, a vendored to
 ### Verify stale content directly, don't assume it's still correct
 
 A skill file can go quietly wrong when something it depends on changes elsewhere in the repo (a deleted script, a renamed method, a retired format) without the skill's own prose being updated — the file still parses, still reads plausibly, and nothing errors until the model tries to act on a reference that no longer exists. This has happened twice in this repo already: `python-pptx`/`PresentationBuilder` method names (`add_kpi_slide()`, etc.) survived in `deliverables/SKILL.md` and `enhancement-deliverables/SKILL.md` well after `generate_pptx.py` was deleted, and existing/new/modified color-coding (an enhancement-only concept) leaked into the *feature* pipeline's engineering-deck instructions via copy-paste. Both were found by tracing what the instruction actually pointed to, not by re-reading the prose for plausibility. When editing a skill that references another file, tool, or API, confirm that reference still exists and still means what the prose says — don't take a plausible-sounding instruction on faith just because it isn't obviously wrong.
+
+---
+
+## 18. Verified Quality Gates (`unlazy-gates`)
+
+`skills/unlazy-gates/` is a curated, **Solo-mode-only** adaptation of `unlazy` (vendored in full — see that skill's own `SKILL.md` for exclusions and attribution), giving Section 12's per-step checklists a mechanically-checkable form instead of a self-reported one. A mechanically-checkable item (a count, a presence/absence check, a file that must exist) becomes a runnable `CHECK:`/`EXPECT:` gate; a genuine qualitative judgment (plain language, no unexplained jargon) stays a manual gate, self-attested exactly as it already was.
+
+### Per step
+
+1. Before producing the step's content, write `.steps/GATES-N.md` (`N` = the step number) from `skills/unlazy-gates/templates/gates-leaf.md`, one gate per item in that step's Section 12 checklist.
+2. Produce the step's content.
+3. `node <path-to>/skills/unlazy-gates/scripts/gate-check.mjs --approve .steps/GATES-N.md` (first run) or `--status`/plain re-run (later checks). Lint first with `gate-lint.mjs` if authoring a new ledger from scratch.
+
+### The resolution rule — never `unlazy`'s native `ABANDON`/handoff
+
+This pipeline has exactly two sanctioned pause points (Section 8); a quality gate is neither of them, so a failing gate is never a reason to stop or hand off:
+
+1. **A failing runnable gate**: revise the specific failing content and re-check. Bound to **2–3 retries**.
+2. **Still unmet after retries**: do not abandon, do not pause. Note the specific gap in that step's own `.steps/*.md` output as a stated assumption/limitation — the same pattern `current-state-analysis/SKILL.md` already uses when a screenshot isn't available — and move on to the next step. A documented gap is an honest, complete step; a silently-dropped gate is not.
+3. **Manual gates** are never mechanically resolved — they're the explicit, single-outcome version of what Section 12's checklists already asked for.
+
+Never install `unlazy`'s optional Stop hook (`scripts/install-hooks.mjs`, deliberately excluded from the vendored copy) — it exists to block a session on unmet gates, which directly contradicts the rule above.
+
+### Retention
+
+`.steps/GATES-N.md` is retained same as every other `.steps/` file (Section 3, hard rule 7) — it's evidence of what was checked and how, not scratch work to clean up after the step completes.

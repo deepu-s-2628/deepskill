@@ -458,14 +458,26 @@ Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and,
 
 ## Quality Gate (before marking complete)
 
-- [ ] All four Step 5 drafts written under `.steps/` with correct filenames for this pipeline mode
-- [ ] Exec and engineering decks are not near-duplicates
-- [ ] Flow content is complete enough to render as real diagrams
-- [ ] PRD requirements are testable
-- [ ] Persona traceability retained
-- [ ] `Progress.md` updated (next: `document_generation`)
+Gate ledger for this step — write `.steps/GATES-5a-5d.md` from `skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `context/pm-operating-system.md` §18.
 
 
+- [ ] G1: All four Step 5 drafts written under `.steps/` with correct filenames for this pipeline mode
+  CHECK: node -e "const fs=require('fs');const f=['.steps/5a_executive_presentation.md','.steps/5b_engineering_presentation.md','.steps/5c_feature_flowchart.md','.steps/5d_product_requirements.md'];process.exit(f.every(p=>fs.existsSync(p))?0:1)"
+  EXPECT: (exits zero)
+- [ ] G2: Exec and engineering decks are not near-duplicates
+  (manual — no command can decide this)
+- [ ] G3: Flow content is complete enough to render as real diagrams
+  (manual — no command can decide this)
+- [ ] G4: No TBD/lorem/fill-in-later placeholders in any of the four drafts
+  CHECK: node -e "const fs=require('fs');const f=['.steps/5a_executive_presentation.md','.steps/5b_engineering_presentation.md','.steps/5c_feature_flowchart.md','.steps/5d_product_requirements.md'];process.exit(f.some(p=>/\bTBD\b|\blorem\b|\[fill in\]/i.test(fs.readFileSync(p,'utf8')))?1:0)"
+  EXPECT: (exits zero)
+- [ ] G5: PRD requirements are testable
+  (manual — no command can decide this)
+- [ ] G6: Persona traceability retained
+  (manual — no command can decide this)
+- [ ] G7: `Progress.md` updated (next: document generation)
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('Progress.md').mtimeMs>=fs.statSync('.steps/5d_product_requirements.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
 ## Completion
 
 After producing all four files, display a **summary directly in chat**:

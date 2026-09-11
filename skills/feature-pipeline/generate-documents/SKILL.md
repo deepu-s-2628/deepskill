@@ -180,25 +180,44 @@ If unsure of the absolute path, resolve it with `file_search` for `**/generate_d
 
 Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
 
-## Quality Gate / Checklist (before marking complete)
+## Quality Gate (before marking complete)
 
-Before declaring complete, verify:
-- [ ] Flowchart has real diagram structure (not a toy overview) covering setup, collection with protocol branches, alert, failure
-- [ ] Engineering deck includes metrics tables + OID/API/path highlights from technical analysis
-- [ ] Executive/Engineering decks are immediately usable (no "fill in later" gaps); content backfilled from Steps 1–4 if needed
-- [ ] Executive deck has at least 3 slides with diagrams/visuals (not all bullets)
-- [ ] Executive deck has NO MORE THAN 2 consecutive bullet-only slides
-- [ ] Executive deck's persona-story slide and persona-revisited slide use the same named persona
-- [ ] Engineering deck has architecture and data flow diagrams embedded
-- [ ] Engineering deck has NO MORE THAN 2 consecutive bullet-only slides
-- [ ] PRD DOCX includes Technical Architecture section with architecture overview, data flow, decision logic, data model, and integration points
-- [ ] PRD DOCX Persona Challenges table is compact (one row per challenge, no narratives)
-- [ ] All diagrams and slides are specific to THIS feature (not generic placeholders)
-- [ ] Color scheme is consistent across all documents
-- [ ] `.steps/build_docx.py` and `.steps/diagrams/flowchart.json` kept for regeneration
-- [ ] `Progress.md` updated after successful generation
+Gate ledger for this step — write `.steps/GATES-5-render.md` from `skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `context/pm-operating-system.md` §18.
 
 
+- [ ] G1: Flowchart has real diagram structure (not a toy overview) covering setup, collection with protocol branches, alert, failure
+  (manual — no command can decide this)
+- [ ] G2: Engineering deck includes metrics tables + OID/API/path highlights from technical analysis
+  (manual — no command can decide this)
+- [ ] G3: Executive/Engineering decks are immediately usable (no "fill in later" gaps); content backfilled from Steps 1–4 if needed
+  (manual — no command can decide this)
+- [ ] G4: Executive deck has at least 3 slides with diagrams/visuals (not all bullets)
+  (manual — no command can decide this)
+- [ ] G5: Executive deck has NO MORE THAN 2 consecutive bullet-only slides
+  (manual — no command can decide this)
+- [ ] G6: Executive deck's persona-story slide and persona-revisited slide use the same named persona
+  (manual — no command can decide this)
+- [ ] G7: Engineering deck has architecture and data flow diagrams embedded
+  (manual — no command can decide this)
+- [ ] G8: Engineering deck has NO MORE THAN 2 consecutive bullet-only slides
+  (manual — no command can decide this)
+- [ ] G9: PRD DOCX includes Technical Architecture section with architecture overview, data flow, decision logic, data model, and integration points
+  (manual — no command can decide this)
+- [ ] G10: PRD DOCX Persona Challenges table is compact (one row per challenge, no narratives)
+  (manual — no command can decide this)
+- [ ] G11: All diagrams and slides are specific to THIS feature (not generic placeholders)
+  (manual — no command can decide this)
+- [ ] G12: Color scheme is consistent across all documents
+  (manual — no command can decide this)
+- [ ] G13: `.steps/build_docx.py` and `.steps/diagrams/flowchart.json` kept for regeneration
+  CHECK: node -e "const fs=require('fs');process.exit(fs.existsSync('.steps/build_docx.py')&&fs.existsSync('.steps/diagrams/flowchart.json')?0:1)"
+  EXPECT: (exits zero)
+- [ ] G14: All four rendered deliverables exist (`architecture.html`, `executive-brief.html`, `engineering-brief.html`, `product-requirements.docx`)
+  CHECK: node -e "const fs=require('fs');process.exit(['architecture.html','executive-brief.html','engineering-brief.html','product-requirements.docx'].every(f=>fs.existsSync(f))?0:1)"
+  EXPECT: (exits zero)
+- [ ] G15: `Progress.md` updated after successful generation
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('Progress.md').mtimeMs>=fs.statSync('product-requirements.docx').mtimeMs?0:1)"
+  EXPECT: (exits zero)
 ## Completion
 
 After generating all files, say:

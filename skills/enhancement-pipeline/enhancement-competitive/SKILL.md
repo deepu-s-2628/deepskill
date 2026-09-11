@@ -175,14 +175,22 @@ Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and,
 
 ## Quality Gate (before marking complete)
 
-- [ ] Path: `[slug]-enhancement/.steps/3_competitive_analysis.md`
-- [ ] Focused on our existing feature gaps (not generic market survey only)
-- [ ] Persona challenges used as competitive benchmark
-- [ ] Sources cited
-- [ ] `Progress.md` updated
+Gate ledger for this step — write `.steps/GATES-3.md` from `skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `context/pm-operating-system.md` §18.
 
 
-
+- [ ] G1: Written at `[slug]-enhancement/.steps/3_competitive_analysis.md`
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('analysis.html').mtimeMs>=fs.statSync('.steps/3_competitive_analysis.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
+- [ ] G2: Focused on our existing feature gaps (not generic market survey only)
+  (manual — no command can decide this)
+- [ ] G3: Persona challenges used as competitive benchmark
+  (manual — no command can decide this)
+- [ ] G4: Sources cited
+  CHECK: node -e "const t=require('fs').readFileSync('.steps/3_competitive_analysis.md','utf8');process.exit(/## Sources[\s\S]*\[.+\]\(http/.test(t)?0:1)"
+  EXPECT: (exits zero)
+- [ ] G5: `Progress.md` updated
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('Progress.md').mtimeMs>=fs.statSync('.steps/3_competitive_analysis.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
 ## Completion
 
 After writing the file, display in chat:

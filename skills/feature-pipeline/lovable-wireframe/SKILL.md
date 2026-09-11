@@ -206,14 +206,24 @@ Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and,
 
 ## Quality Gate (before marking complete)
 
-- [ ] PM's Step 6 choice (A/B/C from operating system §8) respected exactly — nothing built beyond what was chosen
-- [ ] Spec written under correct `.steps/` path, `analysis.html` rebuilt
-- [ ] Scope matches Step 4/5 findings (no silent expansion)
-- [ ] If the Lovable prompt was chosen (A/B): paste-ready (single coherent prompt)
-- [ ] If the prototype was chosen (A/C): `prototype.html` written at the topic-folder root, renders the same Screen 1 spec, follows `skills/design-taste/SKILL.md`
-- [ ] `Progress.md` → `done`
+Gate ledger for this step — write `.steps/GATES-6.md` from `skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `context/pm-operating-system.md` §18.
 
 
+- [ ] G1: PM's Step 6 choice (A/B/C from operating system §8) respected exactly — nothing built beyond what was chosen
+  (manual — no command can decide this)
+- [ ] G2: Spec written under correct `.steps/` path, `analysis.html` rebuilt
+  CHECK: node -e "const fs=require('fs');process.exit(fs.statSync('analysis.html').mtimeMs>=fs.statSync('.steps/6_lovable_wireframe.md').mtimeMs?0:1)"
+  EXPECT: (exits zero)
+- [ ] G3: Scope matches Step 4/5 findings (no silent expansion)
+  (manual — no command can decide this)
+- [ ] G4: If the Lovable prompt was chosen (A/B): paste-ready (single coherent prompt)
+  (manual — no command can decide this)
+- [ ] G5: If the prototype was chosen (A/C): `prototype.html` exists at the topic-folder root
+  CHECK: node -e "process.exit(require('fs').existsSync('prototype.html')?0:1)"
+  EXPECT: (exits zero — only run when the prototype was chosen)
+- [ ] G6: `Progress.md` → `done`
+  CHECK: node -e "process.exit(/\| Next action \| done/.test(require('fs').readFileSync('Progress.md','utf8'))?0:1)"
+  EXPECT: (exits zero)
 ## Completion
 
 After producing the chosen artifact(s), say (include only the lines matching what was actually chosen):

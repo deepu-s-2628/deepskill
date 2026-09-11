@@ -96,8 +96,10 @@ vxlan-monitoring/
 | `wait-what` | "That didn't land — re-pitch it simpler" |
 | `archify` | Vendored in full (`skills/archify/`) — renders the flowchart and any other diagrams as interactive HTML |
 | `frontend-slides` | Vendored in full (`skills/frontend-slides/`) — authors the executive/engineering slide decks as self-contained, animation-capable HTML |
+| `design-taste` | Curated adaptation (`skills/design-taste/`) — the visual-taste principles behind `analysis.html`'s and `prototype.html`'s styling (operating system §11b) |
+| `unlazy-gates` | Curated, Solo-mode-only adaptation (`skills/unlazy-gates/`) — mechanically-verified completion gates for each pipeline step (operating system §18) |
 
-Everything in this repo, including Archify and frontend-slides, is bundled in `skills/` — installing this one package is enough. Nothing here depends on a teammate having a *different*, separately-installed plugin on their machine (operating system §11a) — if that ever changes for something added later, the same rule applies: try it, and degrade gracefully rather than fail the run if it's missing.
+Everything in this repo, including Archify, frontend-slides, design-taste, and unlazy-gates, is bundled in `skills/` — installing this one package is enough. Nothing here depends on a teammate having a *different*, separately-installed plugin on their machine (operating system §11a) — if that ever changes for something added later, the same rule applies: try it, and degrade gracefully rather than fail the run if it's missing.
 
 ## Generating the actual files (Archify flowchart / HTML slide decks / DOCX)
 
@@ -130,7 +132,7 @@ Unreleased — three sequential milestones (each its own changeset, shipped in t
 
 1. **Done.** Design taste for `analysis.html`. Curated the stack-agnostic parts of [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) (`design-taste-frontend` v2) into `skills/design-taste/` — its color/typography/shape/spacing discipline and its process of naming and avoiding generic-AI defaults, not its React/Motion/npm-component-library machinery or landing-page structure rules, neither of which fit this repo's zero-build-step static-HTML deliverables — and applied it to the report's styling: one held accent color (ManageEngine brand blue), row-separator tables instead of a full boxed grid, a readable prose measure, real focus states.
 2. **Done.** A `prototype.html` deliverable for Step 6. Additive alongside the existing Lovable-prompt output: a real, static-HTML mockup of the primary screen (or, in enhancement mode, the enhanced main page with existing/new/modified coding), rendered using the same design-taste groundwork from milestone 1, for a PM who wants to see the idea fast rather than iterate further in an external tool.
-3. **Planned.** `unlazy` gates for the pipeline's Quality Gate checklists. Translates today's self-reported, qualitative gates (e.g. "2–3 named persona stories") into mechanically-verified `CHECK:`/`EXPECT:` pairs — self-correcting only, never pausing the autonomous run (Section 8's never-pause contract stays intact). Shipped last and standalone since it's the least-proven pattern of the three; isolating it keeps a rough edge here from entangling the (lower-risk) taste and prototype work.
+3. **Done.** `unlazy-gates` for the pipeline's Quality Gate checklists. Curated, Solo-mode-only vendor of `unlazy` (`skills/unlazy-gates/` — its Depth Tree, orchestrated/parallel dispatch, and Stop hook all excluded, none of it fits a single-session sequential pipeline) translates each of the 14 skills' checklists into a real `.steps/GATES-N.md` ledger: mechanically-checkable items (a persona-story count, a placeholder-text scan, a file existing) become runnable `CHECK:`/`EXPECT:` gates; genuine judgment calls stay explicit manual gates. A failing gate self-corrects (2–3 retries) or gets documented as a stated gap and the run continues — never `unlazy`'s native abandon/handoff, which would reopen exactly the pause-for-review pattern Section 8 exists to prevent.
 
 Also unreleased, not part of the taste/unlazy sequence above:
 
