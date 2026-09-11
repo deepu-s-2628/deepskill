@@ -348,7 +348,7 @@ Same rule as executive PPT — never more than 2 consecutive bullet slides. Use:
 ## 3. Technical Architecture Changes
 
 ### 3.1 Current Architecture
-[How the feature currently works architecturally — component diagram or data flow description]
+[How the feature currently works architecturally — component diagram or data flow description. Note for `enhancement-generate-documents`: the DOCX embeds a small `matplotlib`-rendered static image here (existing/new/modified color-coded), not the interactive Archify flowchart HTML — Archify's output can't be embedded as a static picture.]
 
 ### 3.2 Enhanced Architecture
 [What changes in the architecture. Show new components, modified connections, removed elements.]

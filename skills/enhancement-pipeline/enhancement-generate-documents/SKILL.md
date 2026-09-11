@@ -69,7 +69,7 @@ node "<archify-dir>/bin/archify.mjs" deliver workflow ".steps/diagrams/flowchart
 - Translate the Mermaid sketch from `5d_enhancement_flowchart.md` into the spec — this is a fresh authoring pass (new stable IDs, real domain wording), not a literal transcription.
 - Mark node/edge state so the diagram visually distinguishes **existing** (unchanged), **new** (added by the enhancement), and **modified** (changed by the enhancement) — Archify's schema supports per-node/edge styling; use it instead of inventing an ad hoc legend.
 - Cover: the enhanced end-to-end flow, discovery changes, data pipeline, alerting, user workflow — multiple linked views (`meta.views`) if one flat diagram can't hold all of it legibly.
-- Validate before delivering: `node "<archify-dir>/bin/archify.mjs" validate workflow ".steps/diagrams/flowchart.json" --quality showcase --json` must report a showcase pass with 0 errors/warnings.
+- Validate before delivering: `node "<archify-dir>/bin/archify.mjs" validate workflow ".steps/diagrams/flowchart.json" --quality showcase --json` must report a showcase pass with 0 errors/warnings. A showcase pass rarely happens on the first attempt — real layout errors (edge/node crossings, label overlaps, desktop-readability failures) are normal on early drafts and come with specific fix suggestions; keep revising the spec and re-validating until it's clean, don't stop or skip the diagram after the first failure.
 - Reference the output from `5d_enhancement_flowchart.md` with `<!-- diagram: [feature-name]-enhancement-flowchart.html -->` so it embeds into the consolidated report (Section 6).
 
 ### 2. Generate the Executive Slide Deck (frontend-slides)

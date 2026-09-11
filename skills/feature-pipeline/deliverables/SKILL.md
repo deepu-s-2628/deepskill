@@ -292,7 +292,7 @@ Same rule as executive PPT — never more than 2 consecutive bullet slides. Use:
 ### 5c — Feature Flowchart
 
 **File:** `[feature-name]/.steps/5c_feature_flowchart.md`
-**Format:** Mermaid diagrams (converted to PDF)
+**Format:** Mermaid diagrams (source material for the Archify flowchart built in `generate-documents`, Section 1 — not a conversion target itself)
 
 ```markdown
 # Feature Flowchart: [Feature Name]
@@ -386,7 +386,7 @@ flowchart TD
 
 ## 3. Technical Architecture
 ### 3.1 Architecture Overview
-[How this feature fits into OpManager Plus architecture. Include a text-based or described diagram showing: data sources → collection layer → processing → storage → UI]
+[How this feature fits into OpManager Plus architecture. Include a text-based or described diagram showing: data sources → collection layer → processing → storage → UI. Note for `generate-documents`: the DOCX embeds a small `matplotlib`-rendered static image here, not the interactive Archify flowchart HTML — Archify's output can't be embedded as a static picture.]
 
 ### 3.2 Data Flow
 [End-to-end data flow from monitored device to user-visible output. Step-by-step description of how data moves through the system.]
