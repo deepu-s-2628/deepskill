@@ -1,13 +1,13 @@
 ---
 name: enhancement-generate-documents
-description: "Generate production-quality PPTX, PDF, and DOCX files with professional design for enhancement deliverables. Use when the PM says 'generate files' after approving Step 5 enhancement deliverables."
+description: "Generate production-quality PPTX, PDF, and DOCX files with professional design for enhancement deliverables. Runs automatically right after Step 5's drafts are done — not gated on a PM command."
 ---
 
 # Generate Enhancement Documents
 
 ## Purpose
 
-Generate production-quality deliverable files from the approved Step 5 enhancement markdown drafts. You (the LLM) are the designer — write custom Python code for this specific enhancement that produces visually appealing, professionally designed output.
+Generate production-quality deliverable files from the finished Step 5 enhancement markdown drafts. You (the LLM) are the designer — write custom Python code for this specific enhancement that produces visually appealing, professionally designed output.
 
 
 ## Dense binary bar (PPTX / flowchart PDF)
@@ -53,7 +53,7 @@ Also check that `1_current_state.md` contains persona stories (search for "perso
 ## CRITICAL: Your Role as Designer
 
 Do NOT just call a generic template script. For each enhancement, you must:
-1. **Read the approved content** from Step 5 files (5a–5d)
+1. **Read the finished content** from Step 5 files (5a–5d)
 2. **Design the visuals** — decide what diagrams, charts, layouts, and images best communicate this specific enhancement
 3. **Write a custom `build_documents.py`** script in `ITOM-PM-Result/[feature-name]-enhancement/Generated/` that generates all files with tailored visuals
 4. **Run it** to produce the final files

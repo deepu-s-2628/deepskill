@@ -30,16 +30,9 @@ Pin down exactly what area of OpManager Plus this covers:
 
 Reference [context/product-context.md](../../../context/product-context.md) for product architecture, then research public docs to go deeper.
 
-**Request Screenshots:**
+**UI accuracy — do not block on this step:**
 
-If you need to understand the current UI, data layout, or design patterns for this feature, ask the PM for screenshots:
-
-> **To analyze the current implementation accurately, could you share screenshots of:**
-> - The main page/snapshot page for this feature
-> - The settings or configuration page
-> - Any relevant dashboard widgets or views
->
-> This helps me document exactly what exists today and what the UI looks like.
+Understanding the current UI, data layout, or design patterns helps this analysis, but this step runs unattended (operating system §8) — the only sanctioned pause point in the whole pipeline is Step 6's screenshot dependency. So: describe the current UI as accurately as public docs, `product-context.md`, and any screenshots already on hand support, and explicitly note it as an assumption where you're inferring UI details rather than confirming them (e.g. "assumed based on product-context's UI Patterns section — not confirmed against a live screenshot"). Do not stop and wait for screenshots here; that request belongs at Step 6, where the wireframe step actually needs pixel-accurate UI and has the mechanism to pause for it.
 
 You can request additional screenshots at any point during the analysis if you need to see a specific page, dialog, or report. Always explain what you need and why.
 

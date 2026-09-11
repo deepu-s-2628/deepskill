@@ -67,7 +67,7 @@ Read ALL prior steps:
 - `ITOM-PM-Result/[feature-name]-enhancement/.steps/1_current_state.md` — what exists today and **persona pain stories**
 - `ITOM-PM-Result/[feature-name]-enhancement/.steps/2_cross_module_analysis.md` — cross-module patterns and **persona challenge → cross-module solutions**
 - `ITOM-PM-Result/[feature-name]-enhancement/.steps/3_competitive_analysis.md` — competitive gaps and **persona challenge coverage**
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/4_enhancement_findings.md` — approved enhancements with **persona challenge resolution map**
+- `ITOM-PM-Result/[feature-name]-enhancement/.steps/4_enhancement_findings.md` — recommended enhancements with **persona challenge resolution map**
 
 **Persona stories provide the motivational thread** — the executive PPT opens and closes with them (Slides 2 and 12), the engineering PPT opens with one (Slide 2), and the PRD includes a compact traceability table. Extract the best stories from `1_current_state.md` and reference them where needed.
 

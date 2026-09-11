@@ -1,6 +1,6 @@
 ---
 name: enhancement-wireframe
-description: "Step 6 of Enhancement Pipeline: Produce a Lovable wireframe prompt that matches the current OpManager Plus design language and incorporates the approved enhancements. Requires screenshots of current UI before generating the prompt."
+description: "Step 6 of Enhancement Pipeline: Produce a Lovable wireframe prompt that matches the current OpManager Plus design language and incorporates the recommended enhancements from Step 4. Requires screenshots of current UI before generating the prompt."
 ---
 
 # Step 6 — Enhancement Wireframe Prompt (Lovable)
@@ -15,7 +15,7 @@ Read all prior steps:
 - `ITOM-PM-Result/[feature-name]-enhancement/.steps/1_current_state.md` — what exists today and **persona challenges**
 - `ITOM-PM-Result/[feature-name]-enhancement/.steps/2_cross_module_analysis.md` — patterns from other modules
 - `ITOM-PM-Result/[feature-name]-enhancement/.steps/3_competitive_analysis.md` — competitive inspiration
-- `ITOM-PM-Result/[feature-name]-enhancement/.steps/4_enhancement_findings.md` — approved enhancements and persona challenge resolution map
+- `ITOM-PM-Result/[feature-name]-enhancement/.steps/4_enhancement_findings.md` — recommended enhancements and persona challenge resolution map
 - `ITOM-PM-Result/[feature-name]-enhancement/.steps/5a_executive_presentation.md` — executive summary of changes
 - `ITOM-PM-Result/[feature-name]-enhancement/.steps/5b_engineering_presentation.md` — technical details of changes
 - `ITOM-PM-Result/[feature-name]-enhancement/.steps/5c_enhancement_prd.md` — full PRD with metrics and requirements
@@ -26,6 +26,8 @@ Read all prior steps:
 ## CRITICAL: Screenshot Collection
 
 **You cannot generate the Lovable prompt without screenshots of the current UI.** The wireframe must match the existing design — colors, layout patterns, navigation structure, component styles, typography, spacing.
+
+This is the one sanctioned pause point in the whole pipeline (operating system §8) — every other step runs unattended. If no usable screenshots exist yet, mark `STATUS.md` as `blocked_on_pm`, ask exactly what's below, and stop the run there until they're supplied; do not fabricate UI details to keep going, and do not ask for screenshots at any earlier step (current-state-analysis explicitly does not block on this — see its Step 2).
 
 ### Step A — Request Initial Screenshots
 
@@ -230,10 +232,10 @@ See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 ## Quality Gate (before marking complete)
 
 - [ ] Prompt written under correct `.steps/` path, `report.html` rebuilt
-- [ ] Scope matches approved Step 4/5 (no silent expansion)
-- [ ] Enhancement mode: screenshots analyzed before drafting
+- [ ] Scope matches Step 4/5 findings (no silent expansion)
+- [ ] Screenshots analyzed before drafting (or run correctly marked `blocked_on_pm` if none were available)
 - [ ] Paste-ready for Lovable (single coherent prompt)
-- [ ] `STATUS.md` → `done` when PM accepts
+- [ ] `STATUS.md` → `done`
 
 - [ ] `.steps/` markdown written, `report.html` rebuilt
 - [ ] Markdown is hidden under `.steps/`; HTML visible under `steps/`; never delete either or Generated artifacts

@@ -209,12 +209,9 @@ See `context/pm-operating-system.md` sections 3, 6, and 11–13.
 ## Quality Gate (before marking complete)
 
 - [ ] Prompt written under correct `.steps/` path, `report.html` rebuilt
-- [ ] Scope matches approved Step 4/5 (no silent expansion)
-- [ ] Enhancement mode: screenshots analyzed before drafting
+- [ ] Scope matches Step 4/5 findings (no silent expansion)
 - [ ] Paste-ready for Lovable (single coherent prompt)
-- [ ] `STATUS.md` → `done` when PM accepts
-
-- [ ] `.steps/` markdown written, `report.html` rebuilt
+- [ ] `STATUS.md` → `done`
 - [ ] Markdown is hidden under `.steps/`; HTML visible under `steps/`; never delete either or Generated artifacts
 
 

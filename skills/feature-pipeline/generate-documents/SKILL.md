@@ -1,6 +1,6 @@
 ---
 name: generate-documents
-description: "Generate production-quality PPTX, PDF, and DOCX files with professional design, embedded diagrams, and visual layouts for OpManager Plus feature documents. Use when the PM says 'generate files' after approving Step 5 deliverables."
+description: "Generate production-quality PPTX, PDF, and DOCX files with professional design, embedded diagrams, and visual layouts for OpManager Plus feature documents. Runs automatically right after Step 5's drafts are done — not gated on a PM command."
 ---
 
 # Generate Documents
@@ -53,7 +53,7 @@ Also check that `.steps/1_brainstorm.md` contains persona stories (search for "p
 ## CRITICAL: Your Role as Designer
 
 Do NOT just call a generic template script. For each feature, you must:
-1. **Read the approved content** from Step 5 files
+1. **Read the finished content** from Step 5 files
 2. **Design the visuals** — decide what diagrams, charts, layouts, and images best communicate this specific feature
 3. **Write a custom `build_documents.py`** script in `ITOM-PM-Result/[feature-name]/Generated/` that generates all files with tailored visuals
 4. **Run it** to produce the final files

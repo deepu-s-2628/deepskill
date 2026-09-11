@@ -1,6 +1,6 @@
 ---
 name: brainstorm
-description: "Step 1 of PM Feature Pipeline: Understand a feature idea deeply before any analysis begins. Produces a structured brainstorm document covering what it is, why it matters, who uses it, and key questions. Use when starting a new feature analysis for OpManager Plus."
+description: "Step 1 of PM Feature Pipeline: Understand a feature idea deeply before any analysis begins. Produces a structured brainstorm document covering what it is, why it matters, and who uses it. Use when starting a new feature analysis for OpManager Plus."
 ---
 
 # Step 1 — Brainstorm
@@ -154,8 +154,8 @@ No RFC dumps.]
 - **Existing reuse:** …
 - **New requirements:** …
 
-## Key Questions to Resolve
-[Batch all PM questions here.]
+## Assumptions & Open Items
+[This step runs unattended — wayfinding (Step 0) was the only interactive point. Anything that would otherwise be a question for the PM gets resolved here as a stated, reasonable assumption instead of left open. List each one so a later step or the final report can see what was assumed and revisit it if wrong.]
 
 1. …
 2. …
