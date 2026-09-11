@@ -11,7 +11,7 @@
 ## 1. Mission
 
 Produce opinionated, **immediately usable** product work for **OpManager Plus / OpManager Nexus**:
-wayfinding → research → analysis → definition → **dense HTML slide deck + Archify diagram + DOCX PRD** → Lovable wireframe prompt + static prototype → **one consolidated HTML report**.
+wayfinding → research → analysis → definition → **dense HTML slide deck + Archify diagram + DOCX PRD** → **one consolidated HTML report**, with an optional Lovable wireframe prompt + static prototype the PM can request once everything else is ready.
 
 Agents are **product operators**, not brainstorming chatbots. Prefer one clear recommendation over option menus.
 
@@ -25,7 +25,7 @@ Agents are **product operators**, not brainstorming chatbots. Prefer one clear r
 
 Before any research step runs, `ask-deepu` interrogates the request itself: does this actually belong in OpManager Plus/Nexus, is it a feature or an enhancement, and what does the rest of the pipeline need locked down before it can run unattended. See `skills/ask-deepu/SKILL.md` for the full interview process — there is no separate wayfinding skill; it's `ask-deepu`'s own first phase.
 
-Wayfinding is the **only** interactive phase in the whole pipeline (Section 8). It concludes one of three ways, and nothing downstream may skip or second-guess this conclusion:
+Wayfinding is the **first** of two sanctioned interactive checkpoints in the whole pipeline (Section 8) — the second comes after Step 5 and document generation, asking only whether the PM wants the optional Step 6 wireframe deliverables. Wayfinding itself concludes one of three ways, and nothing downstream may skip or second-guess this conclusion:
 
 | Conclusion | What happens next |
 |---|---|
@@ -53,7 +53,7 @@ All paths are relative to the **opened workspace root**. There is no wrapper fol
 ├── executive-brief.html        ← executive slide deck (frontend-slides, HTML)
 ├── engineering-brief.html      ← engineering slide deck (frontend-slides, HTML)
 ├── product-requirements.docx   ← PRD, python-docx
-├── prototype.html              ← static-HTML mockup of the primary screen (Step 6, design-taste §11b)
+├── prototype.html              ← static-HTML mockup of the primary screen (Step 6, opt-in — §8; design-taste §11b)
 └── .steps/                     ← HIDDEN: markdown source of truth + build scripts (agent edit/resume)
     ├── 0_wayfinding.md
     ├── 1_brainstorm.md
@@ -75,7 +75,7 @@ All paths are relative to the **opened workspace root**. There is no wrapper fol
 Same flat pattern, folder named `[slug]-enhancement/`:
 - `.steps/*.md` — hidden sources, starting with `0_wayfinding.md`
 - `analysis.html` — the one consolidated deliverable
-- `architecture.html`, `executive-brief.html`, `engineering-brief.html`, `product-requirements.docx`, `prototype.html` — same deliverable set as feature mode
+- `architecture.html`, `executive-brief.html`, `engineering-brief.html`, `product-requirements.docx` — same deliverable set as feature mode; `prototype.html` and `.steps/6_*.md` only exist if the PM opts into Step 6 (§8)
 
 ### Hard rules
 
@@ -85,7 +85,7 @@ Same flat pattern, folder named `[slug]-enhancement/`:
 4. **Diagrams are Archify HTML**, visible at the topic-folder root (e.g. `architecture.html`) *and* referenced from the relevant step's markdown with a `<!-- diagram: architecture.html -->` marker line — `build_report.py` turns that into an embedded, interactive `<iframe>` in the right section. There is no PDF flowchart.
 5. **Slide decks are HTML** (`frontend-slides`), not PPTX. Two decks — `executive-brief.html` (executive audience) and `engineering-brief.html` (engineering audience) — each self-contained, animation-capable, and openable directly in a browser.
 6. **The PRD stays DOCX** (`python-docx`), unchanged from before.
-7. **Retention — never delete** `.steps/*.md`, `analysis.html`, `Progress.md`, the deliverable files at the topic-folder root (including `prototype.html`), or `.steps/build_docx.py`.
+7. **Retention — never delete** `.steps/*.md`, `analysis.html`, `Progress.md`, the deliverable files at the topic-folder root (including `prototype.html`, when the PM opted into it), or `.steps/build_docx.py`.
 8. Do not invent alternate layout names (`output/`, `docs/`, `Generated/`, `steps/` without the dot).
 9. Chat summaries should **highlight the `analysis.html` path** for reviewers; mention MD only as internal source.
 
@@ -126,7 +126,7 @@ Create/update `[folder]/Progress.md` at every step boundary.
 | Current step | [N] — [name] |
 | Step status | running_autonomously \| blocked_on_pm \| complete |
 | Last updated | [YYYY-MM-DD] |
-| Next action | resolve_blocker \| step_N+1 \| done |
+| Next action | resolve_blocker \| step_N+1 \| awaiting_step6_choice \| done |
 
 ## Completed steps
 - [x] Step 0 — Wayfinding (`.steps/0_wayfinding.md`)
@@ -183,18 +183,32 @@ Applies hardest to **brainstorm / current-state openers**, and still applies to 
 
 ---
 
-## 8. Sequential Workflow: Wayfind Interacts, Everything After Runs Unattended
+## 8. Sequential Workflow: Two Sanctioned Checkpoints, Everything Else Runs Unattended
 
-**Wayfind is the only checkpoint.** Once it reaches a "Proceed" conclusion (Section 2), the matching orchestrator runs every remaining step — including document generation (Section 13) and the wireframe prompt — back-to-back with **no pause for approval between steps**. The PM does not need to reply `proceed` at any point after wayfinding.
+**Two points in the whole pipeline are deliberate, sanctioned checkpoints — every other step runs unattended.** Both are **scope or consent decisions**, never a content review: nothing about Steps 1–5's actual analysis, or Step 6's actual output once it runs, gets re-litigated at either checkpoint.
 
-For each step, in order:
+1. **Wayfinding** (Section 2), before anything runs: does this request even belong in OpManager Plus/Nexus, and in what mode. Concludes "Proceed"/"Stop".
+2. **The Step 6 choice**, after Step 5 and document generation finish: does the PM want the optional wireframe deliverables at all. Ask exactly this, in the same lettered-option style as wayfinding:
+
+   > **Analysis and documents are ready:** `analysis.html`, `architecture.html`, `executive-brief.html`, `engineering-brief.html`, `product-requirements.docx`. Would you like the Step 6 wireframe deliverables too?
+   >
+   > A. Both — the Lovable prompt and a static prototype (Recommended)
+   > B. Just the Lovable prompt
+   > C. Just the static prototype
+   > D. Neither — I'm done here
+
+   - **A/B/C**: run Step 6 (`lovable-wireframe`/`enhancement-wireframe`), scoped to only the artifact(s) chosen. The enhancement pipeline's screenshot-blocking pause (an unplanned exception, below) still applies independently whenever the choice includes anything that needs it — it is not part of this checkpoint.
+   - **D**: set `Progress.md`'s `Next action` to `done` immediately. No Step 6 skill runs; `.steps/6_*.md` and `prototype.html` simply don't exist for this run.
+   - While waiting for this answer, `Progress.md`'s `Next action` reads `awaiting_step6_choice` (Section 5).
+
+Once either checkpoint resolves toward doing more work, everything from there runs unattended, for each step, in order:
 1. Produce the step.
 2. Write `.steps/*.md`.
 3. Rebuild `analysis.html` (Section 6).
 4. Update `Progress.md`.
 5. Move immediately to the next step. Do not stop and wait.
 
-### The two real exceptions
+### The two real exceptions (unplanned — distinct from the two sanctioned checkpoints above)
 - **Hard blocker with no safe default** (e.g. the wireframe step needs real screenshots and none exist, or a step's own quality gate fails and can't be self-corrected): pause, ask the *specific* thing needed, resume the same run once answered. This is a genuine dependency gap, not a review gate.
 - **The PM interrupts mid-run** (sends a new message while a run is in progress): stop what you're doing, address what they said, then resume the autonomous chain unless they've asked you to stop for good.
 
@@ -205,7 +219,7 @@ For each step, in order:
 | `status` / `where are we` | Summarize from `Progress.md` + `.steps/` + `analysis.html` |
 | `pause` / `stop` | Stop; leave `Progress.md` accurate so the run can resume later |
 
-There is no `generate files` command to wait for anymore — document generation (Section 13) runs automatically as part of the same unattended chain once Step 5's drafts are done.
+There is no `generate files` command to wait for anymore — document generation (Section 13) runs automatically as part of the same unattended chain once Step 5's drafts are done, right up to the Step 6 choice above.
 
 ---
 
@@ -382,11 +396,16 @@ This applies to `analysis.html`'s own styling, and to `prototype.html` (Step 6's
 - [ ] `.steps/*.md` still present after generation
 - [ ] `product-requirements.docx`, `executive-brief.html`, `engineering-brief.html`, `architecture.html` all openable and content-complete
 
-### Step 6 wireframe
+### Step 6 opt-in choice (Section 8)
+- [ ] PM asked the A/B/C/D question exactly once, after document generation, before Step 6 might run
+- [ ] Chosen scope (both / prompt only / prototype only / neither) respected exactly — no silent expansion or contraction
+- [ ] If "neither": `Progress.md` → `done`, no Step 6 skill invoked, `.steps/6_*.md`/`prototype.html` correctly absent
+
+### Step 6 wireframe (only applies when the PM opted in — Section 8)
 - [ ] `.steps/` path correct, report rebuilt
-- [ ] Enhancement: screenshots first — this is the one place a real blocker can still pause the run (Section 8)
-- [ ] Paste-ready Lovable prompt
-- [ ] `prototype.html` written at the topic-folder root, follows `skills/design-taste/SKILL.md` (Section 11b)
+- [ ] Enhancement: screenshots first — this is one of the two unplanned exceptions that can still pause the run (Section 8), unrelated to the opt-in choice above
+- [ ] If the Lovable prompt was chosen: paste-ready
+- [ ] If the prototype was chosen: `prototype.html` written at the topic-folder root, follows `skills/design-taste/SKILL.md` (Section 11b)
 - [ ] Scope matches wayfinding conclusion only
 
 ---
@@ -416,7 +435,7 @@ There is no single wrapper folder to list — a PM run's topic folder sits direc
 3. Read all `.steps/*.md`.
 4. Rebuild `analysis.html` (Section 6) so it reflects everything read.
 5. Note which topic-folder deliverables already exist so regeneration doesn't start from scratch unnecessarily.
-6. If `Progress.md` shows `blocked_on_pm`, summarize the specific blocker and ask for just that. Otherwise resume the autonomous chain from the next step — do not wait for a `proceed`.
+6. If `Progress.md` shows `blocked_on_pm`, summarize the specific blocker and ask for just that. If it shows `awaiting_step6_choice`, do not re-run Steps 1–5 — they're already complete — just re-surface the same A/B/C/D question from Section 8 and wait. Otherwise resume the autonomous chain from the next step — do not wait for a `proceed`.
 
 If the PM doesn't know the slug and asks what runs exist, it's fine to look for direct child directories of the workspace root that contain both `Progress.md` and `.steps/` — but never treat an unrelated directory as a PM run just because it exists.
 
@@ -425,9 +444,9 @@ If the PM doesn't know the slug and asks what runs exist, it's fine to look for 
 ## 15. Chat UX Contract
 
 - Keep mid-step narration short; put detail in files.
-- Wayfinding is the only step that narrates interactively (Section 8) — every step after it just runs, with Progress.md as the source of "where are we" if asked.
+- Wayfinding and the Step 6 choice are the only two points that narrate interactively (Section 8) — every other step just runs, with Progress.md as the source of "where are we" if asked.
 - End the whole run with a summary + the **`analysis.html`** path.
-- Batch questions (applies to wayfinding; nothing after it asks questions except a genuine blocker).
+- Batch questions (applies to wayfinding and the Step 6 choice; nothing else asks questions except a genuine blocker).
 - Be decisive.
 
 ---
@@ -436,7 +455,7 @@ If the PM doesn't know the slug and asks what runs exist, it's fine to look for 
 
 - Production Java/JS implementation code in PM artifacts
 - Silent scope expansion beyond the wayfinding conclusion
-- Pausing between steps for review once wayfinding has concluded
+- Pausing between steps to review a step's *content* once wayfinding has concluded — the Step 6 choice (Section 8) is not this: it's a one-time scope question about whether an entirely optional later deliverable should run at all, never a re-litigation of Steps 1–5's or Step 6's own output
 - Secrets/customer private data in a PM run's topic folder
 - Putting markdown anywhere but hidden `.steps/`
 - Per-step HTML files (superseded by the single `analysis.html`)

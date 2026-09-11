@@ -7,7 +7,7 @@ argument-hint: "A feature idea, or an existing feature to improve"
 
 # Ask Deepu
 
-The one and only interactive step in the whole pipeline. Everything after this runs without asking the PM anything else — so don't let a wrong assumption slip through here.
+The first of two sanctioned interactive checkpoints in the whole pipeline — the second is a short Step 6 opt-in choice, much later, after everything else is done (`context/pm-operating-system.md` §8). Everything between here and that later choice runs without asking the PM anything else — so don't let a wrong assumption slip through here.
 
 ## Why the interrogation happens here, not later
 
@@ -57,6 +57,6 @@ A PM's one-line request is not enough to safely run seven unattended pipeline st
 
 ## Completion
 
-After reaching a "Proceed" conclusion, do not pause for approval — hand off immediately to the matching agent (`ask-deepu-feature` or `ask-deepu-enhancement`), which runs every remaining step back-to-back without further confirmation. Say so plainly in your conclusion message so the PM knows what happens next and when to expect the finished consolidated report (`analysis.html`, sitting directly in the topic folder). See `.github/agents/Ask-Deepu-feature.agent.md` / `Ask-Deepu-enhancement.agent.md` for the full workflow each pipeline follows.
+After reaching a "Proceed" conclusion, do not pause for approval — hand off immediately to the matching agent (`ask-deepu-feature` or `ask-deepu-enhancement`), which runs Steps 1–5 and document generation back-to-back without further confirmation, then asks one more short question before Step 6 (operating system §8). Say so plainly in your conclusion message so the PM knows what happens next and when to expect the finished consolidated report (`analysis.html`, sitting directly in the topic folder). See `.github/agents/Ask-Deepu-feature.agent.md` / `Ask-Deepu-enhancement.agent.md` for the full workflow each pipeline follows.
 
 For a "Stop" conclusion, end there — no folder, no handoff, just the explanation and (if there's a plausible next step, like "this fits as an integration from a different product") a one-line suggestion of what that would look like.

@@ -44,7 +44,7 @@ Describe what you want, prefixed with `ask-deepu` (typing `/ask-deepu` shows a g
 
 `ask-deepu` interrogates it first — that's its own job, not a separate step you have to invoke. Before anything else happens: does this actually belong in OpManager Plus/Nexus, is it a net-new feature or an improvement to something existing, and what does the rest of the pipeline need to know. It can conclude the request doesn't fit at all and stop there — that's a first-class outcome, not a failure.
 
-Once that interrogation ("wayfinding") concludes "proceed," the matching pipeline runs every remaining step back-to-back with **no further pauses** — no `proceed`/`approve` replies needed. The one exception: the enhancement pipeline's wireframe step will still stop and ask for screenshots if none exist, since that's a real dependency, not a review gate.
+Once that interrogation ("wayfinding") concludes "proceed," the matching pipeline runs every remaining step back-to-back with **no further pauses** through Steps 1–5 and document generation — no `proceed`/`approve` replies needed. Once documents are ready, there's one more short check-in: whether you want the Step 6 wireframe deliverables (the Lovable prompt, a static prototype, both, or neither) at all — a one-time scope question, not a content review. The enhancement pipeline's wireframe step has its own separate, unrelated exception: it'll stop and ask for screenshots if none exist, since that's a real dependency.
 
 Everything lands directly in your workspace, no wrapper folder — a topic folder named after the slug, e.g. `vxlan-monitoring/` (or `vxlan-monitoring-enhancement/`). The files inside it are named for their role, not the slug — same name in every topic folder, same idea as `README.md`, so it's always obvious which one to open first:
 
@@ -56,7 +56,7 @@ vxlan-monitoring/
 ├── executive-brief.html        ← executive slide deck
 ├── engineering-brief.html      ← engineering slide deck
 ├── product-requirements.docx   ← PRD
-├── prototype.html              ← static-HTML mockup of the primary screen
+├── prototype.html              ← static-HTML mockup of the primary screen (only if you opt into Step 6)
 └── .steps/                     ← hidden markdown history, kept for resume
 ```
 
@@ -92,7 +92,7 @@ vxlan-monitoring/
 
 | Skill | Purpose |
 |---|---|
-| `ask-deepu` | Entry point and the only interactive step — interrogates fit, mode, and scope, then hands off to the right pipeline |
+| `ask-deepu` | Entry point and the first of two interactive checkpoints — interrogates fit, mode, and scope, then hands off to the right pipeline |
 | `wait-what` | "That didn't land — re-pitch it simpler" |
 | `archify` | Vendored in full (`skills/archify/`) — renders the flowchart and any other diagrams as interactive HTML |
 | `frontend-slides` | Vendored in full (`skills/frontend-slides/`) — authors the executive/engineering slide decks as self-contained, animation-capable HTML |
@@ -131,6 +131,11 @@ Unreleased — three sequential milestones (each its own changeset, shipped in t
 1. **Done.** Design taste for `analysis.html`. Curated the stack-agnostic parts of [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) (`design-taste-frontend` v2) into `skills/design-taste/` — its color/typography/shape/spacing discipline and its process of naming and avoiding generic-AI defaults, not its React/Motion/npm-component-library machinery or landing-page structure rules, neither of which fit this repo's zero-build-step static-HTML deliverables — and applied it to the report's styling: one held accent color (ManageEngine brand blue), row-separator tables instead of a full boxed grid, a readable prose measure, real focus states.
 2. **Done.** A `prototype.html` deliverable for Step 6. Additive alongside the existing Lovable-prompt output: a real, static-HTML mockup of the primary screen (or, in enhancement mode, the enhanced main page with existing/new/modified coding), rendered using the same design-taste groundwork from milestone 1, for a PM who wants to see the idea fast rather than iterate further in an external tool.
 3. **Planned.** `unlazy` gates for the pipeline's Quality Gate checklists. Translates today's self-reported, qualitative gates (e.g. "2–3 named persona stories") into mechanically-verified `CHECK:`/`EXPECT:` pairs — self-correcting only, never pausing the autonomous run (Section 8's never-pause contract stays intact). Shipped last and standalone since it's the least-proven pattern of the three; isolating it keeps a rough edge here from entangling the (lower-risk) taste and prototype work.
+
+Also unreleased, not part of the taste/unlazy sequence above:
+
+- **Done.** Step 6 (the Lovable prompt and `prototype.html`) is opt-in. Once Steps 1–5 and document generation finish, the PM is asked once — both / just the prompt / just the prototype / neither — a second sanctioned check-in alongside wayfinding, reconciled explicitly in `pm-operating-system.md` §8 as a scope/consent decision, never a content review, so it doesn't quietly reopen the "no per-step pauses" contract it sits inside.
+- **Planned.** OpManager Nexus design fidelity for `prototype.html`. Milestone 2's mockups apply general good taste (design-taste's principles) but don't know the real product's actual components, layout patterns, or visual language — so a prototype can look tasteful without looking like OpManager Nexus. This needs a new skill or context resource capturing the real design system (navigation shape, card/table/widget patterns, real color tokens, spacing) for `prototype.html` to build against, the same way `product-context.md` already grounds the analysis steps in the real product's feature catalog.
 
 Also still planned, unversioned:
 

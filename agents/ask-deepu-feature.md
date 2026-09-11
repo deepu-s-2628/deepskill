@@ -22,7 +22,7 @@ Never ask basic product questions answered in product-context. Never invent alte
 - **Be decisive on technical choices.** Pick ONE primary data-collection approach with clear reasoning.
 - **No implementation code** in PM artifacts (architecture and contracts only).
 - **Cite sources** for competitive/technical external claims.
-- **Run unattended.** Wayfinding was the only interactive step. Do not pause between steps or wait for a `proceed` — the two real exceptions (a genuine hard blocker, or the PM interrupting mid-run) are in operating system §8.
+- **Run unattended except at two sanctioned checkpoints.** Wayfinding (before Step 1) and the Step 6 choice (after document generation) — both scope/consent decisions, never a content review. Do not pause anywhere else, and don't wait for a `proceed` — the two unplanned exceptions (a genuine hard blocker, or the PM interrupting mid-run) are in operating system §8.
 - **Maintain `Progress.md`** at every step boundary (see operating system).
 - **Plain language bar** — especially Step 1: simple English, easy examples, explain why the technology exists (see operating system §7).
 - **Consolidated report** — write markdown under hidden `.steps/`; rebuild `analysis.html` after every step (operating system §6).
@@ -53,7 +53,7 @@ After finishing a step:
 
 ## Sequential Workflow
 
-Wayfinding already ran setup: the slug, `[slug]/`, `.steps/`, `Progress.md`, and `.steps/0_wayfinding.md` all exist before you start. Begin at Step 1 and run straight through to Step 6 without stopping.
+Wayfinding already ran setup: the slug, `[slug]/`, `.steps/`, `Progress.md`, and `.steps/0_wayfinding.md` all exist before you start. Begin at Step 1 and run straight through Steps 1–5 and document generation without stopping. Then ask the Step 6 choice below before deciding whether Step 6 runs at all.
 
 ---
 
@@ -108,18 +108,31 @@ Rebuild report → move straight into document generation, no pause.
 4. Write `.steps/build_docx.py` (resolve `generate_docx.py` via `**/generate_docx.py`) and run it to produce `product-requirements.docx`
 5. **Keep** `.steps/build_docx.py` and `.steps/diagrams/flowchart.json` after success (for regeneration)
 6. **Never delete** any `.steps/*.md` or `analysis.html` after the deliverables are produced
-7. Update `Progress.md`, rebuild report, continue to Step 6
+7. Update `Progress.md`, rebuild report, then ask the Step 6 choice below
 
 Visual bar: real diagram structure, comparison matrices, KPI cards, layout diversity — not bullet-only decks. The flowchart must be a real Archify diagram, not a Mermaid text dump.
 
 ---
 
-### Step 6 — Lovable Wireframe Prompt
+### Step 6 choice — the second sanctioned checkpoint (operating system §8)
+
+Once document generation finishes, stop and ask exactly this:
+
+> **Analysis and documents are ready:** `analysis.html`, `architecture.html`, `executive-brief.html`, `engineering-brief.html`, `product-requirements.docx`. Would you like the Step 6 wireframe deliverables too?
+>
+> A. Both — the Lovable prompt and a static prototype (Recommended)
+> B. Just the Lovable prompt
+> C. Just the static prototype
+> D. Neither — I'm done here
+
+Set `Progress.md`'s `Next action` to `awaiting_step6_choice` while waiting. On A/B/C, proceed to Step 6 below, scoped to what was chosen. On D, set `Next action` to `done` immediately — no Step 6 skill runs, and `.steps/6_lovable_wireframe.md`/`prototype.html` simply don't exist for this run.
+
+### Step 6 — Lovable Wireframe Prompt (only if A/B/C was chosen)
 **Skill:** [skills/feature-pipeline/lovable-wireframe/SKILL.md](../skills/feature-pipeline/lovable-wireframe/SKILL.md)
 
-**Output:** `.steps/6_lovable_wireframe.md` + `prototype.html` (topic-folder root, static HTML rendering the primary screen — see the skill for the exact spec) → rebuild report → mark `Progress.md` as `done`.
+**Output (scoped to the PM's choice):** `.steps/6_lovable_wireframe.md` (A/B) and/or `prototype.html` (A/C, topic-folder root, static HTML rendering the primary screen — see the skill for the exact spec) → rebuild report → mark `Progress.md` as `done`.
 
-Report the finished `analysis.html` path to the PM, and mention `prototype.html` as the fastest way to actually see the idea. This is the first and only point in the run where you present a result — there was nothing to approve in between.
+Report the finished `analysis.html` path to the PM, and mention `prototype.html` as the fastest way to actually see the idea if it was built. This is the first point in the run where you present a result and the only point (besides wayfinding) where the PM makes a choice — nothing about the analysis itself was ever up for approval.
 
 ---
 
@@ -133,7 +146,7 @@ Report the finished `analysis.html` path to the PM, and mention `prototype.html`
 ├── executive-brief.html        ← executive slide deck
 ├── engineering-brief.html      ← engineering slide deck
 ├── product-requirements.docx   ← PRD
-├── prototype.html              ← static-HTML mockup of the primary screen
+├── prototype.html              ← static-HTML mockup of the primary screen (only if chosen — §8)
 └── .steps/                     ← HIDDEN markdown sources + build script
     ├── 0_wayfinding.md
     ├── 1_brainstorm.md
@@ -141,7 +154,7 @@ Report the finished `analysis.html` path to the PM, and mention `prototype.html`
     ├── 3_technical_analysis.md
     ├── 4_feature_definition.md
     ├── 5a…5d …
-    ├── 6_lovable_wireframe.md
+    ├── 6_lovable_wireframe.md   ← only if chosen — §8
     ├── diagrams/flowchart.json
     └── build_docx.py
 ```
@@ -150,6 +163,7 @@ Report the finished `analysis.html` path to the PM, and mention `prototype.html`
 
 1. Read `.steps/0_wayfinding.md` for the slug and locked decisions
 2. Load operating system + product-context
-3. Run Steps 1–6 back-to-back, rebuilding `analysis.html` after each
-4. Enforce quality gates from the operating system before marking any step complete
-5. Only stop early for a genuine hard blocker (operating system §8) or a PM interruption
+3. Run Steps 1–5 and document generation back-to-back, rebuilding `analysis.html` after each
+4. Ask the Step 6 choice (operating system §8), then run Step 6 scoped to the answer — or stop at `done` if the PM said neither
+5. Enforce quality gates from the operating system before marking any step complete
+6. Only stop early for a genuine hard blocker (operating system §8) or a PM interruption

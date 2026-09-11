@@ -9,6 +9,8 @@ description: "Step 6 of PM Feature Pipeline: Produce a complete, detailed prompt
 
 Produce a comprehensive, ready-to-paste prompt for Lovable that will generate a complete wireframe/prototype of this feature as it would appear inside OpManager Plus.
 
+**This step only runs when the PM has opted into it.** The orchestrator asks once, right after Step 5 and document generation finish, whether the PM wants the Lovable prompt, the static prototype, both, or neither (`context/pm-operating-system.md` §8). Draft the spec below in full regardless of which of A/B/C was chosen — it's the shared source `prototype.html` reuses, so there's no wasted work — but only render `prototype.html` if the choice includes it, and shape the Completion message (below) to what was actually chosen.
+
 ## Input
 
 Read all prior step files, particularly:
@@ -186,7 +188,7 @@ For each persona story from Step 1, describe how the wireframe solves their chal
 
 ## Static Prototype (`prototype.html`)
 
-In addition to the Lovable prompt above, render **Screen 1** (the primary/dashboard screen already specified above) as a real, self-contained static HTML mockup. This is the "see it now" deliverable; the Lovable prompt above is still the "keep iterating" one — both ship, neither replaces the other.
+**Only build this if the PM's Step 6 choice included the prototype (A or C above).** When it did: render **Screen 1** (the primary/dashboard screen already specified above) as a real, self-contained static HTML mockup. This is the "see it now" deliverable; the Lovable prompt above is the "keep iterating" one — when both were chosen, ship both, neither replaces the other.
 
 - **Reuse the spec, don't re-derive it.** Screen 1's layout, components table, and data already exist above — render exactly that screen, with the same widgets, the same table columns, the same realistic mock data (never lorem ipsum, matching "Additional Notes for Lovable" above).
 - **Follow `skills/design-taste/SKILL.md` in full** — read it before writing this file. In particular: one accent color held everywhere (ManageEngine brand blue, `#0078d4` — the same color already specified in this prompt's own "Color scheme" above, so the prototype and whatever Lovable later builds actually match), row-separator tables (not a full boxed grid + zebra), a documented shape scale, real `:focus-visible` states, no AI-slop defaults.
@@ -204,17 +206,20 @@ Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and,
 
 ## Quality Gate (before marking complete)
 
-- [ ] Prompt written under correct `.steps/` path, `analysis.html` rebuilt
+- [ ] PM's Step 6 choice (A/B/C from operating system §8) respected exactly — nothing built beyond what was chosen
+- [ ] Spec written under correct `.steps/` path, `analysis.html` rebuilt
 - [ ] Scope matches Step 4/5 findings (no silent expansion)
-- [ ] Paste-ready for Lovable (single coherent prompt)
-- [ ] `prototype.html` written at the topic-folder root, renders the same Screen 1 spec, follows `skills/design-taste/SKILL.md`
+- [ ] If the Lovable prompt was chosen (A/B): paste-ready (single coherent prompt)
+- [ ] If the prototype was chosen (A/C): `prototype.html` written at the topic-folder root, renders the same Screen 1 spec, follows `skills/design-taste/SKILL.md`
 - [ ] `Progress.md` → `done`
 
 
 ## Completion
 
-After producing the document, say:
+After producing the chosen artifact(s), say (include only the lines matching what was actually chosen):
 
-> **Step 6 complete.** Review `6_lovable_wireframe.md`. When ready, copy the entire content of this file and paste it into Lovable's prompt to generate your prototype. Or open `prototype.html` directly to see the primary screen now.
+> **Step 6 complete.**
+> [If the Lovable prompt was chosen:] Review `6_lovable_wireframe.md` (hidden under `.steps/`). When ready, copy its content into Lovable's prompt to generate your prototype.
+> [If the prototype was chosen:] Open `prototype.html` to see the primary screen now.
 >
 > **🎉 Feature pipeline complete!** All artifacts are in `[feature-name]/`.

@@ -9,6 +9,8 @@ description: "Step 6 of Enhancement Pipeline: Produce a Lovable wireframe prompt
 
 Generate a Lovable prompt that produces a wireframe/prototype showing the **enhanced** version of an existing feature. Unlike new-feature wireframes (which design from scratch), enhancement wireframes must **match the current OpManager Plus design language exactly** and show only what changes.
 
+**This step only runs when the PM has opted into it.** The orchestrator asks once, right after Step 5 and document generation finish, whether the PM wants the Lovable prompt, the static prototype, both, or neither (`context/pm-operating-system.md` §8). The screenshot-collection requirement below is unrelated and unconditional — it applies whenever this step runs at all, regardless of which artifact(s) were chosen, since both the prompt and the prototype need the real design system it extracts.
+
 ## Input
 
 Read all prior steps:
@@ -209,7 +211,7 @@ Write to `[feature-name]-enhancement/.steps/6_enhancement_wireframe.md`
 
 ## Static Prototype (`prototype.html`)
 
-In addition to the Lovable prompt above, render **Page 1** (the enhanced main page, already specified above) as a real, self-contained static HTML mockup. This is the "see it now" deliverable; the Lovable prompt above is still the "keep iterating" one — both ship, neither replaces the other.
+**Only build this if the PM's Step 6 choice included the prototype (A or C — see Purpose above).** When it did: render **Page 1** (the enhanced main page, already specified above) as a real, self-contained static HTML mockup. This is the "see it now" deliverable; the Lovable prompt above is the "keep iterating" one — when both were chosen, ship both, neither replaces the other.
 
 - **Reuse the spec and the extracted design system, don't re-derive either.** Page 1's layout and its existing/enhanced/new element breakdown already exist above, and the actual colors/typography/component styles came from the PM's own screenshots (Step B/D above) — this prototype must match the real current OpManager Plus design, not a generic one.
 - **Mark what changed, per the Design Matching Rules above**: use the same existing/new/modified visual distinction this pipeline already uses elsewhere (green `#28A745` = existing/keep, blue `#0078D4` = new, orange `#FD7E14` = modified — the same coding used in this run's Archify flowchart and PRD) rather than inventing a different scheme for the prototype alone.
@@ -227,18 +229,19 @@ Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and,
 
 ## Quality Gate (before marking complete)
 
-- [ ] Prompt written under correct `.steps/` path, `analysis.html` rebuilt
+- [ ] PM's Step 6 choice (A/B/C from operating system §8) respected exactly — nothing built beyond what was chosen
+- [ ] Spec written under correct `.steps/` path, `analysis.html` rebuilt
 - [ ] Scope matches Step 4/5 findings (no silent expansion)
-- [ ] Screenshots analyzed before drafting (or run correctly marked `blocked_on_pm` if none were available)
-- [ ] Paste-ready for Lovable (single coherent prompt)
-- [ ] `prototype.html` written at the topic-folder root, renders Page 1 with the extracted design system + existing/new/modified color coding
+- [ ] Screenshots analyzed before drafting (or run correctly marked `blocked_on_pm` if none were available) — unconditional, applies whenever this step runs at all
+- [ ] If the Lovable prompt was chosen (A/B): paste-ready (single coherent prompt)
+- [ ] If the prototype was chosen (A/C): `prototype.html` written at the topic-folder root, renders Page 1 with the extracted design system + existing/new/modified color coding
 - [ ] `Progress.md` → `done`
 
 
 
 ## Completion
 
-After writing the file, display in chat:
+After producing the chosen artifact(s), display in chat (include only the lines matching what was actually chosen):
 
 ---
 
@@ -250,9 +253,8 @@ After writing the file, display in chat:
 > **Enhanced elements:** [N] modifications to existing UI
 > **New elements added:** [N] new components in existing style
 >
-> The Lovable prompt in `6_enhancement_wireframe.md` matches the current OpManager Plus design language and shows exactly what changes with the enhancements. `prototype.html` renders the enhanced main page now.
->
-> **To use:** Copy the prompt into Lovable to generate the prototype.
+> [If the Lovable prompt was chosen:] The Lovable prompt in `6_enhancement_wireframe.md` (hidden under `.steps/`) matches the current OpManager Plus design language and shows exactly what changes with the enhancements. Copy it into Lovable to generate the prototype.
+> [If the prototype was chosen:] `prototype.html` renders the enhanced main page now.
 >
 > 🎉 **Enhancement analysis pipeline complete!**
 

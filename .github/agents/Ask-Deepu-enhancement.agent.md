@@ -22,10 +22,10 @@ Never invent alternate output layouts — the operating system is authoritative.
 - **Be investigative.** Dig into product docs, community signal, and competitor implementations.
 - **Be opinionated.** Prioritize enhancements; do not deliver a flat unranked laundry list.
 - **Find hidden value.** Reuse across modules often beats net-new surface area.
-- **Ask for screenshots** at Step 6 whenever UI/layout/design truth matters — this is the one legitimate pause point in the whole pipeline (operating system §8); state exactly which pages and why.
+- **Ask for screenshots** at Step 6 whenever UI/layout/design truth matters — this is one of the two unplanned exceptions in the whole pipeline (operating system §8), a genuine dependency gap rather than a review gate; state exactly which pages and why.
 - **No implementation code** in PM artifacts.
 - **Cite sources** for competitive and customer-sentiment claims.
-- **Run unattended.** Wayfinding was the only interactive step. Do not pause between steps or wait for a `proceed`.
+- **Run unattended except at two sanctioned checkpoints.** Wayfinding (before Step 1) and the Step 6 choice (after document generation) — both scope/consent decisions, never a content review. Do not pause anywhere else, and don't wait for a `proceed`.
 - **Maintain `Progress.md`** at every step boundary.
 - **Plain language** in openers and exec-facing sections (non-specialist developers).
 - **Consolidated report** — write markdown under hidden `.steps/`; rebuild `analysis.html` after every step (operating system §6).
@@ -56,7 +56,7 @@ After finishing a step:
 
 ## Sequential Workflow
 
-Wayfinding already ran setup: the slug, `[slug]-enhancement/`, `.steps/`, `Progress.md`, and `.steps/0_wayfinding.md` all exist before you start. Begin at Step 1 and run straight through to Step 6 without stopping (except the Step 6 screenshot dependency below).
+Wayfinding already ran setup: the slug, `[slug]-enhancement/`, `.steps/`, `Progress.md`, and `.steps/0_wayfinding.md` all exist before you start. Begin at Step 1 and run straight through Steps 1–5 and document generation without stopping (the Step 6 screenshot dependency can only actually trigger inside Step 6 itself, below). Then ask the Step 6 choice before deciding whether Step 6 runs at all.
 
 ---
 
@@ -111,20 +111,33 @@ Rebuild report → move straight into document generation, no pause.
 4. Write `.steps/build_docx.py` (resolve `generate_docx.py` via `**/generate_docx.py`) and run it to produce `product-requirements.docx`
 5. **Keep** `.steps/build_docx.py` and `.steps/diagrams/flowchart.json` after success
 6. **Never delete** any `.steps/*.md` or `analysis.html` after the deliverables are produced
-7. Update `Progress.md`, rebuild report, continue to Step 6
+7. Update `Progress.md`, rebuild report, then ask the Step 6 choice below
 
 Visual bar: before/after architecture (green=existing, blue=new, orange=modified), competitive gaps, metrics tables, a real Archify flowchart.
 
 ---
 
-### Step 6 — Enhancement Wireframe Prompt
+### Step 6 choice — the second sanctioned checkpoint (operating system §8)
+
+Once document generation finishes, stop and ask exactly this:
+
+> **Analysis and documents are ready:** `analysis.html`, `architecture.html`, `executive-brief.html`, `engineering-brief.html`, `product-requirements.docx`. Would you like the Step 6 wireframe deliverables too?
+>
+> A. Both — the Lovable prompt and a static prototype (Recommended)
+> B. Just the Lovable prompt
+> C. Just the static prototype
+> D. Neither — I'm done here
+
+Set `Progress.md`'s `Next action` to `awaiting_step6_choice` while waiting. On A/B/C, proceed to Step 6 below, scoped to what was chosen. On D, set `Next action` to `done` immediately — no Step 6 skill runs, and `.steps/6_enhancement_wireframe.md`/`prototype.html` simply don't exist for this run.
+
+### Step 6 — Enhancement Wireframe Prompt (only if A/B/C was chosen)
 **Skill:** [skills/enhancement-pipeline/enhancement-wireframe/SKILL.md](../../skills/enhancement-pipeline/enhancement-wireframe/SKILL.md)
 
-**Screenshots required** before writing the Lovable prompt — this is the one legitimate blocker in the whole pipeline (operating system §8): if none exist, mark `Progress.md` as `blocked_on_pm`, ask specifically for the pages needed, and stop there until the PM supplies them. Match existing OpManager Plus design language; show only the recommended enhancements.
+**Screenshots required** before writing anything in this step, regardless of which artifact(s) were chosen — this is one of the two unplanned exceptions in the whole pipeline (operating system §8), unrelated to the Step 6 choice above: if none exist, mark `Progress.md` as `blocked_on_pm`, ask specifically for the pages needed, and stop there until the PM supplies them. Match existing OpManager Plus design language; show only the recommended enhancements.
 
-**Output:** `.steps/6_enhancement_wireframe.md` + `prototype.html` (topic-folder root, static HTML rendering the enhanced main page with existing/new/modified coding — see the skill for the exact spec) → rebuild report → mark `Progress.md` as `done`.
+**Output (scoped to the PM's choice):** `.steps/6_enhancement_wireframe.md` (A/B) and/or `prototype.html` (A/C, topic-folder root, static HTML rendering the enhanced main page with existing/new/modified coding — see the skill for the exact spec) → rebuild report → mark `Progress.md` as `done`.
 
-Report the finished `analysis.html` path to the PM, and mention `prototype.html` as the fastest way to actually see the change. Outside of the screenshot dependency, there was nothing to approve in between.
+Report the finished `analysis.html` path to the PM, and mention `prototype.html` as the fastest way to actually see the change if it was built. Outside of the screenshot dependency, nothing about the analysis itself was ever up for approval.
 
 ---
 
@@ -138,9 +151,10 @@ Report the finished `analysis.html` path to the PM, and mention `prototype.html`
 ├── executive-brief.html        ← executive slide deck
 ├── engineering-brief.html      ← engineering slide deck
 ├── product-requirements.docx   ← enhancement PRD
-├── prototype.html              ← static-HTML mockup of the enhanced main page
+├── prototype.html              ← static-HTML mockup of the enhanced main page (only if chosen — §8)
 └── .steps/                     ← HIDDEN markdown sources + build script (starts with 0_wayfinding.md)
     ├── diagrams/flowchart.json
+    ├── 6_enhancement_wireframe.md   ← only if chosen — §8
     └── build_docx.py
 ```
 
@@ -148,6 +162,7 @@ Report the finished `analysis.html` path to the PM, and mention `prototype.html`
 
 1. Read `.steps/0_wayfinding.md` for the slug and locked decisions
 2. Load operating system + product-context
-3. Run Steps 1–6 back-to-back, rebuilding `analysis.html` after each
-4. Enforce operating-system quality gates before marking steps complete
-5. Only stop early for the Step 6 screenshot dependency or a PM interruption
+3. Run Steps 1–5 and document generation back-to-back, rebuilding `analysis.html` after each
+4. Ask the Step 6 choice (operating system §8), then run Step 6 scoped to the answer — or stop at `done` if the PM said neither
+5. Enforce operating-system quality gates before marking steps complete
+6. Only stop early for the Step 6 screenshot dependency (once inside Step 6, if chosen) or a PM interruption
