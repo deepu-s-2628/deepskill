@@ -20,7 +20,7 @@ The `skills` CLI tracks where each installed skill came from, so updating doesn'
 npx skills@latest update
 ```
 
-Add `-p` to update only project-scoped skills or `-g` for only global ones, and `-y` to skip the scope prompt. This re-fetches every skill whose source is `deepu-s-2628/deepskill` — `ask-deepu`, all 14 pipeline skills, `wait-what`, Archify, frontend-slides, `design-taste`, and `unlazy-gates` — straight from `main`, and reports each one it touched. Restart your agent afterward to pick up the changes.
+Add `-p` to update only project-scoped skills or `-g` for only global ones, and `-y` to skip the scope prompt. This re-fetches every skill whose source is `deepu-s-2628/deepskill` — `ask-deepu`, all 14 pipeline skills, `wait-what`, `learn-deepu`, Archify, frontend-slides, `design-taste`, and `unlazy-gates` — straight from `main`, and reports each one it touched. Restart your agent afterward to pick up the changes.
 
 To check what's currently installed (and confirm it really came from this repo) before or after updating:
 
