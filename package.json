@@ -1,6 +1,6 @@
 {
   "name": "deepskill",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "Ask Deepu: an end-to-end PM pipeline for OpManager Plus feature and enhancement work, as a Claude Code plugin.",
   "private": true,
   "license": "UNLICENSED",
