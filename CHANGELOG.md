@@ -1,5 +1,11 @@
 # deepskill
 
+## 0.8.0
+
+### Minor Changes
+
+- [`60ec0a8`](https://github.com/deepu-s-2628/deepskill/commit/60ec0a80ab4a60f87d93fd660e3835c36ae3115f) Thanks [@deepu-s-2628](https://github.com/deepu-s-2628)! - Added `learn-deepu`, a standalone teaching utility curated from mattpocock/skills' `teach` (MIT) — a real multi-session learning workspace (`Mission.md`, `lessons/*.html`, `reference/*.html`, `learning-records/`, `assets/`, `Resources.md`, `Notes.md`) for any topic, not just ITOM ones. Checks whether a topic relates to OpManager Plus/Nexus and grounds itself in `context/product-context.md`/`context/CONTEXT.md` when it does, teaches fully generically otherwise. Lessons and reference docs follow `skills/design-taste/SKILL.md`'s styling. Deliberately standalone — not wired into the PM pipeline or any of the 14 pipeline skills.
+
 ## 0.7.1
 
 ### Patch Changes
