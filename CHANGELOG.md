@@ -1,5 +1,11 @@
 # deepskill
 
+## 0.8.1
+
+### Patch Changes
+
+- [`73569bc`](https://github.com/deepu-s-2628/deepskill/commit/73569bca5fdcd8c714b5c1f6b8bede918bf91d43) Thanks [@deepu-s-2628](https://github.com/deepu-s-2628)! - Fixed the README's "Updating an existing install" section, which listed every bundled skill by name but was missed when `learn-deepu` was added — same staleness pattern caught and fixed twice already tonight (skills list -g, Step 6 reference tables).
+
 ## 0.8.0
 
 ### Minor Changes
