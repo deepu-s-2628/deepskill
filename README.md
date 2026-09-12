@@ -98,12 +98,13 @@ vxlan-monitoring/
 |---|---|
 | `ask-deepu` | Entry point and the first of two interactive checkpoints — interrogates fit, mode, and scope, then hands off to the right pipeline |
 | `wait-what` | "That didn't land — re-pitch it simpler" |
+| `learn-deepu` | Standalone, not part of the pipeline — teaches any topic as a real multi-session workspace (lessons, references, progress tracking), grounded in this repo's own OpManager Plus context when the topic is product-related |
 | `archify` | Vendored in full (`skills/archify/`) — renders the flowchart and any other diagrams as interactive HTML |
 | `frontend-slides` | Vendored in full (`skills/frontend-slides/`) — authors the executive/engineering slide decks as self-contained, animation-capable HTML |
 | `design-taste` | Curated adaptation (`skills/design-taste/`) — the visual-taste principles behind `analysis.html`'s and `prototype.html`'s styling (operating system §11b) |
 | `unlazy-gates` | Curated, Solo-mode-only adaptation (`skills/unlazy-gates/`) — mechanically-verified completion gates for each pipeline step (operating system §18) |
 
-Everything in this repo, including Archify, frontend-slides, design-taste, and unlazy-gates, is bundled in `skills/` — installing this one package is enough. Nothing here depends on a teammate having a *different*, separately-installed plugin on their machine (operating system §11a) — if that ever changes for something added later, the same rule applies: try it, and degrade gracefully rather than fail the run if it's missing.
+Everything in this repo, including Archify, frontend-slides, design-taste, unlazy-gates, and learn-deepu, is bundled in `skills/` — installing this one package is enough. Nothing here depends on a teammate having a *different*, separately-installed plugin on their machine (operating system §11a) — if that ever changes for something added later, the same rule applies: try it, and degrade gracefully rather than fail the run if it's missing.
 
 ## Generating the actual files (Archify flowchart / HTML slide decks / DOCX)
 
