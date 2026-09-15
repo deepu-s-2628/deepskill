@@ -1,5 +1,11 @@
 # deepskill
 
+## 0.9.0
+
+### Minor Changes
+
+- [`634c83e`](https://github.com/deepu-s-2628/deepskill/commit/634c83e929cfc60e1c23ba5ce2e935642e3decf2) Thanks [@deepu-s-2628](https://github.com/deepu-s-2628)! - Replace the native Claude Code plugin marketplace fix from the previous release with a universal `npx skills`-only mechanism. The native-plugin approach only solved `ask-deepu`'s missing-context-files bug for Claude Code; the actual goal is cross-agent-surface availability (Codex, Grok Build, Cursor, Gemini CLI — all of which `npx skills add` already installs to). Removed `.claude-plugin/marketplace.json` and every `$CLAUDE_PLUGIN_ROOT`/native-plugin-root resolution instruction. Added `skills/pm-shared/` — a generated mirror of `context/` and `scripts/`, installed as one more sibling skill in the same `npx skills add` — kept in sync with the canonical top-level sources by a new `scripts/sync-pm-shared.mjs`, wired into every release alongside `sync-plugin-version.mjs`. Every dependent skill now resolves shared files via a fixed, unconditional sibling-relative path (one level up from its own installed location, into `pm-shared/`), since `npx skills add` always flattens installed skills to true siblings under one common parent regardless of how deeply any of them were nested in this source repo — verified with a real scratch install before implementing. README updated: `npx skills add deepu-s-2628/deepskill` is now the one documented install method for everything in this package.
+
 ## 0.8.3
 
 ### Patch Changes
