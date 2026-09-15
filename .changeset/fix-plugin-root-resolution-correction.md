@@ -1,5 +1,0 @@
----
-"deepskill": patch
----
-
-Correct the `$CLAUDE_PLUGIN_ROOT` resolution instructions added in the previous fix — it is not a real environment variable. Confirmed empirically: `echo $CLAUDE_PLUGIN_ROOT` and Python's `os.environ["CLAUDE_PLUGIN_ROOT"]` both come back empty/raise, so the "resolve via Bash" advice previously written into `context/pm-operating-system.md`, both orchestrator agents, and several standalone skills was dead and could strand a real run. Replaced with the mechanism that actually works: Claude Code shows every loaded skill its own resolved "Base directory for this skill" path, and the real plugin root is the nearest ancestor of that path containing `.claude-plugin/plugin.json`. Added a new `context/pm-operating-system.md` §0 documenting this as the authoritative procedure, inlined the same compact procedure into every true entry point (`ask-deepu`, `learn-deepu`, `wait-what`, both orchestrator agents) since they can't yet rely on `pm-operating-system.md` being loaded, and fixed the two generated `.steps/build_docx.py` scripts to receive the literal resolved path directly instead of reading a nonexistent environment variable.
