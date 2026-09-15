@@ -13,7 +13,15 @@ Install as a native plugin — this is the only install path where the actual `a
 /plugin install deepskill@deepskill
 ```
 
-`ask-deepu`, the 14 pipeline skills, and `learn-deepu` all depend on files this repo bundles alongside its skills — `context/pm-operating-system.md`, `context/product-context.md`, `context/CONTEXT.md`, and the Python generators under `scripts/`. A native plugin install brings the whole repo tree along as one unit and exposes it to every skill via `${CLAUDE_PLUGIN_ROOT}`, so it works identically no matter where you run it from. Restart Claude Code afterward.
+`ask-deepu`, the 14 pipeline skills, and `learn-deepu` all depend on files this repo bundles alongside its skills — `context/pm-operating-system.md`, `context/product-context.md`, `context/CONTEXT.md`, and the Python generators under `scripts/`. A native plugin install brings the whole repo tree along as one unit, and each skill resolves its own location within it internally, so it works identically no matter where you run it from. Restart Claude Code afterward.
+
+**Already installed `ask-deepu` (or any pipeline skill) via `npx skills` before?** Remove the old flattened copies first — Claude Code resolves a bare `/ask-deepu` to whichever install it finds, and an old `npx skills`-installed copy takes precedence over the new plugin, silently bringing back the exact failure this install method fixes:
+
+```bash
+npx skills@latest remove ask-deepu learn-deepu brainstorm competitive-analysis technical-analysis feature-definition deliverables generate-documents lovable-wireframe current-state-analysis cross-module-analysis enhancement-competitive enhancement-findings enhancement-deliverables enhancement-generate-documents enhancement-wireframe -g -y
+```
+
+(Archify and frontend-slides are fine to leave in place either way — they're self-contained and unaffected.) If you'd rather not remove anything yet, invoke the plugin's version explicitly instead: `/deepskill:ask-deepu`.
 
 ### Other agent surfaces, or the two standalone utility skills only
 
