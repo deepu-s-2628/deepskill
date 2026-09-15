@@ -7,7 +7,7 @@ argument-hint: "A feature idea, or an existing feature to improve"
 
 # Ask Deepu
 
-The first of two sanctioned interactive checkpoints in the whole pipeline — the second is a short Step 6 opt-in choice, much later, after everything else is done (`context/pm-operating-system.md` §8). Everything between here and that later choice runs without asking the PM anything else — so don't let a wrong assumption slip through here.
+The first of two sanctioned interactive checkpoints in the whole pipeline — the second is a short Step 6 opt-in choice, much later, after everything else is done (`$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §8). Everything between here and that later choice runs without asking the PM anything else — so don't let a wrong assumption slip through here.
 
 ## Why the interrogation happens here, not later
 
@@ -15,7 +15,7 @@ A PM's one-line request is not enough to safely run seven unattended pipeline st
 
 ## Process
 
-1. **Load context first.** Read `context/product-context.md` and `context/CONTEXT.md` — you need the real shape of OpManager Plus/Nexus to judge fit.
+1. **Load context first.** This plugin's shared context files live at `$CLAUDE_PLUGIN_ROOT/context/` — resolve `$CLAUDE_PLUGIN_ROOT` via Bash (`echo $CLAUDE_PLUGIN_ROOT`) if not already known this session, then read `$CLAUDE_PLUGIN_ROOT/context/product-context.md` and `$CLAUDE_PLUGIN_ROOT/context/CONTEXT.md` — you need the real shape of OpManager Plus/Nexus to judge fit.
 
 2. **Ask the fit question explicitly, don't assume it.** Before anything else, form a real opinion: does this request describe something that extends OpManager Plus/Nexus's actual product surface (network/server/APM/bandwidth/config/firewall/storage observability), or does it describe a different product category entirely (e.g. a standalone security product, a different buyer, a different deployment model)? If you're not confident, that's the first thing to ask the PM about — don't quietly default to "yes, this fits."
 
@@ -26,11 +26,11 @@ A PM's one-line request is not enough to safely run seven unattended pipeline st
    Cover, in whatever order the conversation naturally raises them:
    - **Fit**: is this an OpManager Plus/Nexus concern, adjacent-but-plausible, or a genuinely different product? If it's a different product, say so plainly and ask whether they still want a pipeline run anyway (e.g. as an integration point, or as an explicit out-of-product-line concept doc) or whether this should stop here.
    - **Product surface**: several modules exist in more than one form — a standalone ManageEngine product (Firewall Analyzer, NetFlow Analyzer, Network Configuration Manager, OpUtils, Applications Manager) *and* an integrated module inside OpManager Nexus. Whenever the request touches one of these, ask explicitly which surface it's for — this pipeline only covers OpManager Plus/Nexus, so a standalone-product answer changes fit, not just scope. Never assume "the Nexus one" by default.
-   - **Mode**: feature (net-new) or enhancement (something that already exists gets better)? Use `context/pm-operating-system.md` section 2's trigger language as a starting signal, not the final word.
+   - **Mode**: feature (net-new) or enhancement (something that already exists gets better)? Use `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` section 2's trigger language as a starting signal, not the final word.
    - **Concrete definition**: if the request names a broad capability area (e.g. "threat intelligence," "automation," "analytics") rather than a specific mechanism, that phrase covers real, different things — break it into the actual sub-capabilities it could mean (reputation lookups vs. IOC matching vs. CVE correlation vs. attribution, to take one example) and ask which the PM means before researching any of them.
    - **User outcome vs. business driver — ask both, separately.** What does the *user* concretely get to do that they can't today (faster detection, better triage, audit evidence, automated response — these are different scopes with different technical paths)? And separately, what's driving this *for the business* (customer demand, a named competitive gap, a compliance requirement, an internal roadmap move)? Conflating these into one question loses the one that didn't happen to come to mind first.
-   - **Internal product-line overlap**: check `context/product-context.md` section 9.1 (ManageEngine ecosystem) for a product that already does something adjacent to this request — Log360 for SIEM/log-compliance, Applications Manager for APM, PAM360 for credentials, etc. If one exists, ask whether this feature is meant to compete with/complement it, position OpManager Plus as a lighter alternative, or stay clearly out of that lane. Skipping this produces a scope that quietly duplicates or contradicts another ManageEngine product.
-   - **Positioning**: if this is genuinely new ground (a new capability area, not a small addition), ask how the PM is thinking about it against *external* competitors too — is this meant to match/exceed a specific named competitor, or something else? Name real candidates from `context/product-context.md` section 10 rather than asking abstractly.
+   - **Internal product-line overlap**: check `$CLAUDE_PLUGIN_ROOT/context/product-context.md` section 9.1 (ManageEngine ecosystem) for a product that already does something adjacent to this request — Log360 for SIEM/log-compliance, Applications Manager for APM, PAM360 for credentials, etc. If one exists, ask whether this feature is meant to compete with/complement it, position OpManager Plus as a lighter alternative, or stay clearly out of that lane. Skipping this produces a scope that quietly duplicates or contradicts another ManageEngine product.
+   - **Positioning**: if this is genuinely new ground (a new capability area, not a small addition), ask how the PM is thinking about it against *external* competitors too — is this meant to match/exceed a specific named competitor, or something else? Name real candidates from `$CLAUDE_PLUGIN_ROOT/context/product-context.md` section 10 rather than asking abstractly.
    - **Scope boundary**: anything that would make Step 3/4 (technical analysis / feature definition) go down the wrong path if this interview didn't ask now.
 
 4. **Conclude explicitly.** State one of exactly three outcomes:

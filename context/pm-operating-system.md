@@ -82,7 +82,7 @@ Same flat pattern, folder named `[slug]-enhancement/`:
 
 1. **Markdown always under hidden `.steps/`** — never put step `.md` in the topic-folder root.
 2. **There is exactly one visible review artifact for the analysis itself: `analysis.html`** at the topic-folder root. No per-step HTML files.
-3. **After every step**, regenerate the report: `python "<scripts-dir>/build_report.py" "[slug]/"`. Never let `analysis.html` fall behind `.steps/`. (`build_report.py` derives the output filename from the folder name — it always matches.)
+3. **After every step**, regenerate the report: `python "$CLAUDE_PLUGIN_ROOT/scripts/build_report.py" "[slug]/"`. Never let `analysis.html` fall behind `.steps/`. (`build_report.py` derives the output filename from the folder name — it always matches.)
 4. **Diagrams are Archify HTML**, visible at the topic-folder root (e.g. `architecture.html`) *and* referenced from the relevant step's markdown with a `<!-- diagram: architecture.html -->` marker line — `build_report.py` turns that into an embedded, interactive `<iframe>` in the right section. There is no PDF flowchart.
 5. **Slide decks are HTML** (`frontend-slides`), not PPTX. Two decks — `executive-brief.html` (executive audience) and `engineering-brief.html` (engineering audience) — each self-contained, animation-capable, and openable directly in a browser.
 6. **The PRD stays DOCX** (`python-docx`), unchanged from before.
@@ -92,10 +92,12 @@ Same flat pattern, folder named `[slug]-enhancement/`:
 
 ### Report rebuild command
 
+This plugin's own scripts, skills, and context files all live under one absolute root: `$CLAUDE_PLUGIN_ROOT` (Claude Code sets this to the plugin's installed location — the same variable whether this is a real plugin install or a local checkout of this repo, so every path below works identically in both). If it isn't already known this session, resolve it once via Bash (`echo $CLAUDE_PLUGIN_ROOT`) before using any path in this file.
+
 ```bash
-python "<scripts-dir>/build_report.py" "[slug]/"
+python "$CLAUDE_PLUGIN_ROOT/scripts/build_report.py" "[slug]/"
 ```
-Resolve helpers via `**/build_report.py` and `**/md_to_html.py` (both live in `scripts/`).
+`build_report.py` and `md_to_html.py` both live at `$CLAUDE_PLUGIN_ROOT/scripts/` — no glob search needed.
 
 ---
 
@@ -153,12 +155,12 @@ On resume: read `Progress.md`, then all **`.steps/*.md`**, then rebuild `analysi
 After writing or revising any step's markdown:
 
 1. Save markdown to **`.steps/<name>.md`**. This is the source of truth for edits and for regeneration.
-2. Rebuild the report: `python "<scripts-dir>/build_report.py" "[folder]/"`. This regenerates the **whole** `analysis.html` from every `.steps/*.md` file that exists so far — cheap, so do it after every step, not just at the end.
+2. Rebuild the report: `python "$CLAUDE_PLUGIN_ROOT/scripts/build_report.py" "[folder]/"`. This regenerates the **whole** `analysis.html` from every `.steps/*.md` file that exists so far — cheap, so do it after every step, not just at the end.
 3. If a step produced a diagram worth showing (see Section 11a), render it with Archify to a visible sibling file (e.g. `architecture.html`) and reference it from that step's markdown with a `<!-- diagram: architecture.html -->` marker before rebuilding — `build_report.py` turns it into an embedded, interactive frame.
 4. **Never delete** `.steps/*.md` or `analysis.html` after binary/HTML generation.
 5. Final chat completion (after the whole run finishes) must cite the **`analysis.html` path**.
 
-If `build_report.py` is unavailable, fall back to `md_to_html.py` per-step and note in chat that the consolidated report couldn't be built — this should not happen in a working checkout.
+If `build_report.py` is unavailable at `$CLAUDE_PLUGIN_ROOT/scripts/`, fall back to `md_to_html.py` per-step and note in chat that the consolidated report couldn't be built — this should not happen on a real plugin install.
 
 ---
 
@@ -227,7 +229,7 @@ There is no `generate files` command to wait for anymore — document generation
 ## 9. Research Bar (Minimum Evidence)
 
 ### Every analysis step must
-- Use `context/product-context.md`.
+- Use `$CLAUDE_PLUGIN_ROOT/context/product-context.md`.
 - Prefer workspace context files via keyword routing.
 - Use **web research** for competitors, vendor tech, protocols, APIs, MIBs/OIDs.
 - Cite sources with links in `## Sources`.
@@ -311,7 +313,7 @@ Step 5 drafts and the document-generation outputs built from them must **transfe
 
 `archify` and `frontend-slides` live inside this repo, at `skills/archify/` and `skills/frontend-slides/` — vendored in full, not separately-installed plugins. They ship with every install of this plugin, so **there is no missing-skill case to degrade from for these two**, and no "try, then fall back to prose" pattern is needed here.
 
-- **Flowchart / architecture diagrams → Archify.** Use it for anything with real structure worth exploring: architecture/data-flow (Section 9's collection pipeline), the feature flowchart, a before/after comparison for an enhancement. Author a JSON spec under `.steps/diagrams/<name>.json`, render with `node <archify-dir>/bin/archify.mjs deliver <type> <spec.json> architecture.html --quality showcase`, then reference the visible output from the relevant step's markdown with `<!-- diagram: architecture.html -->` (Section 6). Resolve `<archify-dir>` via `**/skills/archify/bin/archify.mjs`.
+- **Flowchart / architecture diagrams → Archify.** Use it for anything with real structure worth exploring: architecture/data-flow (Section 9's collection pipeline), the feature flowchart, a before/after comparison for an enhancement. Author a JSON spec under `.steps/diagrams/<name>.json`, render with `node "$CLAUDE_PLUGIN_ROOT/skills/archify/bin/archify.mjs" deliver <type> <spec.json> architecture.html --quality showcase`, then reference the visible output from the relevant step's markdown with `<!-- diagram: architecture.html -->` (Section 6).
 - **Skip the diagram** and just write it out when a short table or a few sentences say the same thing without asking the reader to parse a shape — e.g. a two-option comparison, a short ordered list of steps. A diagram that doesn't earn more clarity than prose is padding.
 - **Slide decks → frontend-slides.** Both the executive and engineering decks (Section 11) are authored as self-contained HTML using `skills/frontend-slides/`'s templates and animation patterns — no PPTX is generated anywhere in this pipeline.
 - **License note:** both skills are MIT-licensed. Archify's vendored copy carries `THIRD_PARTY_NOTICES.md` disclosing that a small set of embedded brand-mark icons (used only when a diagram names a real product) carry their own upstream licenses, one of which (Vue.js) is CC-BY-NC-SA-4.0 with a non-commercial, share-alike condition. That notice ships as-is with the vendored copy — do not strip it, and do not use the Vue.js mark for anything beyond identifying the technology in a diagram.
@@ -392,8 +394,8 @@ The checklists below are the substance of every step's quality bar — what has 
 
 ### Document generation (runs automatically once Step 5 is done — Section 8)
 - [ ] All prerequisite **`.steps/`** markdown files exist
-- [ ] DOCX generator resolved via `**/generate_docx.py`
-- [ ] Archify resolved via `**/skills/archify/bin/archify.mjs`
+- [ ] DOCX generator resolved at `$CLAUDE_PLUGIN_ROOT/scripts/generate_docx.py`
+- [ ] Archify resolved at `$CLAUDE_PLUGIN_ROOT/skills/archify/bin/archify.mjs`
 - [ ] Slide decks and flowchart meet the dense deliverables bar (Section 11)
 - [ ] `.steps/build_docx.py` kept
 - [ ] `.steps/*.md` still present after generation
@@ -417,10 +419,11 @@ The checklists below are the substance of every step's quality bar — what has 
 
 Runs automatically as part of the same unattended chain once Step 5's drafts are done — no `generate files` command to wait for.
 
+0. **Bootstrap Python deps once, unattended, if needed.** Check whether `$CLAUDE_PLUGIN_ROOT/scripts` has its dependencies installed (e.g. a `.venv` present or `python -c "import docx"` succeeding). If not, run `uv sync` inside `$CLAUDE_PLUGIN_ROOT/scripts` (fall back to `python3 -m venv .venv && source .venv/bin/activate && pip install python-docx Pillow matplotlib` if `uv` isn't available). This is a transparent first-run step — never pause or ask the PM about it.
 1. Validate prerequisites from **`.steps/`**; stop and flag as a blocker if any Step 5 MD missing.
-2. **Flowchart:** author a JSON spec (`.steps/diagrams/flowchart.json`) per Archify's schema for the `workflow` type, then render it — resolve the CLI with `**/skills/archify/bin/archify.mjs` — to `architecture.html` at the topic-folder root.
-3. **Slide decks:** using `skills/frontend-slides/`, author `executive-brief.html` and `engineering-brief.html` directly as self-contained HTML — no build script, no PPTX.
-4. **PRD DOCX:** resolve `**/generate_docx.py`; write `.steps/build_docx.py` tailored to this feature, importing `generate_docx.DocxBuilder`. For the PRD's embedded architecture/data-flow image, render a simple static diagram with `matplotlib` (the Archify diagram is interactive HTML, not a static image source — don't try to screenshot it). Run the script to produce `product-requirements.docx`.
+2. **Flowchart:** author a JSON spec (`.steps/diagrams/flowchart.json`) per Archify's schema for the `workflow` type, then render it — with `$CLAUDE_PLUGIN_ROOT/skills/archify/bin/archify.mjs` — to `architecture.html` at the topic-folder root.
+3. **Slide decks:** using `$CLAUDE_PLUGIN_ROOT/skills/frontend-slides/`, author `executive-brief.html` and `engineering-brief.html` directly as self-contained HTML — no build script, no PPTX.
+4. **PRD DOCX:** using `$CLAUDE_PLUGIN_ROOT/scripts/generate_docx.py`, write `.steps/build_docx.py` tailored to this feature, importing `generate_docx.DocxBuilder` (add `$CLAUDE_PLUGIN_ROOT/scripts` to the Python path so the import resolves). For the PRD's embedded architecture/data-flow image, render a simple static diagram with `matplotlib` (the Archify diagram is interactive HTML, not a static image source — don't try to screenshot it). Run the script to produce `product-requirements.docx`.
 5. Fix up to 3 times if generation errors.
 6. **Keep** `.steps/build_docx.py` and `.steps/diagrams/*.json` for regeneration.
 7. **Do not delete** `.steps/`.
@@ -498,7 +501,7 @@ A skill file can go quietly wrong when something it depends on changes elsewhere
 
 1. Before producing the step's content, write `.steps/GATES-N.md` (`N` = the step number) from `skills/unlazy-gates/templates/gates-leaf.md`, one gate per item in that step's Section 12 checklist.
 2. Produce the step's content.
-3. `node <path-to>/skills/unlazy-gates/scripts/gate-check.mjs --approve .steps/GATES-N.md` (first run) or `--status`/plain re-run (later checks). Lint first with `gate-lint.mjs` if authoring a new ledger from scratch.
+3. `node "$CLAUDE_PLUGIN_ROOT/skills/unlazy-gates/scripts/gate-check.mjs" --approve .steps/GATES-N.md` (first run) or `--status`/plain re-run (later checks). Lint first with `gate-lint.mjs` if authoring a new ledger from scratch.
 
 ### The resolution rule — never `unlazy`'s native `ABANDON`/handoff
 

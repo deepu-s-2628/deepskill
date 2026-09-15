@@ -16,7 +16,7 @@ This document must be **engineer-usable**: after reading it, an OpManager develo
 Read:
 - `[feature-name]/.steps/1_brainstorm.md`
 - `[feature-name]/.steps/2_competitive_analysis.md`
-- [context/product-context.md](../../../context/product-context.md)
+- [context/product-context.md]($CLAUDE_PLUGIN_ROOT/context/product-context.md)
 - Relevant workspace context MDs for the domain (SNMP, REST framework, EE, etc.)
 
 **CRITICAL:** Keep persona challenges from Step 1 front and center. Every technical choice must answer: **does this solve the persona pain in time?**
@@ -89,7 +89,7 @@ Discovery, polling path, storage, processing, alerting, UI patterns, EE/probe no
 
 ## Report rebuild (mandatory)
 
-Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
+Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
 
 ## Output Format
 
@@ -219,7 +219,7 @@ Device → Collection → Normalize → Store → Threshold → UI / Notify
 
 ## Quality Gate (before marking complete)
 
-Gate ledger for this step — write `.steps/GATES-3.md` from `skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `context/pm-operating-system.md` §18.
+Gate ledger for this step — write `.steps/GATES-3.md` from `$CLAUDE_PLUGIN_ROOT/skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §18.
 
 
 - [ ] G1: Written at `.steps/3_technical_analysis.md`, `analysis.html` rebuilt

@@ -4,15 +4,37 @@
 
 ## Installation
 
+### Claude Code (recommended)
+
+Install as a native plugin — this is the only install path where the actual `ask-deepu` pipeline works from an arbitrary project folder, including a brand-new empty one:
+
+```
+/plugin marketplace add deepu-s-2628/deepskill
+/plugin install deepskill@deepskill
+```
+
+`ask-deepu`, the 14 pipeline skills, and `learn-deepu` all depend on files this repo bundles alongside its skills — `context/pm-operating-system.md`, `context/product-context.md`, `context/CONTEXT.md`, and the Python generators under `scripts/`. A native plugin install brings the whole repo tree along as one unit and exposes it to every skill via `${CLAUDE_PLUGIN_ROOT}`, so it works identically no matter where you run it from. Restart Claude Code afterward.
+
+### Other agent surfaces, or the two standalone utility skills only
+
 ```bash
 npx skills@latest add deepu-s-2628/deepskill
 ```
 
-Run it from anywhere — no cloning, no local copy of this repo needed. It fetches directly from GitHub (using the git credentials you already have configured, so this works against a private repo the same as a public one) and walks you through the rest: whether to install for just the current project or globally for every project, and which agent(s) to install for (Claude Code, Codex, Copilot — this repo ships compatibility shims for all three).
-
-Restart your agent afterward.
+This installs each skill as an independent, flattened package with no shared files alongside it — reliable only for **Archify** and **frontend-slides**, which are genuinely self-contained. The pipeline skills and `learn-deepu` need the shared `context/`/`scripts/` files this method doesn't carry, so on a non-Claude-Code surface (Codex, Cursor, Gemini CLI, etc.), or if you want the full pipeline without the native plugin mechanism, clone this repo locally and run your agent from inside the checkout instead — every skill keeps its full sibling structure there.
 
 ## Updating an existing install
+
+### Claude Code plugin install
+
+```
+/plugin marketplace update deepskill
+/plugin update deepskill@deepskill
+```
+
+Restart Claude Code afterward to pick up the new version.
+
+### `npx skills` install (Archify / frontend-slides only, or other agent surfaces)
 
 The `skills` CLI tracks where each installed skill came from, so updating doesn't mean re-running `add` — use its dedicated `update` command instead:
 
@@ -20,7 +42,7 @@ The `skills` CLI tracks where each installed skill came from, so updating doesn'
 npx skills@latest update
 ```
 
-Add `-p` to update only project-scoped skills or `-g` for only global ones, and `-y` to skip the scope prompt. This re-fetches every skill whose source is `deepu-s-2628/deepskill` — `ask-deepu`, all 14 pipeline skills, `wait-what`, `learn-deepu`, Archify, frontend-slides, `design-taste`, and `unlazy-gates` — straight from `main`, and reports each one it touched. Restart your agent afterward to pick up the changes.
+Add `-p` to update only project-scoped skills or `-g` for only global ones, and `-y` to skip the scope prompt. This re-fetches every skill whose source is `deepu-s-2628/deepskill` straight from `main` and reports each one it touched. Restart your agent afterward to pick up the changes.
 
 To check what's currently installed (and confirm it really came from this repo) before or after updating:
 
@@ -108,7 +130,9 @@ Everything in this repo, including Archify, frontend-slides, design-taste, unlaz
 
 ## Generating the actual files (Archify flowchart / HTML slide decks / DOCX)
 
-The PRD generator is Python, at `scripts/`. Bootstrap once with [`uv`](https://docs.astral.sh/uv/):
+The PRD generator is Python, at `scripts/` (bundled with the plugin, resolved at `${CLAUDE_PLUGIN_ROOT}/scripts`). Its dependencies bootstrap themselves automatically, unattended, the first time a run needs them — there's no manual setup step for a PM to run. Archify and frontend-slides need no install step at all — both are pure Node.js/static HTML.
+
+If you're developing on this repo directly rather than running it as an installed plugin, you can bootstrap the same dependencies yourself with [`uv`](https://docs.astral.sh/uv/):
 
 ```bash
 cd scripts
@@ -123,8 +147,6 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install python-docx Pillow matplotlib
 ```
 
-Archify and frontend-slides need no install step — both are pure Node.js/static HTML, invoked directly from their vendored `skills/` paths.
-
 ## Roadmap
 
 `v0.1.0` covered the foundation: extraction, the glossary, plain-language output, dual-format skills, this release tooling.
@@ -132,6 +154,8 @@ Archify and frontend-slides need no install step — both are pure Node.js/stati
 `v0.2.0` — pulled forward after real testing surfaced they weren't optional: `ask-deepu`'s wayfinding interrogation and the single consolidated `analysis.html` report; Archify and frontend-slides fully vendored under `skills/`, replacing PPTX/PDF generation entirely; the flat topic-folder layout with no `ITOM-PM-Result/` wrapper.
 
 `v0.3.0` — real-usage feedback from a full pipeline run: role-based deliverable filenames (`analysis.html`, `architecture.html`, `executive-brief.html`, `engineering-brief.html`, `product-requirements.docx`) instead of slug-prefixed ones; a real bookmark-linked PRD Table of Contents (no manual Word "Update Field" step); nested report navigation with scroll-position highlighting; mandatory slide-deck navigation at reading-first density; this README's install/update docs.
+
+**Bug fix, unreleased at time of writing.** `ask-deepu` and every pipeline skill turned out to be unusable outside a checkout of this repo — `npx skills add` installs each skill as an independent, flattened package with no `context/`/`scripts/` alongside it, so a PM running `/ask-deepu` from a real project folder hit a hard failure looking for files that were never installed. Fixed by adding a native Claude Code plugin marketplace (`.claude-plugin/marketplace.json`, so `/plugin install deepskill@deepskill` brings the whole repo tree along as one unit) and rewriting every internal reference to `context/`, `scripts/`, and the vendored Archify/frontend-slides/unlazy-gates tools to resolve via `${CLAUDE_PLUGIN_ROOT}` instead of a repo-relative path — works identically whether this is a real plugin install or a local checkout. Python dependency bootstrap (`uv sync`) is now automatic on first use instead of a manual PM-facing step, since there's no longer a fixed, known path to `scripts/` for a PM to run it in themselves.
 
 Unreleased — three sequential milestones (each its own changeset, shipped in this order — the later ones depend on groundwork the earlier ones lay):
 
@@ -153,4 +177,4 @@ See `CHANGELOG.md` for the exact, generated release history — this section is 
 
 ## Status
 
-Internal tool, private. Not published to any registry — install directly from this repo via `npx skills add` above. Releases are cut with [Changesets](https://github.com/changesets/changesets): every change lands with a `.changeset/*.md` file, and merging the bot-opened "Version Packages" PR bumps `package.json` and `.claude-plugin/plugin.json` together and updates `CHANGELOG.md`. Current version lives in [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json) / [`CHANGELOG.md`](CHANGELOG.md) — not restated here, so this line can't go stale the way it did through v0.2.0.
+Internal tool, private. Not published to any registry — install directly from this repo via the native plugin marketplace or `npx skills add` above. Releases are cut with [Changesets](https://github.com/changesets/changesets): every change lands with a `.changeset/*.md` file, and merging the bot-opened "Version Packages" PR bumps `package.json` and `.claude-plugin/plugin.json` together and updates `CHANGELOG.md`. Current version lives in [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json) / [`CHANGELOG.md`](CHANGELOG.md) — not restated here, so this line can't go stale the way it did through v0.2.0.

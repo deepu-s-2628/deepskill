@@ -15,7 +15,7 @@ Read all prior step files:
 - `[feature-name]/.steps/1_brainstorm.md` — feature understanding, target users, and **persona challenges**
 - `[feature-name]/.steps/2_competitive_analysis.md` — what to match and where to differentiate
 - `[feature-name]/.steps/3_technical_analysis.md` — how it works technically
-- [context/product-context.md](../../../context/product-context.md) — existing product patterns
+- [context/product-context.md]($CLAUDE_PLUGIN_ROOT/context/product-context.md) — existing product patterns
 
 **CRITICAL: The persona challenges from Step 1 are your acceptance test.** Every must-have capability in v1 should trace back to at least one persona challenge. If a capability doesn't help solve any persona's problem, question whether it belongs in v1. When defining user flows, walk through them as each persona — does this flow prevent the bad scenario from their story?
 
@@ -223,11 +223,11 @@ Write to `[feature-name]/.steps/4_feature_definition.md`:
 
 ## Report rebuild (mandatory)
 
-Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
+Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
 
 ## Quality Gate (before marking complete)
 
-Gate ledger for this step — write `.steps/GATES-4.md` from `skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `context/pm-operating-system.md` §18.
+Gate ledger for this step — write `.steps/GATES-4.md` from `$CLAUDE_PLUGIN_ROOT/skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §18.
 
 
 - [ ] G1: Written at `[slug]/.steps/4_feature_definition.md`, `analysis.html` rebuilt

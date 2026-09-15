@@ -9,7 +9,7 @@ description: "Step 6 of PM Feature Pipeline, opt-in after Step 5's documents are
 
 Produce a comprehensive, ready-to-paste prompt for Lovable that will generate a complete wireframe/prototype of this feature as it would appear inside OpManager Plus.
 
-**This step only runs when the PM has opted into it.** The orchestrator asks once, right after Step 5 and document generation finish, whether the PM wants the Lovable prompt, the static prototype, both, or neither (`context/pm-operating-system.md` §8). Draft the spec below in full regardless of which of A/B/C was chosen — it's the shared source `prototype.html` reuses, so there's no wasted work — but only render `prototype.html` if the choice includes it, and shape the Completion message (below) to what was actually chosen.
+**This step only runs when the PM has opted into it.** The orchestrator asks once, right after Step 5 and document generation finish, whether the PM wants the Lovable prompt, the static prototype, both, or neither (`$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §8). Draft the spec below in full regardless of which of A/B/C was chosen — it's the shared source `prototype.html` reuses, so there's no wasted work — but only render `prototype.html` if the choice includes it, and shape the Completion message (below) to what was actually chosen.
 
 ## Input
 
@@ -18,7 +18,7 @@ Read all prior step files, particularly:
 - `[feature-name]/.steps/4_feature_definition.md` — screens, user flows, settings
 - `[feature-name]/.steps/3_technical_analysis.md` — metrics and data points
 - `[feature-name]/.steps/5d_product_requirements.md` — requirements detail
-- [context/product-context.md](../../../context/product-context.md) — product UI patterns
+- [context/product-context.md]($CLAUDE_PLUGIN_ROOT/context/product-context.md) — product UI patterns
 
 **CRITICAL: Design for the personas.** The wireframe should make each persona's challenge obviously solvable. When you define dashboards, think: "If Priya opened this at 6 AM, would she immediately see the degraded SD-WAN tunnel?" When you define alerting UI, think: "Would Marcus get the compliance data he needs from this view?" Walk through each persona's bad-day scenario and ensure the wireframe prevents it.
 
@@ -191,7 +191,7 @@ For each persona story from Step 1, describe how the wireframe solves their chal
 **Only build this if the PM's Step 6 choice included the prototype (A or C above).** When it did: render **Screen 1** (the primary/dashboard screen already specified above) as a real, self-contained static HTML mockup. This is the "see it now" deliverable; the Lovable prompt above is the "keep iterating" one — when both were chosen, ship both, neither replaces the other.
 
 - **Reuse the spec, don't re-derive it.** Screen 1's layout, components table, and data already exist above — render exactly that screen, with the same widgets, the same table columns, the same realistic mock data (never lorem ipsum, matching "Additional Notes for Lovable" above).
-- **Follow `skills/design-taste/SKILL.md` in full** — read it before writing this file. In particular: one accent color held everywhere (ManageEngine brand blue, `#0078d4` — the same color already specified in this prompt's own "Color scheme" above, so the prototype and whatever Lovable later builds actually match), row-separator tables (not a full boxed grid + zebra), a documented shape scale, real `:focus-visible` states, no AI-slop defaults.
+- **Follow `$CLAUDE_PLUGIN_ROOT/skills/design-taste/SKILL.md` in full** — read it before writing this file. In particular: one accent color held everywhere (ManageEngine brand blue, `#0078d4` — the same color already specified in this prompt's own "Color scheme" above, so the prototype and whatever Lovable later builds actually match), row-separator tables (not a full boxed grid + zebra), a documented shape scale, real `:focus-visible` states, no AI-slop defaults.
 - **Plain HTML + inline CSS, zero build step, zero framework** — same constraint as every other deliverable in this repo (Archify, frontend-slides, `analysis.html`). A little vanilla JS is fine only for something genuinely interactive the screen needs (e.g. a time-range dropdown that swaps a static mock chart) — this is a mockup demonstrating the idea, not a working app; don't over-build it.
 - **Persona-check it**: confirm the same persona validation already done for the Lovable prompt above actually holds for this one rendered screen — if the primary screen alone can't show a persona's challenge being solved, note that plainly rather than silently expanding scope to a second screen.
 
@@ -202,11 +202,11 @@ Write to `[feature-name]/prototype.html` (topic-folder root — a visible delive
 
 ## Report rebuild (mandatory)
 
-Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
+Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
 
 ## Quality Gate (before marking complete)
 
-Gate ledger for this step — write `.steps/GATES-6.md` from `skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `context/pm-operating-system.md` §18.
+Gate ledger for this step — write `.steps/GATES-6.md` from `$CLAUDE_PLUGIN_ROOT/skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §18.
 
 
 - [ ] G1: PM's Step 6 choice (A/B/C from operating system §8) respected exactly — nothing built beyond what was chosen
