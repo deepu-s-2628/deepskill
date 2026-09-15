@@ -180,19 +180,21 @@ If `build_report.py` is unavailable at the resolved `pm-shared/scripts/`, fall b
 
 ---
 
-## 7. Plain-language bar (DOE)
+## 7. Plain-language bar (DOE) — the default writing style for every step, not an on-demand fallback
 
-Applies hardest to **brainstorm / current-state openers**, and still applies to executive-facing sections.
+This is the same bar `wait-what` re-pitches to when a PM has to ask for one — "plain words, no unexplained jargon," already named that way in `generate-documents`/`enhancement-generate-documents`. The point of this section is that a PM should never need to invoke `wait-what` in the first place: every step's own written output — not just Step 1, not just executive sections — is held to this bar as it's produced, not corrected after the fact. Applies **hardest** to brainstorm/current-state openers (the reader has the least context there), and still applies in full to every other step's prose, every deliverable draft, and every generated document's section framing.
 
 ### Do
 - Prefer short sentences and everyday words.
 - Define a term the **first** time it appears.
 - Use **analogies and concrete examples**.
 - Separate **what the technology is** / **why people use it** / **what problem it solves** / **what we monitor**.
+- Use this repo's own canonical terms from `CONTEXT.md` — don't introduce a competing name for something already named there.
 
 ### Don’t
 - Open Step 1 with RFC field dumps.
 - Assume the reader already knows why the technology exists.
+- Let a later step (competitive analysis, technical analysis, findings, deliverable drafts) drift back into unexplained jargon just because Step 1 already did the plain-language work — each step's own output is judged against this bar independently, not inherited from an earlier step.
 
 ### Required technology framing (Feature Step 1)
 1. **What is it?**
