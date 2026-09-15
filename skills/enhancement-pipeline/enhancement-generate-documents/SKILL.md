@@ -24,7 +24,7 @@ When generating files from Step 5 drafts:
 
 ### Locating the tools
 
-Everything below is anchored to `$CLAUDE_PLUGIN_ROOT` (resolve via Bash — `echo $CLAUDE_PLUGIN_ROOT` — if not already known this session; see operating system §3/§13).
+Everything below is anchored to `$CLAUDE_PLUGIN_ROOT`, already resolved earlier this run (operating system §0) — reuse that literal value. `$CLAUDE_PLUGIN_ROOT` is not a real environment variable; if for some reason it isn't already known, re-derive it per §0 (this skill's own "Base directory for this skill" path, walked upward to `.claude-plugin/plugin.json`) rather than `echo $CLAUDE_PLUGIN_ROOT`.
 
 - **DOCX:** `generate_docx.py` lives at `$CLAUDE_PLUGIN_ROOT/scripts/`. Bootstrap its dependencies once, unattended, before first use this run: check whether `$CLAUDE_PLUGIN_ROOT/scripts` already has them installed (e.g. `.venv` present, or `python -c "import docx"` succeeds); if not, run `uv sync` inside `$CLAUDE_PLUGIN_ROOT/scripts` (fall back to `python3 -m venv .venv && source .venv/bin/activate && pip install python-docx Pillow matplotlib` if `uv` isn't available). Never pause or ask the PM about this.
 - **Flowchart diagram:** Archify is bundled at `$CLAUDE_PLUGIN_ROOT/skills/archify/`. Its CLI is `$CLAUDE_PLUGIN_ROOT/skills/archify/bin/archify.mjs`. No install step; it's pure Node.js.
@@ -146,10 +146,10 @@ Professional document with:
 ### 5. Write and Run the DOCX Build Script
 
 Write `.steps/build_docx.py` that:
-1. Adds the plugin's `scripts/` directory to `sys.path` (`$CLAUDE_PLUGIN_ROOT/scripts` — resolve `$CLAUDE_PLUGIN_ROOT` via Bash first if not already known this session):
+1. Adds the plugin's `scripts/` directory to `sys.path`. `$CLAUDE_PLUGIN_ROOT` is **not** a real environment variable — `os.environ["CLAUDE_PLUGIN_ROOT"]` will raise a `KeyError`. This script is a per-run generated artifact, not shared code, so write the **literal resolved path** (from operating system §0) directly into it:
    ```python
-   import sys, os
-   SCRIPTS_DIR = os.environ["CLAUDE_PLUGIN_ROOT"] + "/scripts"
+   import sys
+   SCRIPTS_DIR = "<literal resolved $CLAUDE_PLUGIN_ROOT value>/scripts"  # e.g. "/Users/.../deepskill/0.8.1/scripts" — substitute the real path, don't leave this placeholder
    sys.path.insert(0, SCRIPTS_DIR)
    ```
 2. Imports and uses `generate_docx.DocxBuilder`.

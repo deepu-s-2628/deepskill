@@ -8,6 +8,26 @@
 
 ---
 
+## 0. Resolving `$CLAUDE_PLUGIN_ROOT` (read this first)
+
+Every `$CLAUDE_PLUGIN_ROOT/...` path anywhere in this document and every pipeline skill is shorthand for this plugin's own installation root — the directory containing `.claude-plugin/plugin.json`. **It is not a real OS environment variable.** Both of the following come back empty and must never be used: `echo $CLAUDE_PLUGIN_ROOT` in Bash, and `os.environ["CLAUDE_PLUGIN_ROOT"]` in a Python script you write (e.g. `.steps/build_docx.py`) — confirmed empirically, not assumed.
+
+Resolve the real value this way, once per run:
+
+1. Claude Code shows every loaded skill its own real, resolved location as **"Base directory for this skill"** (e.g. `.../deepskill/<version>/skills/ask-deepu` for a top-level skill, or `.../skills/feature-pipeline/brainstorm` for a pipeline-bucketed one — nesting depth varies by skill).
+2. Walk upward from that path until you find the directory containing `.claude-plugin/plugin.json` — that is the real value of `$CLAUDE_PLUGIN_ROOT`:
+   ```bash
+   d="<paste this skill's Base-directory-for-this-skill path>"
+   while [ "$d" != "/" ] && [ ! -f "$d/.claude-plugin/plugin.json" ]; do d="$(dirname "$d")"; done
+   echo "$d"
+   ```
+3. Treat the result as a literal resolved string for the rest of this run. Substitute it directly wherever `$CLAUDE_PLUGIN_ROOT/...` appears below and in any pipeline skill, in every `Read`/`python`/`node` invocation, and when writing any generated script — write the literal resolved path there (e.g. `SCRIPTS_DIR = "/Users/.../deepskill/0.8.1/scripts"`), never `os.environ["CLAUDE_PLUGIN_ROOT"]`.
+4. Resolve it once — right after wayfinding, or at the start of a resumed session — and reuse that value for the rest of the run. Don't re-derive it every step.
+
+Every other reference in this repo to "resolve `$CLAUDE_PLUGIN_ROOT`" points back to this section rather than repeating the procedure (Section 17's token-discipline convention).
+
+---
+
 ## 1. Mission
 
 Produce opinionated, **immediately usable** product work for **OpManager Plus / OpManager Nexus**:
@@ -92,7 +112,7 @@ Same flat pattern, folder named `[slug]-enhancement/`:
 
 ### Report rebuild command
 
-This plugin's own scripts, skills, and context files all live under one absolute root: `$CLAUDE_PLUGIN_ROOT` (Claude Code sets this to the plugin's installed location — the same variable whether this is a real plugin install or a local checkout of this repo, so every path below works identically in both). If it isn't already known this session, resolve it once via Bash (`echo $CLAUDE_PLUGIN_ROOT`) before using any path in this file.
+This plugin's own scripts, skills, and context files all live under one absolute root, `$CLAUDE_PLUGIN_ROOT` — resolve it per Section 0 above if not already known this session, then substitute the literal resolved path everywhere below.
 
 ```bash
 python "$CLAUDE_PLUGIN_ROOT/scripts/build_report.py" "[slug]/"

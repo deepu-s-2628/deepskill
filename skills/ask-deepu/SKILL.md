@@ -15,7 +15,7 @@ A PM's one-line request is not enough to safely run seven unattended pipeline st
 
 ## Process
 
-1. **Load context first.** This plugin's shared context files live at `$CLAUDE_PLUGIN_ROOT/context/` — resolve `$CLAUDE_PLUGIN_ROOT` via Bash (`echo $CLAUDE_PLUGIN_ROOT`) if not already known this session, then read `$CLAUDE_PLUGIN_ROOT/context/product-context.md` and `$CLAUDE_PLUGIN_ROOT/context/CONTEXT.md` — you need the real shape of OpManager Plus/Nexus to judge fit.
+1. **Load context first.** This plugin's shared context files live at `$CLAUDE_PLUGIN_ROOT/context/` — **`$CLAUDE_PLUGIN_ROOT` is not a real environment variable** (`echo $CLAUDE_PLUGIN_ROOT` comes back empty). Resolve it first: take this skill's own **"Base directory for this skill"** path (shown above, no lookup needed) and walk upward until you find the directory containing `.claude-plugin/plugin.json` — that is `$CLAUDE_PLUGIN_ROOT`. Then read `$CLAUDE_PLUGIN_ROOT/context/product-context.md` and `$CLAUDE_PLUGIN_ROOT/context/CONTEXT.md` — you need the real shape of OpManager Plus/Nexus to judge fit. Resolve once and reuse the literal value for the rest of this run.
 
 2. **Ask the fit question explicitly, don't assume it.** Before anything else, form a real opinion: does this request describe something that extends OpManager Plus/Nexus's actual product surface (network/server/APM/bandwidth/config/firewall/storage observability), or does it describe a different product category entirely (e.g. a standalone security product, a different buyer, a different deployment model)? If you're not confident, that's the first thing to ask the PM about — don't quietly default to "yes, this fits."
 
