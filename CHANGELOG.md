@@ -1,5 +1,15 @@
 # deepskill
 
+## 0.8.2
+
+### Patch Changes
+
+- [`0c13841`](https://github.com/deepu-s-2628/deepskill/commit/0c13841e72d620106142e9410986b1a91dc08a77) Thanks [@deepu-s-2628](https://github.com/deepu-s-2628)! - Fixed `ask-deepu` and the whole pipeline being unusable outside a checkout of this repo. `npx skills add` installs each skill as an independent, flattened package with no `context/`/`scripts/` alongside it, so a PM running `/ask-deepu` from a real project folder hit a hard failure looking for files that were never installed. Added a native Claude Code plugin marketplace (`.claude-plugin/marketplace.json`) so `/plugin install deepskill@deepskill` brings the whole repo tree along as one unit, and rewrote every internal reference to `context/`, `scripts/`, and the vendored Archify/frontend-slides/unlazy-gates tools to resolve via `${CLAUDE_PLUGIN_ROOT}` instead of a repo-relative path — works identically whether this is a real plugin install or a local checkout. Python dependency bootstrap (`uv sync`) is now automatic on first use instead of a manual PM-facing step.
+
+- [`e6f2390`](https://github.com/deepu-s-2628/deepskill/commit/e6f2390432e1c3d863531239fcd4113c301c1da0) Thanks [@deepu-s-2628](https://github.com/deepu-s-2628)! - Correct the `$CLAUDE_PLUGIN_ROOT` resolution instructions added in the previous fix — it is not a real environment variable. Confirmed empirically: `echo $CLAUDE_PLUGIN_ROOT` and Python's `os.environ["CLAUDE_PLUGIN_ROOT"]` both come back empty/raise, so the "resolve via Bash" advice previously written into `context/pm-operating-system.md`, both orchestrator agents, and several standalone skills was dead and could strand a real run. Replaced with the mechanism that actually works: Claude Code shows every loaded skill its own resolved "Base directory for this skill" path, and the real plugin root is the nearest ancestor of that path containing `.claude-plugin/plugin.json`. Added a new `context/pm-operating-system.md` §0 documenting this as the authoritative procedure, inlined the same compact procedure into every true entry point (`ask-deepu`, `learn-deepu`, `wait-what`, both orchestrator agents) since they can't yet rely on `pm-operating-system.md` being loaded, and fixed the two generated `.steps/build_docx.py` scripts to receive the literal resolved path directly instead of reading a nonexistent environment variable.
+
+- [`ee070f2`](https://github.com/deepu-s-2628/deepskill/commit/ee070f28aa7c32d2ce316f9c97c14e5fee448027) Thanks [@deepu-s-2628](https://github.com/deepu-s-2628)! - README: add migration guidance for anyone who already installed `ask-deepu`/the pipeline skills via `npx skills` before this native-plugin fix shipped. Confirmed empirically: an old flattened `npx skills`-installed skill takes precedence over the new native plugin for a bare `/ask-deepu`, silently reproducing the exact failure this release fixes. Documents the `npx skills@latest remove ... -g -y` cleanup command (verified against the real skill list) and the `/deepskill:ask-deepu` namespaced-invocation fallback for anyone who'd rather not remove anything yet.
+
 ## 0.8.1
 
 ### Patch Changes
