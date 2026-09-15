@@ -9,6 +9,8 @@ description: "Step 1 of Enhancement Pipeline: Deep dive into how a feature curre
 
 Before proposing any enhancement, understand the feature as it exists today. Map every touchpoint: discovery, monitoring, alerting, UI, reporting. Identify what works well, what's limited, and what's missing entirely.
 
+**Plain-language bar (DOE), same weight as brainstorm's — operating system §7:** this is the enhancement pipeline's own Step 1 opener, named explicitly in §7 as one of the two places this bar applies hardest. The difference from brainstorm: there's no new technology to introduce here, so "what is it / why do people use it" isn't the shape — instead, explain the *existing* feature the way you'd describe it to a developer who's never touched this part of the product: what it actually does today, in everyday words, before any protocol/API detail. Define SNMP, WMI, CLI, and every other acronym the first time each appears in this step's own output, even if a later step will use them freely. A reader should finish the "Feature Overview" paragraph understanding what the feature *does for a user* before reading a single row of the monitoring-coverage table.
+
 ## Input
 
 The PM describes an existing feature or area they want to enhance. Examples:

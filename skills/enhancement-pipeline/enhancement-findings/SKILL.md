@@ -9,6 +9,8 @@ description: "Step 4 of Enhancement Pipeline: Synthesize all analysis into a cle
 
 Bring together the current state analysis, cross-module insights, and competitive research into one decisive document. The PM should walk away knowing exactly what to enhance, why, in what order, and what the expected impact is.
 
+**Plain-language bar (DOE) — operating system §7:** this is a synthesis document read by whoever decides what ships next — every recommendation's "why" should stand on its own in plain terms, not require the reader to have Steps 1–3 open alongside it to follow the reasoning.
+
 ## Input
 
 Read all prior steps:

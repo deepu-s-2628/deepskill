@@ -11,6 +11,8 @@ Generate a Lovable prompt that produces a wireframe/prototype showing the **enha
 
 **This step only runs when the PM has opted into it.** The orchestrator asks once, right after Step 5 and document generation finish, whether the PM wants the Lovable prompt, the static prototype, both, or neither (`pm-shared/context/pm-operating-system.md` §8). The screenshot-collection requirement below is unrelated and unconditional — it applies whenever this step runs at all, regardless of which artifact(s) were chosen, since both the prompt and the prototype need the real design system it extracts.
 
+**Plain-language bar (DOE) — operating system §7:** describe each changed screen the way a persona experiences it, not just what element moved where — say what's new/removed/modified *for the person using the screen*, matching the existing/new/modified coding used elsewhere in this pipeline. A reviewer should be able to tell what actually changed for a user without cross-referencing the component diff themselves.
+
 ## Input
 
 Read all prior steps:

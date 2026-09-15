@@ -9,6 +9,8 @@ description: "Step 2 of PM Feature Pipeline: Research how competitors implement 
 
 Research how competitors have implemented this feature, what customers think of their implementations, and where OpManager Plus can differentiate.
 
+**Plain-language bar (DOE) — operating system §7:** this step's own written output is held to the same bar Step 1 was, not a lighter one just because it's deeper in the pipeline. "Technical approach: Data collection: [method]" should say what the method actually does for the customer, not just name it — a reader shouldn't need to already know a competitor's product to follow the Competitor Breakdown or the Comparison Matrix.
+
 ## Input
 
 Read `[feature-name]/.steps/1_brainstorm.md` for full context on the feature.

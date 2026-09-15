@@ -9,6 +9,8 @@ description: "Step 2 of Enhancement Pipeline: Analyze how the feature relates to
 
 OpManager Plus is a large product with many modules built over 20+ years. Features sometimes exist in one module that could benefit another. Patterns get duplicated inconsistently. A setting in one area solves a problem users report in another area. This step maps those connections.
 
+**Plain-language bar (DOE) — operating system §7:** module names and internal capability names aren't self-explanatory to every reader — when a hidden capability from another module gets proposed as reuse, say what it actually does in plain terms before naming it, the same way Step 1 introduces a technology before naming its protocol.
+
 ## Input
 
 Read `[feature-name]-enhancement/.steps/1_current_state.md` for the current state of the feature being enhanced.

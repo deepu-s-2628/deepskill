@@ -11,6 +11,8 @@ Define the single best technical implementation path for this feature in OpManag
 
 This document must be **engineer-usable**: after reading it, an OpManager developer should know *how* to collect data, *which* OIDs/APIs/paths matter, *what* to store, and *how* to alert — without another research spike for the basics.
 
+**Plain-language bar (DOE) — operating system §7:** "engineer-usable" is a depth requirement, not license to skip framing. Don't assume the reader already knows why the recommended approach (SNMP vs. API vs. agent, a specific protocol) was chosen over the alternatives — state the reasoning in plain terms before the OID/API-level detail, the same way Step 1 explained the technology before the protocol. A reviewer who isn't a specialist in this specific technology should still follow *why* this is the right path, even if the *how* needs real technical depth.
+
 ## Input
 
 Read:

@@ -9,6 +9,7 @@ description: "Step 5 of PM Feature Pipeline: Generate all four deliverable docum
 
 Generate production-quality content for four deliverables. These are written as structured markdown first (for review), then converted to the actual HTML slide decks, Archify flowchart, and DOCX PRD using the `generate_documents` skill.
 
+**Plain-language bar (DOE) — operating system §7:** dense and jargon-free aren't in tension — density means pulling forward everything real from Steps 1–4 (below), not padding with unexplained technical shorthand. All four drafts' own prose is held to this bar directly; it doesn't inherit plain-language credit from Step 1 just because Step 1 already did the work.
 
 ## Dense content bar (mandatory — no thin decks)
 

@@ -9,6 +9,8 @@ description: "Step 3 of Enhancement Pipeline: Focused competitive analysis for a
 
 Understand how competitors handle this specific feature area. Unlike the new-feature competitive analysis (which surveys broadly), this is focused: we already have this feature, so we need to know exactly where competitors are ahead of us, where they have the same gaps, and what customers specifically praise or criticize.
 
+**Plain-language bar (DOE) — operating system §7:** "where they're ahead" needs to say *how*, in terms a non-specialist reviewer can follow, not just that they're ahead — the same standard `enhancement-competitive`'s feature-pipeline counterpart (`competitive-analysis`) is held to.
+
 ## Input
 
 Read:

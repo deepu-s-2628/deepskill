@@ -11,6 +11,8 @@ Produce a comprehensive, ready-to-paste prompt for Lovable that will generate a 
 
 **This step only runs when the PM has opted into it.** The orchestrator asks once, right after Step 5 and document generation finish, whether the PM wants the Lovable prompt, the static prototype, both, or neither (`pm-shared/context/pm-operating-system.md` §8). Draft the spec below in full regardless of which of A/B/C was chosen — it's the shared source `prototype.html` reuses, so there's no wasted work — but only render `prototype.html` if the choice includes it, and shape the Completion message (below) to what was actually chosen.
 
+**Plain-language bar (DOE) — operating system §7:** screen and component descriptions in the Lovable prompt are read by Lovable *and* by the PM reviewing what got specified — describe what each screen does for the persona using it, not just its component names, so the spec itself doubles as something a non-technical reviewer can sanity-check against the persona stories.
+
 ## Input
 
 Read all prior step files, particularly:

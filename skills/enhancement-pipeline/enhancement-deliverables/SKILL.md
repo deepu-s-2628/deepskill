@@ -9,6 +9,7 @@ description: "Step 5 of Enhancement Pipeline: Generate all four enhancement deli
 
 Produce four documents that fully specify the enhancement: an executive presentation for leadership, an engineering presentation for the dev team, flowcharts showing before/after flows, and a PRD with every detail an engineer needs. These are the bridge between the analysis (Steps 1–4) and the visual wireframe (Step 6).
 
+**Plain-language bar (DOE) — operating system §7:** same standard as the feature pipeline's `deliverables` — dense means pulling every real finding forward, not padding with unexplained shorthand. All four drafts' own prose is judged on its own, not inherited from earlier steps.
 
 ## Dense content bar (mandatory — no thin decks)
 

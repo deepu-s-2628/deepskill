@@ -9,6 +9,8 @@ description: "Step 4 of PM Feature Pipeline: Define exactly what needs to be bui
 
 Define exactly what needs to be built. This is the bridge between technical analysis and actual deliverables — it translates technical capability into user-facing product requirements.
 
+**Plain-language bar (DOE) — operating system §7:** the whole point of this step is translating Step 3's technical depth back into user-facing terms — screens, flows, settings a PM or a reviewer can picture, not the underlying data model. If a setting or a dashboard needs a technical term to describe, define it once, the same as Step 1 would.
+
 ## Input
 
 Read all prior step files:
