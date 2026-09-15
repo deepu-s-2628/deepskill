@@ -35,7 +35,7 @@ npx skills@latest list -g   # global skills — use this if you installed with -
 The ITOM PM pipeline used to live inside `itom-ai-toolkit`, tangled up with that repo's VS Code extension build. Pulling it out means:
 
 - **It's independent.** Update the pipeline without touching, or being touched by, unrelated toolkit changes.
-- **It's install-anywhere.** Every skill ships a Codex-compatible `openai.yaml` shim alongside its `SKILL.md`, and the two orchestrators exist in both Claude subagent and Copilot-agent form.
+- **It's install-anywhere.** `npx skills` installs the whole package across Claude Code, Codex, Grok Build, Cursor, Gemini CLI, and more — no per-agent porting needed. Skills a PM actually invokes by name (`ask-deepu`, `wait-what`) ship a Codex-facing `openai.yaml` shim alongside their `SKILL.md` for a proper picker entry; the 14 pipeline steps don't need one, since the orchestrator hands off to each by direct file path, never by name. The two orchestrators exist in both Claude subagent and Copilot-agent form.
 - **It's plain-language by design.** Every step's output is written in ASD-STE100 Simplified Technical English against a real ubiquitous-language glossary (`context/CONTEXT.md`) — not just "try to keep it simple."
 
 ## Getting started
