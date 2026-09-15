@@ -19,7 +19,7 @@ What transferred: the genuinely stack-agnostic taste judgment — color restrain
 
 ## Where this applies
 
-Right now: `$CLAUDE_PLUGIN_ROOT/scripts/build_report.py`'s CSS, which styles every `analysis.html`. Nothing else in this repo's output currently needs it (Archify and frontend-slides carry their own mature, unrelated style systems — don't apply this skill's rules to their output, see `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §11a). A future static-HTML deliverable (e.g. the `prototype.html` from the roadmap's milestone 2) should reference this file the same way.
+Right now: `pm-shared/scripts/build_report.py`'s CSS, which styles every `analysis.html`. Nothing else in this repo's output currently needs it (Archify and frontend-slides carry their own mature, unrelated style systems — don't apply this skill's rules to their output, see `pm-shared/context/pm-operating-system.md` §11a). A future static-HTML deliverable (e.g. the `prototype.html` from the roadmap's milestone 2) should reference this file the same way.
 
 ## The rules
 

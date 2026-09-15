@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 // Changesets bumps package.json's version but has no idea .claude-plugin/plugin.json
-// or .claude-plugin/marketplace.json exist — those are the manifests that actually
-// matter for the installed plugin. Run as part of `npm run version` (see package.json)
-// so none of the three ever drift again.
+// exists — that's the manifest npx skills add reads to discover what's installable.
+// Run as part of `npm run version` (see package.json) so the two never drift again.
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -27,4 +26,3 @@ function syncVersion(relativePath) {
 }
 
 syncVersion(join('.claude-plugin', 'plugin.json'));
-syncVersion(join('.claude-plugin', 'marketplace.json'));

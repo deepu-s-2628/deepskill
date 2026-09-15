@@ -9,7 +9,7 @@ description: "Step 6 of Enhancement Pipeline, opt-in after Step 5's documents ar
 
 Generate a Lovable prompt that produces a wireframe/prototype showing the **enhanced** version of an existing feature. Unlike new-feature wireframes (which design from scratch), enhancement wireframes must **match the current OpManager Plus design language exactly** and show only what changes.
 
-**This step only runs when the PM has opted into it.** The orchestrator asks once, right after Step 5 and document generation finish, whether the PM wants the Lovable prompt, the static prototype, both, or neither (`$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §8). The screenshot-collection requirement below is unrelated and unconditional — it applies whenever this step runs at all, regardless of which artifact(s) were chosen, since both the prompt and the prototype need the real design system it extracts.
+**This step only runs when the PM has opted into it.** The orchestrator asks once, right after Step 5 and document generation finish, whether the PM wants the Lovable prompt, the static prototype, both, or neither (`pm-shared/context/pm-operating-system.md` §8). The screenshot-collection requirement below is unrelated and unconditional — it applies whenever this step runs at all, regardless of which artifact(s) were chosen, since both the prompt and the prototype need the real design system it extracts.
 
 ## Input
 
@@ -215,7 +215,7 @@ Write to `[feature-name]-enhancement/.steps/6_enhancement_wireframe.md`
 
 - **Reuse the spec and the extracted design system, don't re-derive either.** Page 1's layout and its existing/enhanced/new element breakdown already exist above, and the actual colors/typography/component styles came from the PM's own screenshots (Step B/D above) — this prototype must match the real current OpManager Plus design, not a generic one.
 - **Mark what changed, per the Design Matching Rules above**: use the same existing/new/modified visual distinction this pipeline already uses elsewhere (green `#28A745` = existing/keep, blue `#0078D4` = new, orange `#FD7E14` = modified — the same coding used in this run's Archify flowchart and PRD) rather than inventing a different scheme for the prototype alone.
-- **Follow `$CLAUDE_PLUGIN_ROOT/skills/design-taste/SKILL.md`'s structural discipline** (shape consistency, table treatment, focus states, avoiding AI-slop defaults) for anything the extracted screenshots didn't already dictate — the screenshots win on color/layout specifics from Step B/D above; design-taste governs everything screenshots don't specify.
+- **Follow `<resolved shared parent>/design-taste/SKILL.md`'s structural discipline** (sibling skill — shape consistency, table treatment, focus states, avoiding AI-slop defaults) for anything the extracted screenshots didn't already dictate — the screenshots win on color/layout specifics from Step B/D above; design-taste governs everything screenshots don't specify.
 - **Plain HTML + inline CSS, zero build step, zero framework** — same constraint as every other deliverable in this repo. A little vanilla JS is fine only for something genuinely interactive the screen needs; this is a mockup demonstrating the change, not a working app.
 
 Write to `[feature-name]-enhancement/prototype.html` (topic-folder root — a visible deliverable, not `.steps/`; it isn't built from markdown so it sits outside the Report rebuild mechanism below).
@@ -225,11 +225,11 @@ Write to `[feature-name]-enhancement/prototype.html` (topic-folder root — a vi
 
 ## Report rebuild (mandatory)
 
-Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
+Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `pm-shared/context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
 
 ## Quality Gate (before marking complete)
 
-Gate ledger for this step — write `.steps/GATES-6.md` from `$CLAUDE_PLUGIN_ROOT/skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §18.
+Gate ledger for this step — write `.steps/GATES-6.md` from `<resolved shared parent>/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `pm-shared/context/pm-operating-system.md` §18.
 
 
 - [ ] G1: PM's Step 6 choice (A/B/C from operating system §8) respected exactly — nothing built beyond what was chosen

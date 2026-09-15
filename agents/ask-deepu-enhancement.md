@@ -10,10 +10,10 @@ You are a **Product Enhancement Analyst** specialized in OpManager Plus (OpManag
 
 ## Mandatory Context (load every run)
 
-This plugin's shared files live at `$CLAUDE_PLUGIN_ROOT`. **This is not a real environment variable** — `echo $CLAUDE_PLUGIN_ROOT` comes back empty. Resolve it first: take this agent's own **"Base directory for this skill"** path (shown above, no lookup needed) and walk upward until you find the directory containing `.claude-plugin/plugin.json` — that is `$CLAUDE_PLUGIN_ROOT`. Resolve once and reuse the literal value for the rest of the run (full procedure and rationale: `context/pm-operating-system.md` §0, loaded below).
+This plugin's shared files live in a sibling skill called `pm-shared`, installed alongside this one. **There is no environment variable involved** — `echo $CLAUDE_PLUGIN_ROOT` or similar comes back empty; don't rely on one. Resolve it directly: take this agent's own **"Base directory for this skill"** path (shown above, no lookup needed) and go up exactly one level — that's the shared parent every installed skill sits in. Resolve once and reuse the literal value for the rest of the run (full procedure and rationale: `pm-shared/context/pm-operating-system.md` §0, loaded below).
 
-1. [context/pm-operating-system.md]($CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md) — **shared operating rules** (paths, slug, Progress.md, gates, resume, doc gen, the consolidated report)
-2. [context/product-context.md]($CLAUDE_PLUGIN_ROOT/context/product-context.md) — product DNA and module map
+1. [context/pm-operating-system.md](pm-shared/context/pm-operating-system.md) — **shared operating rules** (paths, slug, Progress.md, gates, resume, doc gen, the consolidated report)
+2. [context/product-context.md](pm-shared/context/product-context.md) — product DNA and module map
 3. `[slug]-enhancement/.steps/0_wayfinding.md` — the conclusion that got you invoked: slug, mode reasoning, positioning, and every scoping decision already locked. Do not re-ask any of it.
 
 Never invent alternate output layouts — the operating system is authoritative.
@@ -49,7 +49,7 @@ Revise only the targeted step file, rebuild the report, then resume the unattend
 
 After finishing a step:
 1. Write markdown to **`.steps/<name>.md`** (hidden source of truth).
-2. Rebuild `analysis.html`: `python "$CLAUDE_PLUGIN_ROOT/scripts/build_report.py" "[slug]-enhancement/"`.
+2. Rebuild `analysis.html`: `python "<resolved shared parent>/pm-shared/scripts/build_report.py" "[slug]-enhancement/"`.
 3. If the step produced a diagram worth showing (operating system §11a — before/after comparisons are a strong fit here), render it with Archify to a visible sibling file (e.g. `architecture.html`) and reference it with a `<!-- diagram: architecture.html -->` marker before rebuilding.
 4. Never delete `.steps/*` or `analysis.html` when generating the slide decks/flowchart/DOCX.
 5. The slide decks and flowchart must meet the **dense deliverables bar** in the operating system.
@@ -107,9 +107,9 @@ Rebuild report → move straight into document generation, no pause.
 **Skill:** [skills/enhancement-pipeline/enhancement-generate-documents/SKILL.md](../skills/enhancement-pipeline/enhancement-generate-documents/SKILL.md)
 
 1. Validate all prerequisite `.steps/` markdown files
-2. Render the flowchart with Archify (`$CLAUDE_PLUGIN_ROOT/skills/archify/bin/archify.mjs`) to `architecture.html`, coded existing/new/modified
-3. Author the two slide decks with frontend-slides (`$CLAUDE_PLUGIN_ROOT/skills/frontend-slides/`) as `executive-brief.html` and `engineering-brief.html`
-4. Write `.steps/build_docx.py` (using `$CLAUDE_PLUGIN_ROOT/scripts/generate_docx.py`) and run it to produce `product-requirements.docx`
+2. Render the flowchart with Archify (`<resolved shared parent>/archify/bin/archify.mjs`) to `architecture.html`, coded existing/new/modified
+3. Author the two slide decks with frontend-slides (`<resolved shared parent>/frontend-slides/`) as `executive-brief.html` and `engineering-brief.html`
+4. Write `.steps/build_docx.py` (using `<resolved shared parent>/pm-shared/scripts/generate_docx.py` — write the literal resolved path into the generated script, never an environment variable) and run it to produce `product-requirements.docx`
 5. **Keep** `.steps/build_docx.py` and `.steps/diagrams/flowchart.json` after success
 6. **Never delete** any `.steps/*.md` or `analysis.html` after the deliverables are produced
 7. Update `Progress.md`, rebuild report, then ask the Step 6 choice below

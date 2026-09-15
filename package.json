@@ -1,12 +1,12 @@
 {
   "name": "deepskill",
   "version": "0.8.3",
-  "description": "Ask Deepu: an end-to-end PM pipeline for OpManager Plus feature and enhancement work, as a Claude Code plugin.",
+  "description": "Ask Deepu: an end-to-end PM pipeline for OpManager Plus feature and enhancement work, installable via npx skills across Claude Code, Codex, Grok Build, and more.",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
     "changeset": "changeset",
-    "version": "changeset version && node scripts/sync-plugin-version.mjs",
+    "version": "changeset version && node scripts/sync-plugin-version.mjs && node scripts/sync-pm-shared.mjs",
     "release": "changeset publish"
   },
   "devDependencies": {

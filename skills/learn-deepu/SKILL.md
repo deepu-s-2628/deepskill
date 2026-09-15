@@ -10,9 +10,9 @@ argument-hint: "A technology, feature, or topic you want to learn about"
 ## Source & attribution
 
 Curated from mattpocock/skills' `teach` skill (MIT, Copyright 2026 Matt Pocock). **This is not a copy.** The underlying pedagogical model — Mission, Lessons, Zone of Proximal Development, Reference Documents, Learning Records, reusable Assets, and the fluency-vs-storage-strength distinction — transfers directly and is preserved faithfully, in its own words, for this repo. What changed:
-- **Conditional product grounding** (see below) — the source skill is fully topic-agnostic; this adaptation adds a check for whether the topic relates to OpManager Plus/Nexus, and if so, treats `$CLAUDE_PLUGIN_ROOT/context/product-context.md`/`$CLAUDE_PLUGIN_ROOT/context/CONTEXT.md` as primary trusted sources over generic research.
+- **Conditional product grounding** (see below) — the source skill is fully topic-agnostic; this adaptation adds a check for whether the topic relates to OpManager Plus/Nexus, and if so, treats `pm-shared/context/product-context.md`/`pm-shared/context/CONTEXT.md` as primary trusted sources over generic research.
 - **File naming** — this repo's own convention (`Mission.md`, `Resources.md`, `Notes.md`), not the source's all-caps (`MISSION.md`, `RESOURCES.md`, `NOTES.md`).
-- **Lesson/reference styling** — every HTML file this skill produces follows `$CLAUDE_PLUGIN_ROOT/skills/design-taste/SKILL.md`, not the source's own visual guidance.
+- **Lesson/reference styling** — every HTML file this skill produces follows `design-taste/SKILL.md` (sibling skill), not the source's own visual guidance.
 - **No satellite format files** — the source points to `MISSION-FORMAT.md`/`RESOURCES-FORMAT.md`/`LEARNING-RECORD-FORMAT.md` alongside itself; those formats are inlined directly below instead, since this is one self-contained skill file, not a multi-file bundle.
 
 ## Scope — standalone, not part of the PM pipeline
@@ -21,7 +21,7 @@ This is a general-purpose utility, invocable any time, with **no connection to t
 
 ## Conditional product grounding — check this first, every time
 
-Before researching a topic, resolve `$CLAUDE_PLUGIN_ROOT` if not already known this session. **It is not a real environment variable** — `echo $CLAUDE_PLUGIN_ROOT` comes back empty. Resolve it first: take this skill's own **"Base directory for this skill"** path (shown above, no lookup needed) and walk upward until you find the directory containing `.claude-plugin/plugin.json` — that is `$CLAUDE_PLUGIN_ROOT` (full rationale, if useful: `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §0). Then check whether the topic actually relates to OpManager Plus/Nexus or ITOM concepts — cross-reference `$CLAUDE_PLUGIN_ROOT/context/product-context.md`'s feature catalog and `$CLAUDE_PLUGIN_ROOT/context/CONTEXT.md`'s glossary.
+Before researching a topic, resolve where the shared `pm-shared` skill installed, if not already known this session. **There is no environment variable involved** — `echo $CLAUDE_PLUGIN_ROOT` or similar comes back empty; don't rely on one. Resolve it directly: take this skill's own **"Base directory for this skill"** path (shown above, no lookup needed) and go up exactly one level — that's the shared parent every installed skill sits in (full rationale, if useful: `pm-shared/context/pm-operating-system.md` §0). Then check whether the topic actually relates to OpManager Plus/Nexus or ITOM concepts — cross-reference `pm-shared/context/product-context.md`'s feature catalog and `pm-shared/context/CONTEXT.md`'s glossary.
 
 - **If it does** (e.g. "teach me about SNMP," "teach me what Firewall Analyzer does," "teach me about NetFlow"): treat those two files as primary, trusted sources, alongside external research. Use this repo's own already-established canonical terms — don't introduce a competing name for something `CONTEXT.md` already names.
 - **If it doesn't** (most topics won't — Rust ownership, yoga, thermodynamics, a new framework): skip `product-context.md`/`CONTEXT.md` entirely and teach exactly as a fully generic teaching skill would. Don't force an ITOM angle onto an unrelated topic.
@@ -69,7 +69,7 @@ Each lesson should feel challenging, not easy and not overwhelming. If the user 
 
 ## Lessons
 
-The main deliverable. One self-contained HTML file per lesson, saved to `[topic]-learning/lessons/0001-<dash-case-name>.html` (incrementing), styled per `$CLAUDE_PLUGIN_ROOT/skills/design-taste/SKILL.md` — one held accent color, row-separator tables if the lesson has any, a readable prose measure, real focus states, no generic-AI-slop defaults.
+The main deliverable. One self-contained HTML file per lesson, saved to `[topic]-learning/lessons/0001-<dash-case-name>.html` (incrementing), styled per `design-taste/SKILL.md` (sibling skill) — one held accent color, row-separator tables if the lesson has any, a readable prose measure, real focus states, no generic-AI-slop defaults.
 
 - **Short and completable quickly.** Working memory is small; one tangible win per lesson, directly tied to the mission and pitched at the zone of proximal development — not a sprawling reference dump.
 - **Cite a primary source** — the single best, most trustworthy resource on this specific point, linked prominently.
@@ -124,4 +124,4 @@ A plain scratchpad for anything the user says about how they want to be taught �
     └── (shared stylesheet, widgets, etc.)
 ```
 
-`-learning` is a deliberately distinct suffix from `-enhancement` (the PM pipeline's own suffix, `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §3/§4) — a learning workspace must never be mistaken for a PM run, and vice versa.
+`-learning` is a deliberately distinct suffix from `-enhancement` (the PM pipeline's own suffix, `pm-shared/context/pm-operating-system.md` §3/§4) — a learning workspace must never be mistaken for a PM run, and vice versa.

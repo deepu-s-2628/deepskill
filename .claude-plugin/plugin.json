@@ -17,6 +17,7 @@
   ],
   "skills": [
     "./skills/ask-deepu",
+    "./skills/pm-shared",
     "./skills/wait-what",
     "./skills/archify",
     "./skills/frontend-slides",

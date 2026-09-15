@@ -24,11 +24,11 @@ When generating files from Step 5 drafts:
 
 ### Locating the tools
 
-Everything below is anchored to `$CLAUDE_PLUGIN_ROOT`, already resolved earlier this run (operating system §0) — reuse that literal value. `$CLAUDE_PLUGIN_ROOT` is not a real environment variable; if for some reason it isn't already known, re-derive it per §0 (this skill's own "Base directory for this skill" path, walked upward to `.claude-plugin/plugin.json`) rather than `echo $CLAUDE_PLUGIN_ROOT`.
+These tools are all sibling skills, installed alongside this one — resolve the shared parent once, already done earlier this run (operating system §0), and reuse that literal value. There is no environment variable involved; if for some reason it isn't already known, re-derive it directly (this skill's own "Base directory for this skill" path, one level up).
 
-- **DOCX:** `generate_docx.py` lives at `$CLAUDE_PLUGIN_ROOT/scripts/`. Bootstrap its dependencies once, unattended, before first use this run: check whether `$CLAUDE_PLUGIN_ROOT/scripts` already has them installed (e.g. `.venv` present, or `python -c "import docx"` succeeds); if not, run `uv sync` inside `$CLAUDE_PLUGIN_ROOT/scripts` (fall back to `python3 -m venv .venv && source .venv/bin/activate && pip install python-docx Pillow matplotlib` if `uv` isn't available). Never pause or ask the PM about this.
-- **Flowchart diagram:** Archify is bundled at `$CLAUDE_PLUGIN_ROOT/skills/archify/`. Its CLI is `$CLAUDE_PLUGIN_ROOT/skills/archify/bin/archify.mjs`. No install step; it's pure Node.js.
-- **Slide decks:** frontend-slides is bundled at `$CLAUDE_PLUGIN_ROOT/skills/frontend-slides/`. Read its `SKILL.md` for templates, animation patterns, and style presets before authoring.
+- **DOCX:** `generate_docx.py` lives at `<resolved shared parent>/pm-shared/scripts/`. Bootstrap its dependencies once, unattended, before first use this run: check whether `pm-shared/scripts` already has them installed (e.g. `.venv` present, or `python -c "import docx"` succeeds); if not, run `uv sync` inside `pm-shared/scripts` (fall back to `python3 -m venv .venv && source .venv/bin/activate && pip install python-docx Pillow matplotlib` if `uv` isn't available). Never pause or ask the PM about this.
+- **Flowchart diagram:** Archify is a sibling skill at `<resolved shared parent>/archify/`. Its CLI is `<resolved shared parent>/archify/bin/archify.mjs`. No install step; it's pure Node.js.
+- **Slide decks:** frontend-slides is a sibling skill at `<resolved shared parent>/frontend-slides/`. Read its `SKILL.md` for templates, animation patterns, and style presets before authoring.
 
 ## MANDATORY: Validate Before Generating
 
@@ -63,23 +63,23 @@ Use your understanding of the feature to design a flowchart and slide decks that
 
 ### 1. Generate the Flowchart (Archify)
 
-Author a JSON spec at `.steps/diagrams/flowchart.json` for Archify's `workflow` type (see `$CLAUDE_PLUGIN_ROOT/skills/archify/schemas/`), then render:
+Author a JSON spec at `.steps/diagrams/flowchart.json` for Archify's `workflow` type (see `<resolved shared parent>/archify/schemas/`), then render:
 
 ```bash
-node "$CLAUDE_PLUGIN_ROOT/skills/archify/bin/archify.mjs" deliver workflow ".steps/diagrams/flowchart.json" "architecture.html" --quality showcase --json
+node "<resolved shared parent>/archify/bin/archify.mjs" deliver workflow ".steps/diagrams/flowchart.json" "architecture.html" --quality showcase --json
 ```
 
 - Translate the Mermaid sketch from `5c_feature_flowchart.md` into the spec — this is a fresh authoring pass (new stable IDs, real domain wording), not a literal transcription.
 - Cover: overview flow, setup/onboarding, data collection pipeline (with protocol/API branch detail), alerting, failure/retry — multiple linked views (`meta.views`) if one flat diagram can't hold all of it legibly.
 - Label every decision node with the real condition from the technical analysis; annotate key OIDs/endpoints on collection nodes where space allows.
-- Validate before delivering: `node "$CLAUDE_PLUGIN_ROOT/skills/archify/bin/archify.mjs" validate workflow ".steps/diagrams/flowchart.json" --quality showcase --json` must report a showcase pass with 0 errors/warnings. A showcase pass rarely happens on the first attempt — real layout errors (edge/node crossings, label overlaps, desktop-readability failures) are normal on early drafts and come with specific fix suggestions; keep revising the spec and re-validating until it's clean, don't stop or skip the diagram after the first failure.
+- Validate before delivering: `node "<resolved shared parent>/archify/bin/archify.mjs" validate workflow ".steps/diagrams/flowchart.json" --quality showcase --json` must report a showcase pass with 0 errors/warnings. A showcase pass rarely happens on the first attempt — real layout errors (edge/node crossings, label overlaps, desktop-readability failures) are normal on early drafts and come with specific fix suggestions; keep revising the spec and re-validating until it's clean, don't stop or skip the diagram after the first failure.
 - Reference the output from `5c_feature_flowchart.md` with `<!-- diagram: architecture.html -->` so it embeds into the consolidated report (Section 6).
 
 ### 2. Generate the Executive Slide Deck (frontend-slides)
 
 **This must be visually compelling for a Product Director presentation.**
 
-Author `executive-brief.html` directly as self-contained HTML, following `$CLAUDE_PLUGIN_ROOT/skills/frontend-slides/SKILL.md`'s templates and animation patterns. Plan slide types before writing:
+Author `executive-brief.html` directly as self-contained HTML, following `<resolved shared parent>/frontend-slides/SKILL.md`'s templates and animation patterns. Plan slide types before writing:
 
 | Slide | Content | Why |
 |-------|---------|-----|
@@ -97,7 +97,7 @@ Author `executive-brief.html` directly as self-contained HTML, following `$CLAUD
 
 Design principles:
 - These decks are read async (handoff, review), not presented live — explicitly use frontend-slides' "high density / reading-first" mode (its own SKILL.md §"How dense should the deck feel?"), not its sparse speaker-led default: 4-8 bullets or 4-6 structured cards per slide, self-contained slides that don't need a narrator. Still never more than 2 consecutive bullet-only slides — reach for a table, grid, or comparison layout instead.
-- **Navigation is mandatory, not optional polish.** Every deck must ship the full navigation contract from `$CLAUDE_PLUGIN_ROOT/skills/frontend-slides/html-template.md` — keyboard (arrows, space, page up/down), mouse wheel, and visible on-screen prev/next controls — built directly into the self-contained HTML. Read `html-template.md` in full before authoring; a deck with no way to move to the next slide is incomplete, not just unpolished.
+- **Navigation is mandatory, not optional polish.** Every deck must ship the full navigation contract from `<resolved shared parent>/frontend-slides/html-template.md` — keyboard (arrows, space, page up/down), mouse wheel, and visible on-screen prev/next controls — built directly into the self-contained HTML. Read `html-template.md` in full before authoring; a deck with no way to move to the next slide is incomplete, not just unpolished.
 - Diagrams and visuals should be the center of attention on the slides built around them, not an afterthought.
 - Use frontend-slides' animation patterns deliberately on the persona and transformation slides.
 - The persona-story slide and the persona-revisited slide must use the *same* named persona from Step 1.
@@ -143,10 +143,10 @@ Professional document with:
 ### 5. Write and Run the DOCX Build Script
 
 Write `.steps/build_docx.py` that:
-1. Adds the plugin's `scripts/` directory to `sys.path`. `$CLAUDE_PLUGIN_ROOT` is **not** a real environment variable — `os.environ["CLAUDE_PLUGIN_ROOT"]` will raise a `KeyError`. This script is a per-run generated artifact, not shared code, so write the **literal resolved path** (from operating system §0) directly into it:
+1. Adds `pm-shared/scripts/` (the sibling skill's scripts directory) to `sys.path`. There is **no environment variable involved** — `os.environ["CLAUDE_PLUGIN_ROOT"]` or similar will raise a `KeyError`. This script is a per-run generated artifact, not shared code, so write the **literal resolved path** (from operating system §0) directly into it:
    ```python
    import sys
-   SCRIPTS_DIR = "<literal resolved $CLAUDE_PLUGIN_ROOT value>/scripts"  # e.g. "/Users/.../deepskill/0.8.1/scripts" — substitute the real path, don't leave this placeholder
+   SCRIPTS_DIR = "<literal resolved shared parent>/pm-shared/scripts"  # e.g. "/Users/.../skills/pm-shared/scripts" — substitute the real path, don't leave this placeholder
    sys.path.insert(0, SCRIPTS_DIR)
    ```
 2. Imports and uses `generate_docx.DocxBuilder`.
@@ -178,11 +178,11 @@ cd "[feature-name]" && python .steps/build_docx.py
 
 ## Report rebuild (mandatory)
 
-Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
+Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `pm-shared/context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
 
 ## Quality Gate (before marking complete)
 
-Gate ledger for this step — write `.steps/GATES-5-render.md` from `$CLAUDE_PLUGIN_ROOT/skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §18.
+Gate ledger for this step — write `.steps/GATES-5-render.md` from `<resolved shared parent>/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `pm-shared/context/pm-operating-system.md` §18.
 
 
 - [ ] G1: Flowchart has real diagram structure (not a toy overview) covering setup, collection with protocol branches, alert, failure

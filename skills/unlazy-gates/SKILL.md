@@ -38,7 +38,7 @@ node <path-to>/skills/unlazy-gates/scripts/gate-lint.mjs .steps/GATES-N.md
 
 ## Resolution rule — this repo's own addition, not `unlazy`'s native behavior
 
-`unlazy`'s native behavior for an unsatisfiable gate is `ABANDON: <id> <reason>`, which makes the checker exit `1` with `HANDOFF REQUIRED` — a stop signal, built for a human-supervised session. **`deepskill`'s pipeline never pauses except at its two sanctioned checkpoints** (wayfinding, and the Step 6 opt-in choice — see `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §8). A quality gate is neither of those, so `ABANDON`/handoff semantics are never used here. Instead:
+`unlazy`'s native behavior for an unsatisfiable gate is `ABANDON: <id> <reason>`, which makes the checker exit `1` with `HANDOFF REQUIRED` — a stop signal, built for a human-supervised session. **`deepskill`'s pipeline never pauses except at its two sanctioned checkpoints** (wayfinding, and the Step 6 opt-in choice — see `pm-shared/context/pm-operating-system.md` §8). A quality gate is neither of those, so `ABANDON`/handoff semantics are never used here. Instead:
 
 1. Produce the step's content, then run its gates (`--approve` the first time; `--status`/re-run on later checks).
 2. **A failing runnable gate**: revise the specific failing content (e.g. a persona-count gate short by one → add another persona story) and re-check. Bound this to **2–3 retries** — a gate that still fails after that is either malformed or the content genuinely can't meet it; either way, looping forever is worse than moving on.

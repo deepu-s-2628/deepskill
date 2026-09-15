@@ -28,7 +28,7 @@ Pin down exactly what area of OpManager Plus this covers:
 
 ### 2. Map the Current Implementation
 
-Reference [context/product-context.md]($CLAUDE_PLUGIN_ROOT/context/product-context.md) for product architecture, then research public docs to go deeper.
+Reference [context/product-context.md](pm-shared/context/product-context.md) for product architecture, then research public docs to go deeper.
 
 **UI accuracy — do not block on this step:**
 
@@ -165,11 +165,11 @@ These are narrative-driven stories showing the real human impact of the current 
 
 ## Report rebuild (mandatory)
 
-Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
+Write markdown to `.steps/<name>.md` (hidden), then rebuild `analysis.html` and, if this step produced a diagram, render it and reference it first with a `<!-- diagram: architecture.html -->` marker. **Full procedure, exact paths, and the rebuild command are in `pm-shared/context/pm-operating-system.md` §§3, 6, 11a — already loaded as mandatory context for every run, so it is not repeated here.** Never delete `.steps/*.md`, `analysis.html`, or `.steps/build_docx.py`.
 
 ## Quality Gate (before marking complete)
 
-Gate ledger for this step — write `.steps/GATES-1.md` from `$CLAUDE_PLUGIN_ROOT/skills/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `$CLAUDE_PLUGIN_ROOT/context/pm-operating-system.md` §18.
+Gate ledger for this step — write `.steps/GATES-1.md` from `<resolved shared parent>/unlazy-gates/templates/gates-leaf.md` before producing this step's content, one gate per item below. Resolution rule (self-correct on a failed gate, document the gap and continue — never abandon, never pause): `pm-shared/context/pm-operating-system.md` §18.
 
 
 - [ ] G1: Written at `[slug]-enhancement/.steps/1_current_state.md`

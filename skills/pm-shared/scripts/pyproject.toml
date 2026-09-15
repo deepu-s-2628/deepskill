@@ -1,0 +1,17 @@
+[project]
+name = "itom-pm-scripts"
+version = "0.1.0"
+description = "Document generators for the ITOM-PM pipeline (DOCX PRD, consolidated step HTML report)"
+requires-python = ">=3.10"
+dependencies = [
+    "python-docx>=0.8.11",
+    "Pillow>=9.0.0",
+    "matplotlib>=3.5.0",
+]
+
+# python-pptx is not a pipeline dependency — it's only needed if a PM asks to
+# convert an existing .pptx into an HTML deck via the vendored frontend-slides
+# skill's scripts/extract-pptx.py. Install it separately for that one path.
+
+[tool.uv]
+package = false
