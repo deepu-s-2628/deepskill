@@ -30,6 +30,21 @@ npx skills@latest list -g   # global skills — use this if you installed with -
                              # or if the plain command above says "No project skills found"
 ```
 
+## Uninstalling
+
+To remove this package's skills specifically (leaving every other installed skill from other sources untouched), name them all explicitly — `npx skills` has no single "remove everything from this source" flag:
+
+```bash
+npx skills@latest remove ask-deepu pm-shared wait-what archify frontend-slides design-taste unlazy-gates learn-deepu \
+  brainstorm competitive-analysis technical-analysis feature-definition deliverables generate-documents lovable-wireframe \
+  current-state-analysis cross-module-analysis enhancement-competitive enhancement-findings enhancement-deliverables \
+  enhancement-generate-documents enhancement-wireframe -g -y
+```
+
+Drop `-g` if you installed project-scoped instead of global. Run `npx skills@latest list -g` (or without `-g` for project scope) first if you're unsure which skills are actually installed before removing them.
+
+`npx skills@latest remove` with no arguments opens an interactive picker if you'd rather select skills by hand instead of pasting the full list above. `--all` also exists, but removes **every** installed skill regardless of source — not scoped to this package — so it's rarely what you actually want here.
+
 ## Why this exists
 
 The ITOM PM pipeline used to live inside `itom-ai-toolkit`, tangled up with that repo's VS Code extension build. Pulling it out means:
