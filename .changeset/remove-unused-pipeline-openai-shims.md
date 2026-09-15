@@ -1,5 +1,0 @@
----
-"deepskill": patch
----
-
-Removed `agents/openai.yaml` from all 14 pipeline step skills. Confirmed both structurally and empirically that it served no purpose there: both orchestrator formats (`agents/ask-deepu-feature.md` and the Copilot/Codex-facing `.github/agents/Ask-Deepu-feature.agent.md`) hand off to every step by a direct file path link, never by name-based lookup, and a PM is never meant to invoke a step skill directly — so the shim's `display_name`/`short_description` (picker-UI fields) never had an audience. Verified with a real scratch install that `npx skills add` reports identical Codex/cross-surface compatibility whether or not the shim is present. Also fixed a real naming collision this surfaced: an `agents/` folder inside each pipeline skill (holding only this shim) was easy to mistake for the unrelated top-level `agents/` folder that holds the real orchestrators. Kept the shim on `ask-deepu` and `wait-what` — the two skills a human actually invokes by name — and updated the README's "install-anywhere" claim to describe the split accurately.
