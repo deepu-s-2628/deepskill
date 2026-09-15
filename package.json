@@ -1,6 +1,6 @@
 {
   "name": "deepskill",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "Ask Deepu: an end-to-end PM pipeline for OpManager Plus feature and enhancement work, installable via npx skills across Claude Code, Codex, Grok Build, and more.",
   "private": true,
   "license": "UNLICENSED",
