@@ -1,5 +1,11 @@
 # deepskill
 
+## 0.8.3
+
+### Patch Changes
+
+- [`73dc788`](https://github.com/deepu-s-2628/deepskill/commit/73dc7883939b1fb7308f5ba04ca8c4c6cf2c8da8) Thanks [@deepu-s-2628](https://github.com/deepu-s-2628)! - Fix `scripts/sync-plugin-version.mjs` only syncing `.claude-plugin/plugin.json`'s version from `package.json`, leaving the newly-added `.claude-plugin/marketplace.json` to drift stale after every release (caught immediately after the previous release: `marketplace.json` stayed at `0.8.1` while `package.json`/`plugin.json` moved to `0.8.2`). Now syncs both manifests.
+
 ## 0.8.2
 
 ### Patch Changes
